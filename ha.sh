@@ -12,8 +12,9 @@ set -e
 cd "$(dirname "$0")"
 source .env
 
-_get() { curl -s -H "Authorization: Bearer $HA_TOKEN" "$HA_URL$1"; }
-_post() { curl -s -X POST -H "Authorization: Bearer $HA_TOKEN" -H "Content-Type: application/json" -d "$2" "$HA_URL$1"; }
+# HA 在内网，一律绕过 HTTP 代理（Clash 等会把 .local 主机名吞掉返回 502）
+_get() { curl -s --noproxy '*' -H "Authorization: Bearer $HA_TOKEN" "$HA_URL$1"; }
+_post() { curl -s --noproxy '*' -X POST -H "Authorization: Bearer $HA_TOKEN" -H "Content-Type: application/json" -d "$2" "$HA_URL$1"; }
 
 case "$1" in
   states)   _get /api/states | jq -r '.[] | "\(.entity_id)\t\(.state)"' | sort ;;
