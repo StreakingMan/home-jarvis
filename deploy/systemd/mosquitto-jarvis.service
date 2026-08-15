@@ -1,0 +1,14 @@
+[Unit]
+Description=Mosquitto MQTT broker (jarvis, conda build)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+ExecStart=%h/miniconda3/envs/mqtt/sbin/mosquitto -c %h/apps/mosquitto/config/mosquitto.conf
+ExecReload=/bin/kill -HUP $MAINPID
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=default.target

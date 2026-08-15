@@ -1,0 +1,17 @@
+[Unit]
+Description=GPT-SoVITS api.py (manbo voice)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+ExecStart=%h/code/home-jarvis/scripts/run_gptsovits_api.sh
+Restart=on-failure
+RestartSec=10
+# 模型加载约 4 秒，但首次 CUDA 初始化可能更久，给足余量
+TimeoutStartSec=180
+StandardOutput=append:%h/apps/jarvis/logs/gptsovits-api.log
+StandardError=append:%h/apps/jarvis/logs/gptsovits-api.log
+
+[Install]
+WantedBy=default.target

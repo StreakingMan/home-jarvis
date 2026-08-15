@@ -18,6 +18,8 @@
 ## 家庭事实
 
 - 宿主机 NucBox G3 Plus（N150，无头）；算力机 14600KF + 5060 Ti 16G（Windows + WSL2，兼职游戏）
+- 算力机已跑：GPT-SoVITS 曼波音色 TTS（:9880 + 缓冲代理 :9881）、Mosquitto broker（:1883）、HASS.Agent；详见 `deploy/README.md`
+- 路由器：小米 BE6500 Pro（RD08）。**NUC 拉不到 Docker Hub 镜像**（DNS 污染 + IP 封锁），加载项装不上，待解
 - 三只猫：哦多茄、雕猫、妹妹；Petkit 猫厕所 MAX / MAX PRO 2；米家喂食器×2、无线饮水机
 - 拓竹 P1S、美的空调（LAN）、小米人在传感器 Pro、闲置小爱×2、闲置 iPad
 - 约 2806 实体 / 115 设备，已隐藏 1519 个噪音实体；12 台离线设备待确认删除
@@ -37,6 +39,7 @@
 ## 文档地图
 
 - `docs/blueprint.md` — 架构蓝图主文档（14 节）
+- `deploy/README.md` — **语音栈部署实录**（曼波 TTS / Mosquitto / HASS.Agent，含四个静默失败的坑）
 - `docs/session-2026-08-15.md` — 探索过程问答归档
 - `docs/memory-snapshot.md` — 项目记忆快照
 - 在线版蓝图为私有 Artifact，未随公开仓库发布

@@ -1,0 +1,18 @@
+[Unit]
+Description=GPT-SoVITS buffered proxy (adds Content-Length)
+After=gptsovits-api.service
+Wants=gptsovits-api.service
+
+[Service]
+Type=simple
+WorkingDirectory=%h/code/home-jarvis/scripts
+Environment=TTS_UPSTREAM=http://127.0.0.1:9880/
+Environment=TTS_CACHE_DIR=%h/apps/jarvis/cache/tts
+ExecStart=%h/miniconda3/envs/GPTSoVits/bin/uvicorn tts_proxy:app --host 127.0.0.1 --port 9881
+Restart=on-failure
+RestartSec=5
+StandardOutput=append:%h/apps/jarvis/logs/tts-proxy.log
+StandardError=append:%h/apps/jarvis/logs/tts-proxy.log
+
+[Install]
+WantedBy=default.target
