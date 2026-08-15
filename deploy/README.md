@@ -21,7 +21,8 @@ HA (NucBox)
 |---|---|---|
 | GPT-SoVITS 本体 | `~/apps/GPT-SoVITS` | ✗ upstream clone |
 | 曼波权重 / 参考音频 | `~/apps/GPT-SoVITS/{GPT,SoVITS}_weights_v2Pro/`、`refer/` | ✗ 240MB，版权归 Cygames |
-| Mosquitto 配置与密码 | `~/apps/mosquitto/config/` | ✗ 含凭据 |
+| Mosquitto 配置与密码 | `~/apps/mosquitto/config/` | ✗ 含凭据（`passwd` 是哈希，取不回明文） |
+| **MQTT 账号明文备份** | `~/apps/jarvis/config/mqtt_credentials.txt`（`chmod 600`） | ✗ **仓库是公开的，切勿入库** |
 | 缓存 / 日志 | `~/apps/jarvis/{cache,logs}/` | ✗ |
 | 脚本 | 本仓库 `scripts/` | ✓ |
 | systemd unit | 本仓库 `deploy/systemd/` | ✓ |
