@@ -32,9 +32,11 @@
 
 语音三层架构（本地意图→Assist+本地 LLM→异步 Agent）；本地 LLM 关 thinking；固定模糊词用别名；认知层 OpenClaw 经 MCP 接入不替代语音管线；习惯→自动化必须人工确认；游戏模式经 HASS.Agent 卸载本地 LLM 切云端管线。
 
+认知层框架约束（第 14 节）：主动动作一律经打扰闸门 `script.jarvis_speak`，不许直接调 announce/start_conversation；习惯档案带状态与命中/否决计数，60 条硬上限；拒绝写回档案且永不删除；记忆与反思留 HA 侧（24/7 职责不依赖会关机的 GPU 机）。**反思的数据边界未决**（云端/本地/脱敏三选一，见 14.5）。
+
 ## 文档地图
 
-- `docs/blueprint.md` — 架构蓝图主文档（13 节）
+- `docs/blueprint.md` — 架构蓝图主文档（14 节）
 - `docs/session-2026-08-15.md` — 探索过程问答归档
 - `docs/memory-snapshot.md` — 项目记忆快照
 - 在线版蓝图为私有 Artifact，未随公开仓库发布
