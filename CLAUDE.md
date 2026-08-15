@@ -12,14 +12,14 @@
 - 令牌在项目根 `.env`（`HA_URL` / `HA_TOKEN`，已 gitignore，新机器需手动创建）
 - `./ha.sh`：REST 快捷工具（`states` / `state <id>` / `call <domain> <service> '<json>'` / `services` / `get <path>`）
 - HA 官方 MCP Server 已启用（SSE `/mcp_server/sse`）；新机器上用 `claude mcp add` 注册
-- 该令牌对 `/api/hassio/*`（Supervisor）返回 401，装 Add-on 走 UI
+- 该令牌对 REST 的 `/api/hassio/*` 返回 401，但**走 WebSocket 的 `supervisor/api` 命令可读可写**（`scripts/supervisor_ws.py`）：读 DNS/系统信息、装卸载与启停加载项都能做。日志类端点是纯文本，WS 代理接不住
 - 仪表板等 UI 操作优先走 WebSocket API（参考 `scripts/create_dashboard.py`），免 SSH 免重启
 
 ## 家庭事实
 
 - 宿主机 NucBox G3 Plus（N150，无头）；算力机 14600KF + 5060 Ti 16G（Windows + WSL2，兼职游戏）
 - 算力机已跑：GPT-SoVITS 曼波音色 TTS（:9880 + 缓冲代理 :9881）、Mosquitto broker（:1883）、HASS.Agent；详见 `deploy/README.md`
-- 路由器：小米 BE6500 Pro（RD08）。**NUC 拉不到 Docker Hub 镜像**（DNS 污染 + IP 封锁），加载项装不上，待解
+- 路由器：小米 BE6500 Pro（RD08）。**NUC 只是拉不到 Docker Hub**（DNS 污染，每次返回不同的假 IP）；**ghcr.io 完全可用**，所以社区加载项（hassio-addons / ESPHome / Music Assistant）能正常装，只有官方加载项装不了。细节与试过的无效方案见 `deploy/README.md` 附录
 - 三只猫：哦多茄、雕猫、妹妹；Petkit 猫厕所 MAX / MAX PRO 2；米家喂食器×2、无线饮水机
 - 拓竹 P1S、美的空调（LAN）、小米人在传感器 Pro、闲置小爱×2、闲置 iPad
 - 约 2806 实体 / 115 设备，已隐藏 1519 个噪音实体；12 台离线设备待确认删除

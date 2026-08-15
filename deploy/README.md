@@ -124,6 +124,76 @@ systemctl --user enable --now mosquitto-jarvis gptsovits-api tts-proxy
 sudo loginctl enable-linger $USER
 ```
 
+## 附：NUC 的网络限制（2026-08-16 摸清）
+
+### 结论先行
+
+| 目标 | 可达性 |
+|---|---|
+| **ghcr.io** | ✅ 完全可用 |
+| **Docker Hub（registry-1.docker.io）** | ❌ DNS 被污染 + IP 不可达 |
+
+所以准确的说法是「**NUC 装不了官方加载项**」，不是「装不了加载项」。
+`hassio-addons`、`ESPHome`、`Music Assistant` 这些社区仓库的镜像都在 ghcr.io，**正常可装**
+（实测装成功过 `a0d7b954_ssh`，日志里 `Starting Docker app ghcr.io/hassio-addons/ssh` 一次通过）。
+
+这条对路线图很关键：**给其他房间做播放出口的 ESPHome 方案不受影响**，
+而且 ESPHome 设备走 HA 原生 API，根本不经 MQTT。
+
+### DNS 污染的具体表现
+
+`registry-1.docker.io` 每次解析到不同的知名被墙 IP，三次实测分别是：
+
+| 时间 | 返回的假 IP | 实际归属 |
+|---|---|---|
+| 初次 | `185.60.216.36` | Facebook |
+| 换阿里 DNS 后 | `199.59.148.15` | Twitter |
+| 再次 | `162.125.7.1` | Dropbox |
+
+**换上游 DNS 无效**——GFW 对明文 53 端口一律注入伪造应答，查国内的阿里/DNSPod 也一样，
+伪造包先到就赢。唯一解法是加密查询（DoT/DoH），而 Supervisor 的 `servers` 字段
+**只接受 `dns://` 格式**，传 `tls://` 会被 schema 拒绝。
+
+（`ha dns options` 的 `--fallback` 说明里写着「Cloudflare DoT」，但它只在上游**失败**时触发；
+污染返回的是「成功」的假答案，触发不了兜底。这也是为什么问题一直不易察觉。）
+
+### 试过但无效的方案
+
+**打 tag 骗过 Supervisor —— 不管用。** 即使本地已有
+`homeassistant/amd64-addon-mosquitto:7.1.0`，Supervisor 装的时候仍会无条件去拉 manifest：
+
+```
+Failed to connect to registry docker.io: Connection timeout
+Downloading docker image homeassistant/amd64-addon-mosquitto with tag 7.1.0.
+Can't install ...: dial tcp 162.125.7.1:443: i/o timeout
+```
+
+镜像源本身是通的（`docker.1ms.run` 拉取成功），但拉下来没用。
+
+### 尚未尝试的方案
+
+1. **给宿主机 Docker 配 registry mirror**（`/etc/docker/daemon.json`）——根治，但要用特权容器改宿主机文件、
+   改完必须重启 Docker（连带重启 Supervisor 与 HA），**JSON 写错会导致 HA 起不来**，headless 机器需接显示器救援
+2. **路由器刷 ShellClash**（小米 BE6500 Pro / RD08，`xmir-patcher` 支持，需先降级到 1.0.46 解锁 SSH）——
+   一劳永逸且全屋受益，但有变砖风险，且这是家里唯一的路由器
+3. **独立跑 Mosquitto 容器**（不走加载项体系）——能达成目的，但 Supervisor 检测到非托管容器
+   可能把系统标记为 unsupported
+
+### Supervisor API 的正确访问方式
+
+长期访问令牌对 REST 的 `/api/hassio/*` **一律 401**，
+但 HA 前端本身是通过 **WebSocket 的 `supervisor/api` 命令**代理过去的，那条通道可读可写。
+见 `scripts/supervisor_ws.py`：
+
+```bash
+python scripts/supervisor_ws.py get  /dns/info
+python scripts/supervisor_ws.py get  /addons
+python scripts/supervisor_ws.py post /addons/<slug>/restart
+```
+
+⚠️ 日志类端点（`/supervisor/logs`、`/addons/<slug>/logs`）返回纯文本，
+WS 代理接不住，会报空错误；看日志仍需 UI 或终端里的 `ha supervisor logs`。
+
 ## 六、验证
 
 ```bash
