@@ -140,7 +140,12 @@ WebSocket: assist_pipeline/pipeline_debug/list  {pipeline_id}
 
 这是**你家真实的说话方式**，比任何合成数据都贴合。
 
-⚠️ **HA 只保留最近若干次运行**，要用就得定期导出归档。
+⚠️ **实测只保留最近 10 条运行记录**，要用就得定期导出归档。
+
+⚠️ 更麻烦的一条：**文字交互只记录回答，不记录用户问了什么**。
+只有走 STT 的语音才有 `stt-end` 事件带上识别原文；网页/App 里打字聊的那些，
+`pipeline_debug` 里只剩一句孤零零的回复，配不成训练样本。
+要采集文字侧的数据，得另开 `logger` 的 `homeassistant.components.conversation` debug。
 建议现在就开始存 —— 攒几周才有量，而且早期数据反映的是「系统还不完善时用户怎么说」，
 恰恰是最有价值的部分。
 
