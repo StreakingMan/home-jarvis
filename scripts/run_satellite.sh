@@ -35,10 +35,22 @@ conda activate "$ENV"
 
 export PULSE_SERVER="${PULSE_SERVER:-unix:/mnt/wslg/PulseServer}"
 
-# 采集：16kHz 单声道 16bit 裸 PCM 到 stdout，这是 Wyoming 约定的格式
+# 采集：16kHz 单声道 16bit 裸 PCM 到 stdout，这是 Wyoming 约定的格式。
+# 采集方向走 WSLg 没问题（STT 识别正常），所以保持不动
 MIC_CMD="ffmpeg -hide_banner -loglevel error -f pulse -i RDPSource -ac 1 -ar 16000 -f s16le -"
-# 播放：从 stdin 读 22.05kHz 裸 PCM 送回 Windows 默认输出
-SND_CMD="ffmpeg -hide_banner -loglevel error -f s16le -ar 22050 -ac 1 -i - -f pulse RDPSink"
+
+# ⚠️ 播放**不能**走 WSLg 的 RDPSink。实测 8 秒音频、5 次取中位：
+#
+#   | 播放工具 | 语音栈停止 | 语音栈运行 |
+#   |---|---|---|
+#   | ffmpeg → RDPSink | 4 秒（没播完就退出，砍掉后半段） | 34 秒 |
+#   | paplay → RDPSink | 8 秒（正确） | 20 秒 |
+#   | **snd_windows.sh** | — | **8 秒** ✓ |
+#
+# 只要麦克风在采集，WSLg 的播放就慢 2.5~4 倍，换工具救不了 —— 那座桥没法同时
+# 好好做采集和播放。表现是提示音延迟十几秒、TTS 回复断成两段甚至完全听不到。
+# snd_windows.sh 把音频交给 Windows 原生播放，绕开这座桥。
+SND_CMD="${SATELLITE_SND_CMD:-$(dirname "$0")/snd_windows.sh}"
 
 # ⚠️ 提示音不是锦上添花。satellite 默认**一声不吭**：唤醒词命中后直接开始录指令，
 #    人完全感知不到，表现就是「喊了没反应」，而日志里唤醒明明是成功的。
