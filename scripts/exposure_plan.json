@@ -1,0 +1,3051 @@
+{
+ "keep": [
+  {
+   "entity_id": "climate.xiaomi_cn_847219109_r34r00",
+   "name": "米家空调 自然风Pro 1.5匹 超一级能效  空调",
+   "domain": "climate",
+   "area": "书房",
+   "reason": "climate 主控设备"
+  },
+  {
+   "entity_id": "cover.babai_cn_823257437_cmb5_s_2_curtain",
+   "name": "窗帘  窗帘",
+   "domain": "cover",
+   "area": "次卧",
+   "reason": "cover 主控设备"
+  },
+  {
+   "entity_id": "cover.giot_cn_1186473164_v5icm_s_2_curtain",
+   "name": "V1锂电池智能窗帘（Mesh）  窗帘",
+   "domain": "cover",
+   "area": "厨房",
+   "reason": "cover 主控设备"
+  },
+  {
+   "entity_id": "cover.lumi_cn_1000914510_hmcn02_s_2",
+   "name": "窗帘  窗帘",
+   "domain": "cover",
+   "area": "书房",
+   "reason": "cover 主控设备"
+  },
+  {
+   "entity_id": "cover.mu_bu_curtain",
+   "name": "幕布 窗帘",
+   "domain": "cover",
+   "area": "舞台",
+   "reason": "cover 主控设备"
+  },
+  {
+   "entity_id": "cover.xiaomi_cn_2196568891_lyj4qc_s_2_airer",
+   "name": "米家智能双控晾衣机  晾衣架",
+   "domain": "cover",
+   "area": "阳台",
+   "reason": "cover 主控设备"
+  },
+  {
+   "entity_id": "cover.xiaomi_cn_2196568891_lyj4qc_s_6_airer_2",
+   "name": "米家智能双控晾衣机  晾杆2",
+   "domain": "cover",
+   "area": "阳台",
+   "reason": "cover 主控设备"
+  },
+  {
+   "entity_id": "cover.xiaomi_cn_2196568891_lyj4qc_s_7_airer_1",
+   "name": "米家智能双控晾衣机  晾杆1",
+   "domain": "cover",
+   "area": "阳台",
+   "reason": "cover 主控设备"
+  },
+  {
+   "entity_id": "fan.dmaker_cn_656819667_p5c_s_2_fan",
+   "name": "风扇  风扇",
+   "domain": "fan",
+   "area": "卧室",
+   "reason": "fan 主控设备"
+  },
+  {
+   "entity_id": "fan.dmaker_cn_657279936_p28_s_2_fan",
+   "name": "循环扇  风扇",
+   "domain": "fan",
+   "area": "书房",
+   "reason": "fan 主控设备"
+  },
+  {
+   "entity_id": "fan.xiaomi_cn_824017681_p69_s_2_fan",
+   "name": "米家直流变频台式循环扇  风扇",
+   "domain": "fan",
+   "area": "舞台",
+   "reason": "fan 主控设备"
+  },
+  {
+   "entity_id": "light.devcea_cn_699316520_ls2304_s_2_light",
+   "name": "台灯1  灯",
+   "domain": "light",
+   "area": "卧室",
+   "reason": "light 主控设备"
+  },
+  {
+   "entity_id": "light.devcea_cn_699352781_ls2305_s_2_light",
+   "name": "摇臂台灯  灯",
+   "domain": "light",
+   "area": "客厅",
+   "reason": "light 主控设备"
+  },
+  {
+   "entity_id": "light.devcea_cn_732021453_ls2307_s_2_light",
+   "name": "宜家麦希瑟E27 806lm智能彩色球泡灯  灯",
+   "domain": "light",
+   "area": "卧室",
+   "reason": "light 主控设备"
+  },
+  {
+   "entity_id": "light.devcea_cn_732026401_ls2305_s_2_light",
+   "name": "台灯2  灯",
+   "domain": "light",
+   "area": "卧室",
+   "reason": "light 主控设备"
+  },
+  {
+   "entity_id": "light.devcea_cn_732047445_ls2303_s_2_light",
+   "name": "落地灯  灯",
+   "domain": "light",
+   "area": "舞台",
+   "reason": "light 主控设备"
+  },
+  {
+   "entity_id": "light.ftd_cn_1124112558_dsplmp_s_2_light",
+   "name": "碗柜灯  灯",
+   "domain": "light",
+   "area": "餐厅",
+   "reason": "light 主控设备"
+  },
+  {
+   "entity_id": "light.leishi_cn_959422788_eps126_s_2_light",
+   "name": "餐厅吊灯  灯",
+   "domain": "light",
+   "area": "餐厅",
+   "reason": "light 主控设备"
+  },
+  {
+   "entity_id": "light.leishi_cn_959422788_eps126_s_4_ambient_light",
+   "name": "餐厅吊灯  氛围灯",
+   "domain": "light",
+   "area": "餐厅",
+   "reason": "light 主控设备"
+  },
+  {
+   "entity_id": "light.lemesh_cn_948937568_wy0d02_s_2_light",
+   "name": "餐厅射灯2  灯",
+   "domain": "light",
+   "area": "餐厅",
+   "reason": "light 主控设备"
+  },
+  {
+   "entity_id": "light.lemesh_cn_948950531_wy0d02_s_2_light",
+   "name": "餐厅射灯1  灯",
+   "domain": "light",
+   "area": "餐厅",
+   "reason": "light 主控设备"
+  },
+  {
+   "entity_id": "light.mijia_cn_group_1852643054621175808_group3_s_2_light",
+   "name": "书墙灯组  灯",
+   "domain": "light",
+   "area": "客厅",
+   "reason": "light 主控设备"
+  },
+  {
+   "entity_id": "light.mijia_cn_group_1935348461855723520_group3_s_2_light",
+   "name": "餐厅灯组  灯",
+   "domain": "light",
+   "area": "餐厅",
+   "reason": "light 主控设备"
+  },
+  {
+   "entity_id": "light.mijia_cn_group_1935351717395046400_group3_s_2_light",
+   "name": "餐厅射灯组  灯",
+   "domain": "light",
+   "area": "餐厅",
+   "reason": "light 主控设备"
+  },
+  {
+   "entity_id": "light.p1s_01p00c4a2700361_chamber_light",
+   "name": "P1S_01P00C4A2700361 打印仓灯",
+   "domain": "light",
+   "area": "舞台",
+   "reason": "light 主控设备"
+  },
+  {
+   "entity_id": "light.quan_zi_dong_mao_ce_suo_max_pro_2_light",
+   "name": "全自动猫厕所 MAX PRO 2 照明",
+   "domain": "light",
+   "area": "阳台",
+   "reason": "light 主控设备"
+  },
+  {
+   "entity_id": "light.xiaomi_cn_2196568891_lyj4qc_s_3_light",
+   "name": "米家智能双控晾衣机  灯",
+   "domain": "light",
+   "area": "阳台",
+   "reason": "light 主控设备"
+  },
+  {
+   "entity_id": "light.xiaomi_cn_950382496_btlm2p_s_2_light",
+   "name": "大门筒灯  灯",
+   "domain": "light",
+   "area": "客厅",
+   "reason": "light 主控设备"
+  },
+  {
+   "entity_id": "light.yeelink_cn_102902378_lamp1_s_2_light",
+   "name": "工作台灯  灯",
+   "domain": "light",
+   "area": "舞台",
+   "reason": "light 主控设备"
+  },
+  {
+   "entity_id": "light.yeelink_cn_1084213811_mbulb3_s_2",
+   "name": "壁灯  灯",
+   "domain": "light",
+   "area": "次卧",
+   "reason": "light 主控设备"
+  },
+  {
+   "entity_id": "light.yeelink_cn_1113642441_ml8_s_2_light",
+   "name": "轨道射灯1  灯光",
+   "domain": "light",
+   "area": "客厅",
+   "reason": "light 主控设备"
+  },
+  {
+   "entity_id": "light.yeelink_cn_1113655780_ml8_s_2_light",
+   "name": "轨道射灯2  灯光",
+   "domain": "light",
+   "area": "客厅",
+   "reason": "light 主控设备"
+  },
+  {
+   "entity_id": "light.yeelink_cn_1133290646_ml8_s_2_light",
+   "name": "轨道射灯3  灯光",
+   "domain": "light",
+   "area": "客厅",
+   "reason": "light 主控设备"
+  },
+  {
+   "entity_id": "light.yeelink_cn_1133291216_ml8_s_2_light",
+   "name": "轨道射灯5  灯光",
+   "domain": "light",
+   "area": "客厅",
+   "reason": "light 主控设备"
+  },
+  {
+   "entity_id": "light.yeelink_cn_1136701416_ml8_s_2_light",
+   "name": "轨道射灯4  灯光",
+   "domain": "light",
+   "area": "客厅",
+   "reason": "light 主控设备"
+  },
+  {
+   "entity_id": "light.yeelink_cn_1159997477_ml6_s_2_light",
+   "name": "格栅灯  灯光",
+   "domain": "light",
+   "area": "客厅",
+   "reason": "light 主控设备"
+  },
+  {
+   "entity_id": "light.yeelink_cn_1188051832_wy0a03_s_2_light",
+   "name": "厨房灯带  灯光",
+   "domain": "light",
+   "area": "厨房",
+   "reason": "light 主控设备"
+  },
+  {
+   "entity_id": "light.yeelink_cn_1189996185_ml8_s_2_light",
+   "name": "轨道射灯6  灯光",
+   "domain": "light",
+   "area": "客厅",
+   "reason": "light 主控设备"
+  },
+  {
+   "entity_id": "light.yeelink_cn_750251176_lamp22_s_2",
+   "name": "米家智能显示器挂灯1S  灯",
+   "domain": "light",
+   "area": "书房",
+   "reason": "light 主控设备"
+  },
+  {
+   "entity_id": "media_player.windowspcintelnvida",
+   "name": "WindowsPCIntelNvida",
+   "domain": "media_player",
+   "area": "未分配",
+   "reason": "media_player 主控设备"
+  },
+  {
+   "entity_id": "media_player.xiaomi_cn_379045180_lx06",
+   "name": "小爱音箱Pro  音箱",
+   "domain": "media_player",
+   "area": "客厅",
+   "reason": "media_player 主控设备"
+  },
+  {
+   "entity_id": "media_player.xiaomi_cn_884873845_mih1",
+   "name": "小米电视  电视",
+   "domain": "media_player",
+   "area": "舞台",
+   "reason": "media_player 主控设备"
+  },
+  {
+   "entity_id": "media_player.xiaomi_cn_980579994_oh2p",
+   "name": "Xiaomi 智能音箱 Pro  音箱",
+   "domain": "media_player",
+   "area": "客厅",
+   "reason": "media_player 主控设备"
+  },
+  {
+   "entity_id": "switch.chuangmi_cn_334499590_212a01_on_p_2_1",
+   "name": "三头落地灯(插座)  开关 开关",
+   "domain": "switch",
+   "area": "客厅",
+   "reason": "真继电器（无模式实体，按名称判定）"
+  },
+  {
+   "entity_id": "switch.chuangmi_cn_334502283_212a01_on_p_2_1",
+   "name": "猫砂盆排风扇(插座)  开关 开关",
+   "domain": "switch",
+   "area": "阳台",
+   "reason": "真继电器（无模式实体，按名称判定）"
+  },
+  {
+   "entity_id": "switch.chuangmi_cn_450479275_029a02_on_p_2_1",
+   "name": "小米智能摄像机 云台版2K  摄像机控制 开关",
+   "domain": "switch",
+   "area": "客厅",
+   "reason": "真继电器（无模式实体，按名称判定）"
+  },
+  {
+   "entity_id": "switch.cuco_cn_697173993_v3_on_p_2_1",
+   "name": "鱼缸水泵  开关 开关",
+   "domain": "switch",
+   "area": "客厅",
+   "reason": "真继电器（无模式实体，按名称判定）"
+  },
+  {
+   "entity_id": "switch.cuco_cn_831748964_v3_on_p_2_1",
+   "name": "植物墙水泵  开关 开关",
+   "domain": "switch",
+   "area": "阳台",
+   "reason": "真继电器（无模式实体，按名称判定）"
+  },
+  {
+   "entity_id": "switch.cuco_cn_846583549_v3_on_p_2_1",
+   "name": "化妆灯  开关 开关",
+   "domain": "switch",
+   "area": "卧室",
+   "reason": "真继电器（无模式实体，按名称判定）"
+  },
+  {
+   "entity_id": "switch.cuco_cn_857610130_v3_on_p_2_1",
+   "name": "水陆缸雾化器  开关 开关",
+   "domain": "switch",
+   "area": "阳台",
+   "reason": "真继电器（无模式实体，按名称判定）"
+  },
+  {
+   "entity_id": "switch.cuco_cn_861885629_v3_on_p_2_1",
+   "name": "雨林灯  开关 开关",
+   "domain": "switch",
+   "area": "阳台",
+   "reason": "真继电器（无模式实体，按名称判定）"
+  },
+  {
+   "entity_id": "switch.hfjh_cn_942280505_m100_on_p_2_1",
+   "name": "猪笼草缸  鱼缸 开关",
+   "domain": "switch",
+   "area": "客厅",
+   "reason": "真继电器（无模式实体，按名称判定）"
+  },
+  {
+   "entity_id": "switch.hfjh_cn_942280505_m100_water_pump_p_2_2",
+   "name": "猪笼草缸  鱼缸 水泵开关",
+   "domain": "switch",
+   "area": "客厅",
+   "reason": "真继电器（无模式实体，按名称判定）"
+  },
+  {
+   "entity_id": "switch.lemesh_cn_1120820739_sw0a04_on_p_2_1",
+   "name": "投影散热风扇  开关 开关",
+   "domain": "switch",
+   "area": "客厅",
+   "reason": "真继电器（无模式实体，按名称判定）"
+  },
+  {
+   "entity_id": "switch.lemesh_cn_1123993798_sw0a04_on_p_2_1",
+   "name": "二氧化碳开关  开关 开关",
+   "domain": "switch",
+   "area": "客厅",
+   "reason": "真继电器（无模式实体，按名称判定）"
+  },
+  {
+   "entity_id": "switch.lemesh_cn_1123995156_sw0a04_on_p_2_1",
+   "name": "壁柜灯  开关 开关",
+   "domain": "switch",
+   "area": "厨房",
+   "reason": "真继电器（无模式实体，按名称判定）"
+  },
+  {
+   "entity_id": "switch.lemesh_cn_1124028204_sw0a04_on_p_2_1",
+   "name": "鸟笼灯带  开关 开关",
+   "domain": "switch",
+   "area": "客厅",
+   "reason": "真继电器（无模式实体，按名称判定）"
+  },
+  {
+   "entity_id": "switch.mibx2_cn_836329235_x11_on_p_2_3",
+   "name": "米家洗衣机 分区洗 洗烘15kg  洗衣机 开关",
+   "domain": "switch",
+   "area": "阳台",
+   "reason": "真继电器（无模式实体，按名称判定）"
+  },
+  {
+   "entity_id": "switch.quan_zi_dong_mao_ce_suo_max_power",
+   "name": "全自动猫厕所MAX 电源",
+   "domain": "switch",
+   "area": "阳台",
+   "reason": "真继电器（无模式实体，按名称判定）"
+  },
+  {
+   "entity_id": "switch.quan_zi_dong_mao_ce_suo_max_pro_2_power",
+   "name": "全自动猫厕所 MAX PRO 2 电源",
+   "domain": "switch",
+   "area": "阳台",
+   "reason": "真继电器（无模式实体，按名称判定）"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_1102356379_pro3_on_p_2_1",
+   "name": "游戏房外三开  筒灯 左键",
+   "domain": "switch",
+   "area": "阳台",
+   "reason": "★ 有线路继电器（模式=有线和无线开关）"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_1110557300_pro1_on_p_2_1",
+   "name": "主卫灯  开关 开关",
+   "domain": "switch",
+   "area": "卫生间",
+   "reason": "★ 有线路继电器（模式=有线和无线开关）"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_1110751089_wpro2_on_p_2_1",
+   "name": "桌右侧双开  筒灯 左键",
+   "domain": "switch",
+   "area": "书房",
+   "reason": "★ 有线路继电器（模式=有线和无线开关）"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_1110899730_pro2_on_p_2_1",
+   "name": "飘窗双开  飘窗筒灯 左键",
+   "domain": "switch",
+   "area": "次卧",
+   "reason": "★ 有线路继电器（模式=有线和无线开关）"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_1110986782_pro1_on_p_2_1",
+   "name": "次卫灯  开关 开关",
+   "domain": "switch",
+   "area": "卫生间",
+   "reason": "★ 有线路继电器（模式=有线和无线开关）"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_1112001330_pro2_on_p_2_1",
+   "name": "靠窗双开  吸顶灯 左键",
+   "domain": "switch",
+   "area": "卧室",
+   "reason": "★ 有线路继电器（模式=有线和无线开关）"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_1112007147_pro2_on_p_2_1",
+   "name": "靠柜双开  壁灯 左键",
+   "domain": "switch",
+   "area": "卧室",
+   "reason": "★ 有线路继电器（模式=有线和无线开关）"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_1112019897_pro2_on_p_2_1",
+   "name": "过道双开  过道筒灯 左键",
+   "domain": "switch",
+   "area": "卫生间",
+   "reason": "★ 有线路继电器（模式=有线和无线开关）"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_1112019897_pro2_on_p_3_1",
+   "name": "过道双开  次卫排气扇 右键",
+   "domain": "switch",
+   "area": "卫生间",
+   "reason": "★ 有线路继电器（模式=有线和无线开关）"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_1112662384_pro3_on_p_2_1",
+   "name": "窗边三开  吸顶灯 左键",
+   "domain": "switch",
+   "area": "书房",
+   "reason": "★ 有线路继电器（模式=有线和无线开关）"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_1112662384_pro3_on_p_3_1",
+   "name": "窗边三开  外顶灯 中键",
+   "domain": "switch",
+   "area": "书房",
+   "reason": "★ 有线路继电器（模式=有线和无线开关）"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_1112662384_pro3_on_p_4_1",
+   "name": "窗边三开  壁灯 右键",
+   "domain": "switch",
+   "area": "书房",
+   "reason": "★ 有线路继电器（模式=有线和无线开关）"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_1112662522_pro3_on_p_2_1",
+   "name": "碗柜后三开  筒灯 左键",
+   "domain": "switch",
+   "area": "餐厅",
+   "reason": "★ 有线路继电器（模式=有线和无线开关）"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_1133637884_pro3_on_p_3_1",
+   "name": "床头三开  吸顶灯 中键",
+   "domain": "switch",
+   "area": "次卧",
+   "reason": "★ 有线路继电器（模式=有线和无线开关）"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_1133640662_pro3_on_p_2_1",
+   "name": "门口三开  门口筒灯 左键",
+   "domain": "switch",
+   "area": "次卧",
+   "reason": "★ 有线路继电器（模式=有线和无线开关）"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_578006328_86v1_on_p_10_1",
+   "name": "小米智能家庭面板  玄关柜灯带 开关",
+   "domain": "switch",
+   "area": "客厅",
+   "reason": "★ 有线路继电器（模式=有线和无线开关）"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_578006328_86v1_on_p_12_1",
+   "name": "小米智能家庭面板  吸顶灯 开关",
+   "domain": "switch",
+   "area": "客厅",
+   "reason": "★ 有线路继电器（模式=有线和无线开关）"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_599671876_86v1_on_p_10_1",
+   "name": "卧室门口智能面板  过道筒灯 开关",
+   "domain": "switch",
+   "area": "舞台",
+   "reason": "★ 有线路继电器（模式=有线和无线开关）"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_599671876_86v1_on_p_11_1",
+   "name": "卧室门口智能面板  舞台筒灯 开关",
+   "domain": "switch",
+   "area": "舞台",
+   "reason": "★ 有线路继电器（模式=有线和无线开关）"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_599671876_86v1_on_p_12_1",
+   "name": "卧室门口智能面板  舞台灯带 开关",
+   "domain": "switch",
+   "area": "舞台",
+   "reason": "★ 有线路继电器（模式=有线和无线开关）"
+  },
+  {
+   "entity_id": "switch.zhimi_cn_593492799_rma2_on_p_2_1",
+   "name": "米家空气净化器 4 Lite  空气净化器 开关",
+   "domain": "switch",
+   "area": "阳台",
+   "reason": "真继电器（无模式实体，按名称判定）"
+  },
+  {
+   "entity_id": "todo.shopping_list",
+   "name": "购物清单",
+   "domain": "todo",
+   "area": "未分配",
+   "reason": "todo 主控设备"
+  },
+  {
+   "entity_id": "vacuum.xiaomi_cn_1141278931_c107",
+   "name": "米家全能扫拖机器人M30 Pro 米家全能扫拖机器人M30 Pro",
+   "domain": "vacuum",
+   "area": "阳台",
+   "reason": "vacuum 主控设备"
+  }
+ ],
+ "drop": [
+  {
+   "entity_id": "binary_sensor.isa_cn_blt_3_1jgfsqc78kc00_dw2hl_contact_state_p_2_2",
+   "name": "主卫门传感器  门窗传感器 接触状态",
+   "domain": "binary_sensor",
+   "area": "卫生间",
+   "reason": "binary_sensor 查询类，走 GetLiveContext 按需查"
+  },
+  {
+   "entity_id": "binary_sensor.isa_cn_blt_3_1jgfuqt5ckg00_dw2hl_contact_state_p_2_2",
+   "name": "门传感器  门窗传感器 接触状态",
+   "domain": "binary_sensor",
+   "area": "书房",
+   "reason": "binary_sensor 查询类，走 GetLiveContext 按需查"
+  },
+  {
+   "entity_id": "fan.p1s_01p00c4a2700361_aux_fan",
+   "name": "P1S_01P00C4A2700361 辅助风扇",
+   "domain": "fan",
+   "area": "舞台",
+   "reason": "用户决定：P1S 风扇不需要语音控制"
+  },
+  {
+   "entity_id": "fan.p1s_01p00c4a2700361_chamber_fan",
+   "name": "P1S_01P00C4A2700361 打印仓风扇",
+   "domain": "fan",
+   "area": "舞台",
+   "reason": "用户决定：P1S 风扇不需要语音控制"
+  },
+  {
+   "entity_id": "fan.p1s_01p00c4a2700361_cooling_fan",
+   "name": "P1S_01P00C4A2700361 冷却风扇",
+   "domain": "fan",
+   "area": "舞台",
+   "reason": "用户决定：P1S 风扇不需要语音控制"
+  },
+  {
+   "entity_id": "light.hfjh_cn_942280505_m100_s_15_light",
+   "name": "猪笼草缸  灯",
+   "domain": "light",
+   "area": "客厅",
+   "reason": "植物灯在 light 域，会被「把灯都关了」误伤（R6）"
+  },
+  {
+   "entity_id": "light.lemesh_cn_793510044_wy0d02_s_2_light",
+   "name": "盆栽射灯  灯",
+   "domain": "light",
+   "area": "阳台",
+   "reason": "植物灯在 light 域，会被「把灯都关了」误伤（R6）"
+  },
+  {
+   "entity_id": "sensor.chuangmi_cn_334499590_212a01_temperature_p_2_6",
+   "name": "三头落地灯(插座)  开关 温度",
+   "domain": "sensor",
+   "area": "客厅",
+   "reason": "sensor 查询类，走 GetLiveContext 按需查"
+  },
+  {
+   "entity_id": "sensor.chuangmi_cn_334502283_212a01_temperature_p_2_6",
+   "name": "猫砂盆排风扇(插座)  开关 温度",
+   "domain": "sensor",
+   "area": "阳台",
+   "reason": "sensor 查询类，走 GetLiveContext 按需查"
+  },
+  {
+   "entity_id": "sensor.cuco_cn_697173993_v3_temperature_p_12_2",
+   "name": "鱼缸水泵 * 开关次数 设备温度",
+   "domain": "sensor",
+   "area": "客厅",
+   "reason": "sensor 查询类，走 GetLiveContext 按需查"
+  },
+  {
+   "entity_id": "sensor.cuco_cn_831748964_v3_temperature_p_12_2",
+   "name": "植物墙水泵 * 开关次数 设备温度",
+   "domain": "sensor",
+   "area": "阳台",
+   "reason": "sensor 查询类，走 GetLiveContext 按需查"
+  },
+  {
+   "entity_id": "sensor.cuco_cn_846583549_v3_temperature_p_12_2",
+   "name": "化妆灯 * 开关次数 设备温度",
+   "domain": "sensor",
+   "area": "卧室",
+   "reason": "sensor 查询类，走 GetLiveContext 按需查"
+  },
+  {
+   "entity_id": "sensor.cuco_cn_857610130_v3_temperature_p_12_2",
+   "name": "水陆缸雾化器 * 开关次数 设备温度",
+   "domain": "sensor",
+   "area": "阳台",
+   "reason": "sensor 查询类，走 GetLiveContext 按需查"
+  },
+  {
+   "entity_id": "sensor.cuco_cn_861885629_v3_temperature_p_12_2",
+   "name": "雨林灯 * 开关次数 设备温度",
+   "domain": "sensor",
+   "area": "阳台",
+   "reason": "sensor 查询类，走 GetLiveContext 按需查"
+  },
+  {
+   "entity_id": "sensor.dmaker_cn_657279936_p28_relative_humidity_p_9_2",
+   "name": "循环扇  环境参数 相对湿度",
+   "domain": "sensor",
+   "area": "书房",
+   "reason": "sensor 查询类，走 GetLiveContext 按需查"
+  },
+  {
+   "entity_id": "sensor.dmaker_cn_657279936_p28_temperature_p_9_1",
+   "name": "循环扇  环境参数 温度",
+   "domain": "sensor",
+   "area": "书房",
+   "reason": "sensor 查询类，走 GetLiveContext 按需查"
+  },
+  {
+   "entity_id": "sensor.hfjh_cn_942280505_m100_temperature_p_2_4",
+   "name": "猪笼草缸  鱼缸 鱼缸当前温度",
+   "domain": "sensor",
+   "area": "客厅",
+   "reason": "sensor 查询类，走 GetLiveContext 按需查"
+  },
+  {
+   "entity_id": "sensor.miaomiaoc_cn_blt_3_1jgec2htgkg00_t2_relative_humidity_p_2_2",
+   "name": "拓竹AMS温湿度计  温湿度传感器 湿度",
+   "domain": "sensor",
+   "area": "舞台",
+   "reason": "sensor 查询类，走 GetLiveContext 按需查"
+  },
+  {
+   "entity_id": "sensor.miaomiaoc_cn_blt_3_1jgec2htgkg00_t2_temperature_p_2_1",
+   "name": "拓竹AMS温湿度计  温湿度传感器 温度",
+   "domain": "sensor",
+   "area": "舞台",
+   "reason": "sensor 查询类，走 GetLiveContext 按需查"
+  },
+  {
+   "entity_id": "sensor.miaomiaoc_cn_blt_3_1k2ejve8sc400_t2_relative_humidity_p_2_2",
+   "name": "鸟笼温湿度计  温湿度传感器 湿度",
+   "domain": "sensor",
+   "area": "客厅",
+   "reason": "sensor 查询类，走 GetLiveContext 按需查"
+  },
+  {
+   "entity_id": "sensor.miaomiaoc_cn_blt_3_1k2ejve8sc400_t2_temperature_p_2_1",
+   "name": "鸟笼温湿度计  温湿度传感器 温度",
+   "domain": "sensor",
+   "area": "客厅",
+   "reason": "sensor 查询类，走 GetLiveContext 按需查"
+  },
+  {
+   "entity_id": "sensor.miaomiaoc_cn_blt_3_1kb5udcqk4s01_t2_relative_humidity_p_2_2",
+   "name": "耗材箱2温湿度计  温湿度传感器 湿度",
+   "domain": "sensor",
+   "area": "舞台",
+   "reason": "sensor 查询类，走 GetLiveContext 按需查"
+  },
+  {
+   "entity_id": "sensor.miaomiaoc_cn_blt_3_1kb5udcqk4s01_t2_temperature_p_2_1",
+   "name": "耗材箱2温湿度计  温湿度传感器 温度",
+   "domain": "sensor",
+   "area": "舞台",
+   "reason": "sensor 查询类，走 GetLiveContext 按需查"
+  },
+  {
+   "entity_id": "sensor.miaomiaoc_cn_blt_3_1lgfvs3l44c00_t2_relative_humidity_p_2_2",
+   "name": "植物墙温湿度计  温湿度传感器 湿度",
+   "domain": "sensor",
+   "area": "阳台",
+   "reason": "sensor 查询类，走 GetLiveContext 按需查"
+  },
+  {
+   "entity_id": "sensor.miaomiaoc_cn_blt_3_1lgfvs3l44c00_t2_temperature_p_2_1",
+   "name": "植物墙温湿度计  温湿度传感器 温度",
+   "domain": "sensor",
+   "area": "阳台",
+   "reason": "sensor 查询类，走 GetLiveContext 按需查"
+  },
+  {
+   "entity_id": "sensor.p1s_01p00c4a2700361_ams_1_humidity",
+   "name": "P1S_01P00C4A2700361_AMS_1 湿度",
+   "domain": "sensor",
+   "area": "舞台",
+   "reason": "sensor 查询类，走 GetLiveContext 按需查"
+  },
+  {
+   "entity_id": "sensor.p1s_01p00c4a2700361_ams_1_temperature",
+   "name": "P1S_01P00C4A2700361_AMS_1 温度",
+   "domain": "sensor",
+   "area": "舞台",
+   "reason": "sensor 查询类，走 GetLiveContext 按需查"
+  },
+  {
+   "entity_id": "sensor.p1s_01p00c4a2700361_ams_2_humidity",
+   "name": "P1S_01P00C4A2700361_AMS_2 湿度",
+   "domain": "sensor",
+   "area": "舞台",
+   "reason": "sensor 查询类，走 GetLiveContext 按需查"
+  },
+  {
+   "entity_id": "sensor.p1s_01p00c4a2700361_ams_2_temperature",
+   "name": "P1S_01P00C4A2700361_AMS_2 温度",
+   "domain": "sensor",
+   "area": "舞台",
+   "reason": "sensor 查询类，走 GetLiveContext 按需查"
+  },
+  {
+   "entity_id": "sensor.p1s_01p00c4a2700361_bed_target_temperature",
+   "name": "P1S_01P00C4A2700361 热床目标温度",
+   "domain": "sensor",
+   "area": "舞台",
+   "reason": "sensor 查询类，走 GetLiveContext 按需查"
+  },
+  {
+   "entity_id": "sensor.p1s_01p00c4a2700361_bed_temperature",
+   "name": "P1S_01P00C4A2700361 热床温度",
+   "domain": "sensor",
+   "area": "舞台",
+   "reason": "sensor 查询类，走 GetLiveContext 按需查"
+  },
+  {
+   "entity_id": "sensor.p1s_01p00c4a2700361_nozzle_target_temperature",
+   "name": "P1S_01P00C4A2700361 喷嘴目标温度",
+   "domain": "sensor",
+   "area": "舞台",
+   "reason": "sensor 查询类，走 GetLiveContext 按需查"
+  },
+  {
+   "entity_id": "sensor.p1s_01p00c4a2700361_nozzle_temperature",
+   "name": "P1S_01P00C4A2700361 喷嘴温度",
+   "domain": "sensor",
+   "area": "舞台",
+   "reason": "sensor 查询类，走 GetLiveContext 按需查"
+  },
+  {
+   "entity_id": "sensor.xiaomi_cn_821937859_p1_temperature_p_2_11",
+   "name": "米家智能多功能养生壶 P1  养生壶 温度",
+   "domain": "sensor",
+   "area": "厨房",
+   "reason": "sensor 查询类，走 GetLiveContext 按需查"
+  },
+  {
+   "entity_id": "sensor.xiaomi_cn_826029761_mek01_temperature_p_2_6",
+   "name": "米家智能电热水瓶 5L  热水瓶 温度",
+   "domain": "sensor",
+   "area": "厨房",
+   "reason": "sensor 查询类，走 GetLiveContext 按需查"
+  },
+  {
+   "entity_id": "sensor.zhimi_cn_593492799_rma2_pm2_5_density_p_3_4",
+   "name": "米家空气净化器 4 Lite  环境参数 PM2.5",
+   "domain": "sensor",
+   "area": "阳台",
+   "reason": "sensor 查询类，走 GetLiveContext 按需查"
+  },
+  {
+   "entity_id": "sensor.zhimi_cn_593492799_rma2_relative_humidity_p_3_1",
+   "name": "米家空气净化器 4 Lite  环境参数 相对湿度",
+   "domain": "sensor",
+   "area": "阳台",
+   "reason": "sensor 查询类，走 GetLiveContext 按需查"
+  },
+  {
+   "entity_id": "sensor.zhimi_cn_593492799_rma2_temperature_p_3_7",
+   "name": "米家空气净化器 4 Lite  环境参数 温度",
+   "domain": "sensor",
+   "area": "阳台",
+   "reason": "sensor 查询类，走 GetLiveContext 按需查"
+  },
+  {
+   "entity_id": "switch.chuangmi_cn_334499590_212a01_power_enable_p_7_1",
+   "name": "三头落地灯(插座) * 用来打开或者关闭某些功能 功率保护开关",
+   "domain": "switch",
+   "area": "客厅",
+   "reason": "厂商自定义服务（名称含 *）"
+  },
+  {
+   "entity_id": "switch.chuangmi_cn_334499590_212a01_switch_toggle_p_4_6",
+   "name": "三头落地灯(插座) * 循环任务、按键倒计时 开关状态自动翻转",
+   "domain": "switch",
+   "area": "客厅",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.chuangmi_cn_334499590_212a01_task_switch_p_4_4",
+   "name": "三头落地灯(插座) * 循环任务、按键倒计时 循环任务的开关",
+   "domain": "switch",
+   "area": "客厅",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.chuangmi_cn_334502283_212a01_power_enable_p_7_1",
+   "name": "猫砂盆排风扇(插座) * 用来打开或者关闭某些功能 功率保护开关",
+   "domain": "switch",
+   "area": "阳台",
+   "reason": "厂商自定义服务（名称含 *）"
+  },
+  {
+   "entity_id": "switch.chuangmi_cn_334502283_212a01_switch_toggle_p_4_6",
+   "name": "猫砂盆排风扇(插座) * 循环任务、按键倒计时 开关状态自动翻转",
+   "domain": "switch",
+   "area": "阳台",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.chuangmi_cn_334502283_212a01_task_switch_p_4_4",
+   "name": "猫砂盆排风扇(插座) * 循环任务、按键倒计时 循环任务的开关",
+   "domain": "switch",
+   "area": "阳台",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.chuangmi_cn_450479275_029a02_glimmer_full_color_p_2_6",
+   "name": "小米智能摄像机 云台版2K  摄像机控制 微光全彩",
+   "domain": "switch",
+   "area": "客厅",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.chuangmi_cn_450479275_029a02_motion_detection_p_5_1",
+   "name": "小米智能摄像机 云台版2K  移动侦测 移动侦测",
+   "domain": "switch",
+   "area": "客厅",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.chuangmi_cn_450479275_029a02_motion_tracking_p_2_8",
+   "name": "小米智能摄像机 云台版2K  摄像机控制 移动追踪",
+   "domain": "switch",
+   "area": "客厅",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.chuangmi_cn_450479275_029a02_time_watermark_p_2_9",
+   "name": "小米智能摄像机 云台版2K  摄像机控制 时间水印",
+   "domain": "switch",
+   "area": "客厅",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.chuangmi_cn_450479275_029a02_wdr_mode_p_2_5",
+   "name": "小米智能摄像机 云台版2K  摄像机控制 宽动态范围模式",
+   "domain": "switch",
+   "area": "客厅",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.chunmi_cn_247144765_n20l01_physical_controls_locked_p_3_1",
+   "name": "米家微波炉  童锁 童锁",
+   "domain": "switch",
+   "area": "厨房",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.cuco_cn_697173993_v3_mode_p_3_2",
+   "name": "鱼缸水泵 * 指示灯勿扰模式 勿扰模式",
+   "domain": "switch",
+   "area": "客厅",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.cuco_cn_697173993_v3_on_p_10_1",
+   "name": "鱼缸水泵 * 过度用电提醒 开关",
+   "domain": "switch",
+   "area": "客厅",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.cuco_cn_697173993_v3_on_p_4_1",
+   "name": "鱼缸水泵 * 充电保护 开关",
+   "domain": "switch",
+   "area": "客厅",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.cuco_cn_697173993_v3_on_p_8_1",
+   "name": "鱼缸水泵 * 快捷倒计时关闭 倒计时关闭 开关",
+   "domain": "switch",
+   "area": "客厅",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.cuco_cn_697173993_v3_on_p_9_1",
+   "name": "鱼缸水泵 * 最大功率限制 开关",
+   "domain": "switch",
+   "area": "客厅",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.cuco_cn_697173993_v3_physical_controls_locked_p_7_1",
+   "name": "鱼缸水泵  物理控制锁 物理控制锁",
+   "domain": "switch",
+   "area": "客厅",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.cuco_cn_697173993_v3_status_p_5_1",
+   "name": "鱼缸水泵 * 循环任务 状态，true：启用中；false：未启用",
+   "domain": "switch",
+   "area": "客厅",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.cuco_cn_831748964_v3_mode_p_3_2",
+   "name": "植物墙水泵 * 指示灯勿扰模式 勿扰模式",
+   "domain": "switch",
+   "area": "阳台",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.cuco_cn_831748964_v3_on_p_10_1",
+   "name": "植物墙水泵 * 过度用电提醒 开关",
+   "domain": "switch",
+   "area": "阳台",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.cuco_cn_831748964_v3_on_p_4_1",
+   "name": "植物墙水泵 * 充电保护 开关",
+   "domain": "switch",
+   "area": "阳台",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.cuco_cn_831748964_v3_on_p_8_1",
+   "name": "植物墙水泵 * 快捷倒计时关闭 倒计时关闭 开关",
+   "domain": "switch",
+   "area": "阳台",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.cuco_cn_831748964_v3_on_p_9_1",
+   "name": "植物墙水泵 * 最大功率限制 开关",
+   "domain": "switch",
+   "area": "阳台",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.cuco_cn_831748964_v3_physical_controls_locked_p_7_1",
+   "name": "植物墙水泵  物理控制锁 物理控制锁",
+   "domain": "switch",
+   "area": "阳台",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.cuco_cn_831748964_v3_status_p_5_1",
+   "name": "植物墙水泵 * 循环任务 状态，true：启用中；false：未启用",
+   "domain": "switch",
+   "area": "阳台",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.cuco_cn_846583549_v3_mode_p_3_2",
+   "name": "化妆灯 * 指示灯勿扰模式 勿扰模式",
+   "domain": "switch",
+   "area": "卧室",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.cuco_cn_846583549_v3_on_p_10_1",
+   "name": "化妆灯 * 过度用电提醒 开关",
+   "domain": "switch",
+   "area": "卧室",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.cuco_cn_846583549_v3_on_p_4_1",
+   "name": "化妆灯 * 充电保护 开关",
+   "domain": "switch",
+   "area": "卧室",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.cuco_cn_846583549_v3_on_p_8_1",
+   "name": "化妆灯 * 快捷倒计时关闭 倒计时关闭 开关",
+   "domain": "switch",
+   "area": "卧室",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.cuco_cn_846583549_v3_on_p_9_1",
+   "name": "化妆灯 * 最大功率限制 开关",
+   "domain": "switch",
+   "area": "卧室",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.cuco_cn_846583549_v3_physical_controls_locked_p_7_1",
+   "name": "化妆灯  物理控制锁 物理控制锁",
+   "domain": "switch",
+   "area": "卧室",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.cuco_cn_846583549_v3_status_p_5_1",
+   "name": "化妆灯 * 循环任务 状态，true：启用中；false：未启用",
+   "domain": "switch",
+   "area": "卧室",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.cuco_cn_857610130_v3_mode_p_3_2",
+   "name": "水陆缸雾化器 * 指示灯勿扰模式 勿扰模式",
+   "domain": "switch",
+   "area": "阳台",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.cuco_cn_857610130_v3_on_p_10_1",
+   "name": "水陆缸雾化器 * 过度用电提醒 开关",
+   "domain": "switch",
+   "area": "阳台",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.cuco_cn_857610130_v3_on_p_4_1",
+   "name": "水陆缸雾化器 * 充电保护 开关",
+   "domain": "switch",
+   "area": "阳台",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.cuco_cn_857610130_v3_on_p_8_1",
+   "name": "水陆缸雾化器 * 快捷倒计时关闭 倒计时关闭 开关",
+   "domain": "switch",
+   "area": "阳台",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.cuco_cn_857610130_v3_on_p_9_1",
+   "name": "水陆缸雾化器 * 最大功率限制 开关",
+   "domain": "switch",
+   "area": "阳台",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.cuco_cn_857610130_v3_physical_controls_locked_p_7_1",
+   "name": "水陆缸雾化器  物理控制锁 物理控制锁",
+   "domain": "switch",
+   "area": "阳台",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.cuco_cn_857610130_v3_status_p_5_1",
+   "name": "水陆缸雾化器 * 循环任务 状态，true：启用中；false：未启用",
+   "domain": "switch",
+   "area": "阳台",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.cuco_cn_861885629_v3_mode_p_3_2",
+   "name": "雨林灯 * 指示灯勿扰模式 勿扰模式",
+   "domain": "switch",
+   "area": "阳台",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.cuco_cn_861885629_v3_on_p_10_1",
+   "name": "雨林灯 * 过度用电提醒 开关",
+   "domain": "switch",
+   "area": "阳台",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.cuco_cn_861885629_v3_on_p_4_1",
+   "name": "雨林灯 * 充电保护 开关",
+   "domain": "switch",
+   "area": "阳台",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.cuco_cn_861885629_v3_on_p_8_1",
+   "name": "雨林灯 * 快捷倒计时关闭 倒计时关闭 开关",
+   "domain": "switch",
+   "area": "阳台",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.cuco_cn_861885629_v3_on_p_9_1",
+   "name": "雨林灯 * 最大功率限制 开关",
+   "domain": "switch",
+   "area": "阳台",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.cuco_cn_861885629_v3_physical_controls_locked_p_7_1",
+   "name": "雨林灯  物理控制锁 物理控制锁",
+   "domain": "switch",
+   "area": "阳台",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.cuco_cn_861885629_v3_status_p_5_1",
+   "name": "雨林灯 * 循环任务 状态，true：启用中；false：未启用",
+   "domain": "switch",
+   "area": "阳台",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.devcea_cn_699316520_ls2304_custom_sleep_aid_p_3_8",
+   "name": "台灯1 * 设置 助眠自定义开关",
+   "domain": "switch",
+   "area": "卧室",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.devcea_cn_699316520_ls2304_custom_weak_up_p_3_12",
+   "name": "台灯1 * 设置 唤醒自定义开关",
+   "domain": "switch",
+   "area": "卧室",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.devcea_cn_699316520_ls2304_flex_switch_p_2_5",
+   "name": "台灯1  灯 凌动开关",
+   "domain": "switch",
+   "area": "卧室",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.devcea_cn_699316520_ls2304_power_on_state_p_3_2",
+   "name": "台灯1 * 设置 通电默认状态",
+   "domain": "switch",
+   "area": "卧室",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.devcea_cn_699316520_ls2304_turn_on_state_p_3_3",
+   "name": "台灯1 * 设置 开灯默认状态",
+   "domain": "switch",
+   "area": "卧室",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.devcea_cn_699352781_ls2305_custom_sleep_aid_p_3_8",
+   "name": "摇臂台灯 * 设置 助眠自定义开关",
+   "domain": "switch",
+   "area": "客厅",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.devcea_cn_699352781_ls2305_custom_weak_up_p_3_12",
+   "name": "摇臂台灯 * 设置 唤醒自定义开关",
+   "domain": "switch",
+   "area": "客厅",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.devcea_cn_699352781_ls2305_flex_switch_p_2_5",
+   "name": "摇臂台灯  灯 凌动开关",
+   "domain": "switch",
+   "area": "客厅",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.devcea_cn_699352781_ls2305_power_on_state_p_3_2",
+   "name": "摇臂台灯 * 设置 通电默认状态",
+   "domain": "switch",
+   "area": "客厅",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.devcea_cn_699352781_ls2305_turn_on_state_p_3_3",
+   "name": "摇臂台灯 * 设置 开灯默认状态",
+   "domain": "switch",
+   "area": "客厅",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.devcea_cn_732021453_ls2307_custom_sleep_aid_p_3_8",
+   "name": "宜家麦希瑟E27 806lm智能彩色球泡灯 * 设置 助眠自定义开关",
+   "domain": "switch",
+   "area": "卧室",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.devcea_cn_732021453_ls2307_custom_weak_up_p_3_12",
+   "name": "宜家麦希瑟E27 806lm智能彩色球泡灯 * 设置 唤醒自定义开关",
+   "domain": "switch",
+   "area": "卧室",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.devcea_cn_732021453_ls2307_flex_switch_p_2_5",
+   "name": "宜家麦希瑟E27 806lm智能彩色球泡灯  灯 凌动开关",
+   "domain": "switch",
+   "area": "卧室",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.devcea_cn_732021453_ls2307_power_on_state_p_3_2",
+   "name": "宜家麦希瑟E27 806lm智能彩色球泡灯 * 设置 通电默认状态",
+   "domain": "switch",
+   "area": "卧室",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.devcea_cn_732021453_ls2307_turn_on_state_p_3_3",
+   "name": "宜家麦希瑟E27 806lm智能彩色球泡灯 * 设置 开灯默认状态",
+   "domain": "switch",
+   "area": "卧室",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.devcea_cn_732026401_ls2305_custom_sleep_aid_p_3_8",
+   "name": "台灯2 * 设置 助眠自定义开关",
+   "domain": "switch",
+   "area": "卧室",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.devcea_cn_732026401_ls2305_custom_weak_up_p_3_12",
+   "name": "台灯2 * 设置 唤醒自定义开关",
+   "domain": "switch",
+   "area": "卧室",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.devcea_cn_732026401_ls2305_flex_switch_p_2_5",
+   "name": "台灯2  灯 凌动开关",
+   "domain": "switch",
+   "area": "卧室",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.devcea_cn_732026401_ls2305_power_on_state_p_3_2",
+   "name": "台灯2 * 设置 通电默认状态",
+   "domain": "switch",
+   "area": "卧室",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.devcea_cn_732026401_ls2305_turn_on_state_p_3_3",
+   "name": "台灯2 * 设置 开灯默认状态",
+   "domain": "switch",
+   "area": "卧室",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.devcea_cn_732047445_ls2303_custom_sleep_aid_p_3_8",
+   "name": "落地灯 * 设置 助眠自定义开关",
+   "domain": "switch",
+   "area": "舞台",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.devcea_cn_732047445_ls2303_custom_weak_up_p_3_12",
+   "name": "落地灯 * 设置 唤醒自定义开关",
+   "domain": "switch",
+   "area": "舞台",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.devcea_cn_732047445_ls2303_flex_switch_p_2_5",
+   "name": "落地灯  灯 凌动开关",
+   "domain": "switch",
+   "area": "舞台",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.devcea_cn_732047445_ls2303_power_on_state_p_3_2",
+   "name": "落地灯 * 设置 通电默认状态",
+   "domain": "switch",
+   "area": "舞台",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.devcea_cn_732047445_ls2303_turn_on_state_p_3_3",
+   "name": "落地灯 * 设置 开灯默认状态",
+   "domain": "switch",
+   "area": "舞台",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.dmaker_cn_656819667_p5c_alarm_p_5_1",
+   "name": "风扇  提示音 提示音",
+   "domain": "switch",
+   "area": "卧室",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.dmaker_cn_656819667_p5c_physical_controls_locked_p_7_1",
+   "name": "风扇  物理控制锁（童锁） 物理控制锁",
+   "domain": "switch",
+   "area": "卧室",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.dmaker_cn_656819667_p5c_start_left_p_8_3",
+   "name": "风扇 * 自定义服务 开始向左转",
+   "domain": "switch",
+   "area": "卧室",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.dmaker_cn_656819667_p5c_start_right_p_8_4",
+   "name": "风扇 * 自定义服务 开始向右转",
+   "domain": "switch",
+   "area": "卧室",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.dmaker_cn_657279936_p28_alarm_p_5_1",
+   "name": "循环扇  提示音 提示音",
+   "domain": "switch",
+   "area": "书房",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.dmaker_cn_657279936_p28_back_to_center_p_8_9",
+   "name": "循环扇 * 自定义服务 一键回正",
+   "domain": "switch",
+   "area": "书房",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.dmaker_cn_657279936_p28_off_to_center_p_8_10",
+   "name": "循环扇 * 自定义服务 关机后回正",
+   "domain": "switch",
+   "area": "书房",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.dmaker_cn_657279936_p28_physical_controls_locked_p_7_1",
+   "name": "循环扇  物理控制锁 物理控制锁",
+   "domain": "switch",
+   "area": "书房",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.dmaker_cn_657279936_p28_start_down_p_8_7",
+   "name": "循环扇 * 自定义服务 开始向下转",
+   "domain": "switch",
+   "area": "书房",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.dmaker_cn_657279936_p28_start_left_p_8_4",
+   "name": "循环扇 * 自定义服务 开始向左转",
+   "domain": "switch",
+   "area": "书房",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.dmaker_cn_657279936_p28_start_right_p_8_5",
+   "name": "循环扇 * 自定义服务 开始向右转",
+   "domain": "switch",
+   "area": "书房",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.dmaker_cn_657279936_p28_start_up_p_8_6",
+   "name": "循环扇 * 自定义服务 开始向上转",
+   "domain": "switch",
+   "area": "书房",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.dmaker_cn_657279936_p28_swing_all_p_8_8",
+   "name": "循环扇 * 自定义服务 循环摇头一键开关",
+   "domain": "switch",
+   "area": "书房",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.dmaker_cn_657279936_p28_vertical_swing_p_2_7",
+   "name": "循环扇  风扇 上下摆风",
+   "domain": "switch",
+   "area": "书房",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.fengmi_cn_350902109_m135jp_mute_p_4_2",
+   "name": "投影仪  扬声器 静音",
+   "domain": "switch",
+   "area": "客厅",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.ftd_cn_1124112558_dsplmp_defaultonoffstate_p_3_5",
+   "name": "碗柜灯 * 厂商自定义 通电默认状态",
+   "domain": "switch",
+   "area": "餐厅",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.ftd_cn_1124112558_dsplmp_defaultstate_p_3_20",
+   "name": "碗柜灯 * 厂商自定义 默认灯光",
+   "domain": "switch",
+   "area": "餐厅",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.ftd_cn_1124112558_dsplmp_dimctl_p_3_2",
+   "name": "碗柜灯 * 厂商自定义 色温增减",
+   "domain": "switch",
+   "area": "餐厅",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.ftd_cn_1124112558_dsplmp_dimlum_p_3_1",
+   "name": "碗柜灯 * 厂商自定义 亮度增减",
+   "domain": "switch",
+   "area": "餐厅",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.ftd_cn_1124112558_dsplmp_flex_switch_p_2_4",
+   "name": "碗柜灯  灯 凌动开关",
+   "domain": "switch",
+   "area": "餐厅",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.ftd_cn_1124112558_dsplmp_nightlight_p_3_7",
+   "name": "碗柜灯 * 厂商自定义 起夜模式开关",
+   "domain": "switch",
+   "area": "餐厅",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.ftd_cn_1124112558_dsplmp_nightlightonoff_p_3_19",
+   "name": "碗柜灯 * 厂商自定义 打开/关闭起夜灯功能",
+   "domain": "switch",
+   "area": "餐厅",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.ftd_cn_1124112558_dsplmp_recoverybeforeoff_p_3_6",
+   "name": "碗柜灯 * 厂商自定义 恢复断电前灯光",
+   "domain": "switch",
+   "area": "餐厅",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.ftd_cn_1124112558_dsplmp_sleepmodeuserset_p_3_13",
+   "name": "碗柜灯 * 厂商自定义 助眠模式自定义亮度标志",
+   "domain": "switch",
+   "area": "餐厅",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.ftd_cn_1124112558_dsplmp_wakeupmodeuserset_p_3_16",
+   "name": "碗柜灯 * 厂商自定义 唤醒模式自定义亮度标志",
+   "domain": "switch",
+   "area": "餐厅",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.giot_cn_1186473164_v5icm_motor_reverse_p_2_8",
+   "name": "V1锂电池智能窗帘（Mesh）  窗帘 电机反向",
+   "domain": "switch",
+   "area": "厨房",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.hfjh_cn_942280505_m100_alarm_p_13_1",
+   "name": "猪笼草缸  提示音 提示音",
+   "domain": "switch",
+   "area": "客厅",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.hfjh_cn_942280505_m100_feed_protect_on_p_6_3",
+   "name": "猪笼草缸 * 自定义喂食器内容 喂食保护开关，水泵暂停3分钟",
+   "domain": "switch",
+   "area": "客厅",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.hfjh_cn_942280505_m100_light_edit_on_p_4_2",
+   "name": "猪笼草缸 * 自定义灯光内容 灯光编辑开关",
+   "domain": "switch",
+   "area": "客厅",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.hfjh_cn_942280505_m100_light_status_on_p_8_4",
+   "name": "猪笼草缸 * 自定义勿扰模式内容 灯光状态-开关",
+   "domain": "switch",
+   "area": "客厅",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.hfjh_cn_942280505_m100_no_disturb_p_7_1",
+   "name": "猪笼草缸  勿扰 勿扰",
+   "domain": "switch",
+   "area": "客厅",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.hfjh_cn_942280505_m100_off_flipcover_switch_p_4_7",
+   "name": "猪笼草缸 * 自定义灯光内容 翻盖熄灯开关",
+   "domain": "switch",
+   "area": "客厅",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.hfjh_cn_942280505_m100_physical_controls_locked_p_16_1",
+   "name": "猪笼草缸  物理控制锁 物理控制锁",
+   "domain": "switch",
+   "area": "客厅",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.hfjh_cn_942280505_m100_pump_status_on_p_8_8",
+   "name": "猪笼草缸 * 自定义勿扰模式内容 水泵状态-开关",
+   "domain": "switch",
+   "area": "客厅",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.hfjh_cn_942280505_m100_temperature_warn_on_p_9_3",
+   "name": "猪笼草缸 * 自定义鱼缸内容 温度提醒开关",
+   "domain": "switch",
+   "area": "客厅",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.leishi_cn_959422788_eps126_brightness_add_p_5_2",
+   "name": "餐厅吊灯 * 场景自动化 亮度增加",
+   "domain": "switch",
+   "area": "餐厅",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.leishi_cn_959422788_eps126_brightness_dec_p_5_3",
+   "name": "餐厅吊灯 * 场景自动化 亮度减少",
+   "domain": "switch",
+   "area": "餐厅",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.leishi_cn_959422788_eps126_brightness_sw_p_5_4",
+   "name": "餐厅吊灯 * 场景自动化 亮度切换",
+   "domain": "switch",
+   "area": "餐厅",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.leishi_cn_959422788_eps126_colortemperature_add_p_5_6",
+   "name": "餐厅吊灯 * 场景自动化 色温增加",
+   "domain": "switch",
+   "area": "餐厅",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.leishi_cn_959422788_eps126_colortemperature_dec_p_5_7",
+   "name": "餐厅吊灯 * 场景自动化 色温减少",
+   "domain": "switch",
+   "area": "餐厅",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.leishi_cn_959422788_eps126_colortemperature_sw_p_5_8",
+   "name": "餐厅吊灯 * 场景自动化 色温切换",
+   "domain": "switch",
+   "area": "餐厅",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.leishi_cn_959422788_eps126_flex_switch_p_2_6",
+   "name": "餐厅吊灯  灯 凌动开关",
+   "domain": "switch",
+   "area": "餐厅",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.leishi_cn_959422788_eps126_follow_the_main_p_3_9",
+   "name": "餐厅吊灯 * 设置 跟随主光开关",
+   "domain": "switch",
+   "area": "餐厅",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.leishi_cn_959422788_eps126_night_light_off_p_3_8",
+   "name": "餐厅吊灯 * 设置 夜灯延时关闭开关",
+   "domain": "switch",
+   "area": "餐厅",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.leishi_cn_959422788_eps126_night_light_switch_p_2_11",
+   "name": "餐厅吊灯  灯 夜灯开关",
+   "domain": "switch",
+   "area": "餐厅",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.leishi_cn_959422788_eps126_on_or_brightness_p_5_5",
+   "name": "餐厅吊灯 * 场景自动化 开或切换亮度",
+   "domain": "switch",
+   "area": "餐厅",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.leishi_cn_959422788_eps126_on_or_colortemp_p_5_9",
+   "name": "餐厅吊灯 * 场景自动化 开或切换色温",
+   "domain": "switch",
+   "area": "餐厅",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.leishi_cn_959422788_eps126_sleep_aid_mode_p_2_7",
+   "name": "餐厅吊灯  灯 助眠模式",
+   "domain": "switch",
+   "area": "餐厅",
+   "reason": "switch 未命中任何保留条件"
+  },
+  {
+   "entity_id": "switch.leishi_cn_959422788_eps126_toggle_p_5_1",
+   "name": "餐厅吊灯 * 场景自动化 开关状态切换",
+   "domain": "switch",
+   "area": "餐厅",
+   "reason": "厂商自定义服务（名称含 *）"
+  },
+  {
+   "entity_id": "switch.leishi_cn_959422788_eps126_user_save_p_3_6",
+   "name": "餐厅吊灯 * 设置 默认灯光",
+   "domain": "switch",
+   "area": "餐厅",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.leishi_cn_959422788_eps126_wake_up_mode_p_2_8",
+   "name": "餐厅吊灯  灯 唤醒模式",
+   "domain": "switch",
+   "area": "餐厅",
+   "reason": "switch 未命中任何保留条件"
+  },
+  {
+   "entity_id": "switch.lemesh_cn_793510044_wy0d02_flex_switch_p_2_12",
+   "name": "盆栽射灯  灯 凌动开关",
+   "domain": "switch",
+   "area": "阳台",
+   "reason": "植物灯在 light 域，会被「把灯都关了」误伤（R6）"
+  },
+  {
+   "entity_id": "switch.lemesh_cn_793510044_wy0d02_master_slave_switch_p_5_19",
+   "name": "盆栽射灯 * 默认状态 主从灯开关",
+   "domain": "switch",
+   "area": "阳台",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.lemesh_cn_793510044_wy0d02_night_light_switch_p_2_13",
+   "name": "盆栽射灯  灯 夜灯开关",
+   "domain": "switch",
+   "area": "阳台",
+   "reason": "植物灯在 light 域，会被「把灯都关了」误伤（R6）"
+  },
+  {
+   "entity_id": "switch.lemesh_cn_793510044_wy0d02_remote_control_addable_p_6_1",
+   "name": "盆栽射灯  遥控器管理 遥控器添加开关",
+   "domain": "switch",
+   "area": "阳台",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.lemesh_cn_793510044_wy0d02_remote_control_addable_p_6_7",
+   "name": "盆栽射灯  遥控器管理 遥控器禁止添加开关",
+   "domain": "switch",
+   "area": "阳台",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.lemesh_cn_948937568_wy0d02_flex_switch_p_2_12",
+   "name": "餐厅射灯2  灯 凌动开关",
+   "domain": "switch",
+   "area": "餐厅",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.lemesh_cn_948937568_wy0d02_master_slave_switch_p_5_19",
+   "name": "餐厅射灯2 * 默认状态 主从灯开关",
+   "domain": "switch",
+   "area": "餐厅",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.lemesh_cn_948937568_wy0d02_night_light_switch_p_2_13",
+   "name": "餐厅射灯2  灯 夜灯开关",
+   "domain": "switch",
+   "area": "餐厅",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.lemesh_cn_948937568_wy0d02_remote_control_addable_p_6_1",
+   "name": "餐厅射灯2  遥控器管理 遥控器添加开关",
+   "domain": "switch",
+   "area": "餐厅",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.lemesh_cn_948937568_wy0d02_remote_control_addable_p_6_7",
+   "name": "餐厅射灯2  遥控器管理 遥控器禁止添加开关",
+   "domain": "switch",
+   "area": "餐厅",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.lemesh_cn_948950531_wy0d02_flex_switch_p_2_12",
+   "name": "餐厅射灯1  灯 凌动开关",
+   "domain": "switch",
+   "area": "餐厅",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.lemesh_cn_948950531_wy0d02_master_slave_switch_p_5_19",
+   "name": "餐厅射灯1 * 默认状态 主从灯开关",
+   "domain": "switch",
+   "area": "餐厅",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.lemesh_cn_948950531_wy0d02_night_light_switch_p_2_13",
+   "name": "餐厅射灯1  灯 夜灯开关",
+   "domain": "switch",
+   "area": "餐厅",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.lemesh_cn_948950531_wy0d02_remote_control_addable_p_6_1",
+   "name": "餐厅射灯1  遥控器管理 遥控器添加开关",
+   "domain": "switch",
+   "area": "餐厅",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.lemesh_cn_948950531_wy0d02_remote_control_addable_p_6_7",
+   "name": "餐厅射灯1  遥控器管理 遥控器禁止添加开关",
+   "domain": "switch",
+   "area": "餐厅",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.lumi_cn_1000914510_hmcn02_wake_up_mode_p_2_7",
+   "name": "窗帘  窗帘 唤醒模式",
+   "domain": "switch",
+   "area": "书房",
+   "reason": "switch 未命中任何保留条件"
+  },
+  {
+   "entity_id": "switch.mibx2_cn_836329235_x11_alarm_p_7_1",
+   "name": "米家洗衣机 分区洗 洗烘15kg  提示音 提示音",
+   "domain": "switch",
+   "area": "阳台",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.mibx2_cn_836329235_x11_extend_func_enabled_p_18_1",
+   "name": "米家洗衣机 分区洗 洗烘15kg * 插件连接、断连 控制扩展功能的开关",
+   "domain": "switch",
+   "area": "阳台",
+   "reason": "厂商自定义服务（名称含 *）"
+  },
+  {
+   "entity_id": "switch.mibx2_cn_836329235_x11_laundry_beads_p_3_27",
+   "name": "米家洗衣机 分区洗 洗烘15kg  洗衣机上桶 洗衣凝珠开启",
+   "domain": "switch",
+   "area": "阳台",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.mibx2_cn_836329235_x11_laundry_beads_p_4_27",
+   "name": "米家洗衣机 分区洗 洗烘15kg  洗衣机下桶 洗衣凝珠开启",
+   "domain": "switch",
+   "area": "阳台",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.mibx2_cn_836329235_x11_physical_controls_locked_p_6_1",
+   "name": "米家洗衣机 分区洗 洗烘15kg  物理控制锁 物理控制锁",
+   "domain": "switch",
+   "area": "阳台",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.mibx2_cn_836329235_x11_self_delivery_auto_turnoff_p_2_4",
+   "name": "米家洗衣机 分区洗 洗烘15kg  洗衣机 自动关闭自动投放",
+   "domain": "switch",
+   "area": "阳台",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.mibx2_cn_836329235_x11_uv_p_3_21",
+   "name": "米家洗衣机 分区洗 洗烘15kg  洗衣机上桶 UV杀菌",
+   "domain": "switch",
+   "area": "阳台",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.mibx2_cn_836329235_x11_uv_p_4_21",
+   "name": "米家洗衣机 分区洗 洗烘15kg  洗衣机下桶 UV杀菌",
+   "domain": "switch",
+   "area": "阳台",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.quan_zi_dong_mao_ce_suo_max_pro_2_camera",
+   "name": "全自动猫厕所 MAX PRO 2 摄像头",
+   "domain": "switch",
+   "area": "阳台",
+   "reason": "switch 未命中任何保留条件"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_1102316232_pro3_anti_flicker_p_2_4",
+   "name": "卧室门口三开  左键-卧室门口三开 防闪烁模式",
+   "domain": "switch",
+   "area": "舞台",
+   "reason": "★ 该路为纯无线模式，动继电器会让下游智能灯断电"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_1102316232_pro3_on_p_2_1",
+   "name": "卧室门口三开  左键-卧室门口三开 左键",
+   "domain": "switch",
+   "area": "舞台",
+   "reason": "★ 该路为纯无线模式，动继电器会让下游智能灯断电"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_1102316232_pro3_on_p_3_1",
+   "name": "卧室门口三开  中键-卧室门口三开 中键",
+   "domain": "switch",
+   "area": "舞台",
+   "reason": "★ 该路为纯无线模式，动继电器会让下游智能灯断电"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_1102316232_pro3_on_p_4_1",
+   "name": "卧室门口三开  右键-卧室门口三开 右键",
+   "domain": "switch",
+   "area": "舞台",
+   "reason": "★ 该路为纯无线模式，动继电器会让下游智能灯断电"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_1102356379_pro3_anti_flicker_p_2_4",
+   "name": "游戏房外三开  筒灯 防闪烁模式",
+   "domain": "switch",
+   "area": "阳台",
+   "reason": "有线路内的设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_1102356379_pro3_on_p_3_1",
+   "name": "游戏房外三开  吸顶灯 中键",
+   "domain": "switch",
+   "area": "阳台",
+   "reason": "★ 该路为纯无线模式，动继电器会让下游智能灯断电"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_1102356379_pro3_on_p_4_1",
+   "name": "游戏房外三开  右键-游戏房外三开 右键",
+   "domain": "switch",
+   "area": "阳台",
+   "reason": "★ 该路为纯无线模式，动继电器会让下游智能灯断电"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_1110557300_pro1_anti_flicker_p_2_4",
+   "name": "主卫灯  开关 防闪烁模式",
+   "domain": "switch",
+   "area": "卫生间",
+   "reason": "有线路内的设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_1110751089_wpro2_anti_flicker_p_2_4",
+   "name": "桌右侧双开  筒灯 防闪烁模式",
+   "domain": "switch",
+   "area": "书房",
+   "reason": "有线路内的设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_1110751089_wpro2_on_p_3_1",
+   "name": "桌右侧双开  右键-桌右侧双开 右键",
+   "domain": "switch",
+   "area": "书房",
+   "reason": "★ 该路为纯无线模式，动继电器会让下游智能灯断电"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_1110898494_pro2_anti_flicker_p_2_4",
+   "name": "大门双开  左键-大门双开 防闪烁模式",
+   "domain": "switch",
+   "area": "客厅",
+   "reason": "★ 该路为纯无线模式，动继电器会让下游智能灯断电"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_1110898494_pro2_on_p_2_1",
+   "name": "大门双开  左键-大门双开 左键",
+   "domain": "switch",
+   "area": "客厅",
+   "reason": "★ 该路为纯无线模式，动继电器会让下游智能灯断电"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_1110898494_pro2_on_p_3_1",
+   "name": "大门双开  右键-大门双开 右键",
+   "domain": "switch",
+   "area": "客厅",
+   "reason": "★ 该路为纯无线模式，动继电器会让下游智能灯断电"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_1110899730_pro2_anti_flicker_p_2_4",
+   "name": "飘窗双开  飘窗筒灯 防闪烁模式",
+   "domain": "switch",
+   "area": "次卧",
+   "reason": "有线路内的设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_1110899730_pro2_on_p_3_1",
+   "name": "飘窗双开  右键-飘窗双开 右键",
+   "domain": "switch",
+   "area": "次卧",
+   "reason": "★ 该路为纯无线模式，动继电器会让下游智能灯断电"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_1110986782_pro1_anti_flicker_p_2_4",
+   "name": "次卫灯  开关 防闪烁模式",
+   "domain": "switch",
+   "area": "卫生间",
+   "reason": "有线路内的设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_1111949782_wpro3_anti_flicker_p_2_4",
+   "name": "门口三开  左键-门口三开 防闪烁模式",
+   "domain": "switch",
+   "area": "书房",
+   "reason": "★ 该路为纯无线模式，动继电器会让下游智能灯断电"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_1111949782_wpro3_on_p_2_1",
+   "name": "门口三开  左键-门口三开 左键",
+   "domain": "switch",
+   "area": "书房",
+   "reason": "★ 该路为纯无线模式，动继电器会让下游智能灯断电"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_1111949782_wpro3_on_p_3_1",
+   "name": "门口三开  中键-门口三开 中键",
+   "domain": "switch",
+   "area": "书房",
+   "reason": "★ 该路为纯无线模式，动继电器会让下游智能灯断电"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_1111949782_wpro3_on_p_4_1",
+   "name": "门口三开  右键-门口三开 右键",
+   "domain": "switch",
+   "area": "书房",
+   "reason": "★ 该路为纯无线模式，动继电器会让下游智能灯断电"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_1112001330_pro2_anti_flicker_p_2_4",
+   "name": "靠窗双开  吸顶灯 防闪烁模式",
+   "domain": "switch",
+   "area": "卧室",
+   "reason": "有线路内的设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_1112001330_pro2_on_p_3_1",
+   "name": "靠窗双开  右键-靠窗双开 右键",
+   "domain": "switch",
+   "area": "卧室",
+   "reason": "★ 该路为纯无线模式，动继电器会让下游智能灯断电"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_1112007147_pro2_anti_flicker_p_2_4",
+   "name": "靠柜双开  壁灯 防闪烁模式",
+   "domain": "switch",
+   "area": "卧室",
+   "reason": "有线路内的设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_1112007147_pro2_on_p_3_1",
+   "name": "靠柜双开  右键-靠柜双开 右键",
+   "domain": "switch",
+   "area": "卧室",
+   "reason": "★ 该路为纯无线模式，动继电器会让下游智能灯断电"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_1112019897_pro2_anti_flicker_p_2_4",
+   "name": "过道双开  过道筒灯 防闪烁模式",
+   "domain": "switch",
+   "area": "卫生间",
+   "reason": "有线路内的设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_1112662384_pro3_anti_flicker_p_2_4",
+   "name": "窗边三开  吸顶灯 防闪烁模式",
+   "domain": "switch",
+   "area": "书房",
+   "reason": "有线路内的设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_1112662522_pro3_anti_flicker_p_2_4",
+   "name": "碗柜后三开  筒灯 防闪烁模式",
+   "domain": "switch",
+   "area": "餐厅",
+   "reason": "有线路内的设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_1112662522_pro3_on_p_3_1",
+   "name": "碗柜后三开  中键-碗柜后三开 中键",
+   "domain": "switch",
+   "area": "餐厅",
+   "reason": "★ 该路为纯无线模式，动继电器会让下游智能灯断电"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_1112662522_pro3_on_p_4_1",
+   "name": "碗柜后三开  右键-碗柜后三开 右键",
+   "domain": "switch",
+   "area": "餐厅",
+   "reason": "★ 该路为纯无线模式，动继电器会让下游智能灯断电"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_1133409230_pro3_anti_flicker_p_2_4",
+   "name": "门口三开  左键-门口三开 防闪烁模式",
+   "domain": "switch",
+   "area": "卧室",
+   "reason": "★ 该路为纯无线模式，动继电器会让下游智能灯断电"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_1133409230_pro3_on_p_2_1",
+   "name": "门口三开  左键-门口三开 左键",
+   "domain": "switch",
+   "area": "卧室",
+   "reason": "★ 该路为纯无线模式，动继电器会让下游智能灯断电"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_1133409230_pro3_on_p_3_1",
+   "name": "门口三开  中键-门口三开 中键",
+   "domain": "switch",
+   "area": "卧室",
+   "reason": "★ 该路为纯无线模式，动继电器会让下游智能灯断电"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_1133409230_pro3_on_p_4_1",
+   "name": "门口三开  右键-门口三开 右键",
+   "domain": "switch",
+   "area": "卧室",
+   "reason": "★ 该路为纯无线模式，动继电器会让下游智能灯断电"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_1133637884_pro3_anti_flicker_p_2_4",
+   "name": "床头三开  左键-床头三开 防闪烁模式",
+   "domain": "switch",
+   "area": "次卧",
+   "reason": "★ 该路为纯无线模式，动继电器会让下游智能灯断电"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_1133637884_pro3_on_p_2_1",
+   "name": "床头三开  左键-床头三开 左键",
+   "domain": "switch",
+   "area": "次卧",
+   "reason": "★ 该路为纯无线模式，动继电器会让下游智能灯断电"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_1133637884_pro3_on_p_4_1",
+   "name": "床头三开  右键-床头三开 右键",
+   "domain": "switch",
+   "area": "次卧",
+   "reason": "★ 该路为纯无线模式，动继电器会让下游智能灯断电"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_1133640662_pro3_anti_flicker_p_2_4",
+   "name": "门口三开  门口筒灯 防闪烁模式",
+   "domain": "switch",
+   "area": "次卧",
+   "reason": "有线路内的设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_1133640662_pro3_on_p_3_1",
+   "name": "门口三开  中键-门口三开 中键",
+   "domain": "switch",
+   "area": "次卧",
+   "reason": "★ 该路为纯无线模式，动继电器会让下游智能灯断电"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_1133640662_pro3_on_p_4_1",
+   "name": "门口三开  右键-门口三开 右键",
+   "domain": "switch",
+   "area": "次卧",
+   "reason": "★ 该路为纯无线模式，动继电器会让下游智能灯断电"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_1141278931_c107_ai_cleaning_p_2_37",
+   "name": "米家全能扫拖机器人M30 Pro  扫地机 AI感知清洁 ",
+   "domain": "switch",
+   "area": "阳台",
+   "reason": "switch 未命中任何保留条件"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_1141278931_c107_ai_managed_cleaning_p_2_69",
+   "name": "米家全能扫拖机器人M30 Pro  扫地机 AI托管清洁",
+   "domain": "switch",
+   "area": "阳台",
+   "reason": "switch 未命中任何保留条件"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_1141278931_c107_alarm_p_4_1",
+   "name": "米家全能扫拖机器人M30 Pro  提示音 提示音",
+   "domain": "switch",
+   "area": "阳台",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_1141278931_c107_auto_dust_arrest_p_2_32",
+   "name": "米家全能扫拖机器人M30 Pro  扫地机 自动集尘 ",
+   "domain": "switch",
+   "area": "阳台",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_1141278931_c107_auto_mop_dry_p_2_34",
+   "name": "米家全能扫拖机器人M30 Pro  扫地机 自动烘干拖布",
+   "domain": "switch",
+   "area": "阳台",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_1141278931_c107_auto_water_change_p_2_35",
+   "name": "米家全能扫拖机器人M30 Pro  扫地机 自动上下水",
+   "domain": "switch",
+   "area": "阳台",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_1141278931_c107_carpet_avoidance_p_2_21",
+   "name": "米家全能扫拖机器人M30 Pro  扫地机 地毯避让",
+   "domain": "switch",
+   "area": "阳台",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_1141278931_c107_carpet_boost_p_2_20",
+   "name": "米家全能扫拖机器人M30 Pro  扫地机 地毯增压模式",
+   "domain": "switch",
+   "area": "阳台",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_1141278931_c107_carpet_deep_cleaning_p_2_76",
+   "name": "米家全能扫拖机器人M30 Pro  扫地机 地毯深度清洁",
+   "domain": "switch",
+   "area": "阳台",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_1141278931_c107_carpet_discriminate_p_2_77",
+   "name": "米家全能扫拖机器人M30 Pro  扫地机 地毯识别",
+   "domain": "switch",
+   "area": "阳台",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_1141278931_c107_carpet_display_p_2_22",
+   "name": "米家全能扫拖机器人M30 Pro  扫地机 地毯显示",
+   "domain": "switch",
+   "area": "阳台",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_1141278931_c107_cut_hair_config_p_2_63",
+   "name": "米家全能扫拖机器人M30 Pro  扫地机 割毛发开关",
+   "domain": "switch",
+   "area": "阳台",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_1141278931_c107_defecation_detection_p_2_50",
+   "name": "米家全能扫拖机器人M30 Pro  扫地机 便便识别",
+   "domain": "switch",
+   "area": "阳台",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_1141278931_c107_detergent_depletion_reminder_p_2_71",
+   "name": "米家全能扫拖机器人M30 Pro  扫地机 清洁剂缺液提醒",
+   "domain": "switch",
+   "area": "阳台",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_1141278931_c107_detergent_self_delivery_p_18_2",
+   "name": "米家全能扫拖机器人M30 Pro  清洁剂管理 清洁剂自投放",
+   "domain": "switch",
+   "area": "阳台",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_1141278931_c107_detergent_self_delivery_p_2_59",
+   "name": "米家全能扫拖机器人M30 Pro  扫地机 清洁剂自投放",
+   "domain": "switch",
+   "area": "阳台",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_1141278931_c107_dirt_detection_p_2_46",
+   "name": "米家全能扫拖机器人M30 Pro  扫地机 脏污识别",
+   "domain": "switch",
+   "area": "阳台",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_1141278931_c107_edge_swing_tail_sweep_p_2_55",
+   "name": "米家全能扫拖机器人M30 Pro  扫地机 沿边甩尾清扫",
+   "domain": "switch",
+   "area": "阳台",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_1141278931_c107_enable_mop_wash_p_2_28",
+   "name": "米家全能扫拖机器人M30 Pro  扫地机 回洗拖布",
+   "domain": "switch",
+   "area": "阳台",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_1141278931_c107_exit_remote_dialog_p_2_38",
+   "name": "米家全能扫拖机器人M30 Pro  扫地机 退出遥控模式弹窗",
+   "domain": "switch",
+   "area": "阳台",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_1141278931_c107_floor_material_detection_p_2_49",
+   "name": "米家全能扫拖机器人M30 Pro  扫地机 地板材质识别",
+   "domain": "switch",
+   "area": "阳台",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_1141278931_c107_hot_water_mop_wash_p_2_41",
+   "name": "米家全能扫拖机器人M30 Pro  扫地机 热水洗拖布",
+   "domain": "switch",
+   "area": "阳台",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_1141278931_c107_liquid_dirt_detection_p_2_51",
+   "name": "米家全能扫拖机器人M30 Pro  扫地机 液体脏污识别",
+   "domain": "switch",
+   "area": "阳台",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_1141278931_c107_mop_auto_lift_p_2_44",
+   "name": "米家全能扫拖机器人M30 Pro  扫地机 拖布自动抬升",
+   "domain": "switch",
+   "area": "阳台",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_1141278931_c107_no_disturb_p_11_1",
+   "name": "米家全能扫拖机器人M30 Pro  勿扰 勿扰",
+   "domain": "switch",
+   "area": "阳台",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_1141278931_c107_object_detection_p_2_47",
+   "name": "米家全能扫拖机器人M30 Pro  扫地机 物体识别",
+   "domain": "switch",
+   "area": "阳台",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_1141278931_c107_physical_controls_locked_p_5_1",
+   "name": "米家全能扫拖机器人M30 Pro  物理控制锁（童锁） 物理控制锁",
+   "domain": "switch",
+   "area": "阳台",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_1141278931_c107_room_detection_p_2_48",
+   "name": "米家全能扫拖机器人M30 Pro  扫地机 房间识别",
+   "domain": "switch",
+   "area": "阳台",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_1141278931_c107_solid_dirt_detection_p_2_52",
+   "name": "米家全能扫拖机器人M30 Pro  扫地机 固体脏污识别",
+   "domain": "switch",
+   "area": "阳台",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_1141278931_c107_sweep_ai_detection_p_2_45",
+   "name": "米家全能扫拖机器人M30 Pro  扫地机 清扫AI识别",
+   "domain": "switch",
+   "area": "阳台",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_1141278931_c107_sweep_break_switch_p_2_23",
+   "name": "米家全能扫拖机器人M30 Pro  扫地机 断点续扫开关",
+   "domain": "switch",
+   "area": "阳台",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_1141278931_c107_use_detergent_p_2_36",
+   "name": "米家全能扫拖机器人M30 Pro  扫地机 使用清洁剂 ",
+   "domain": "switch",
+   "area": "阳台",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_2196568891_lyj4qc_alarm_p_5_1",
+   "name": "米家智能双控晾衣机  提示音 提示音",
+   "domain": "switch",
+   "area": "阳台",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_2196568891_lyj4qc_convergent_p_2_3",
+   "name": "米家智能双控晾衣机  晾衣架 双杆收合开关",
+   "domain": "switch",
+   "area": "阳台",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_2196568891_lyj4qc_convergent_p_6_15",
+   "name": "米家智能双控晾衣机  晾杆2 杆2收合开关",
+   "domain": "switch",
+   "area": "阳台",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_2196568891_lyj4qc_convergent_p_7_18",
+   "name": "米家智能双控晾衣机  晾杆1 杆1收合开关",
+   "domain": "switch",
+   "area": "阳台",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_2196568891_lyj4qc_night_light_switch_p_3_4",
+   "name": "米家智能双控晾衣机  灯 夜灯开关",
+   "domain": "switch",
+   "area": "阳台",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_379045180_lx06_mute_p_4_1",
+   "name": "小爱音箱Pro  麦克风 静音",
+   "domain": "switch",
+   "area": "客厅",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_379045180_lx06_sleep_mode_p_5_3",
+   "name": "小爱音箱Pro  智能音箱 睡眠模式",
+   "domain": "switch",
+   "area": "客厅",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_542939706_x08a_mute_p_3_1",
+   "name": "小爱触屏音箱Pro 8  麦克风 静音",
+   "domain": "switch",
+   "area": "舞台",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_542939706_x08a_sleep_mode_p_5_3",
+   "name": "小爱触屏音箱Pro 8  智能音箱 睡眠模式",
+   "domain": "switch",
+   "area": "舞台",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_578006328_86v1_agree_privacy_p_17_15",
+   "name": "小米智能家庭面板 * 中控屏服务 同意敏感弹窗；默认为false，true为同意过",
+   "domain": "switch",
+   "area": "客厅",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_578006328_86v1_auto_screen_brightness_p_16_4",
+   "name": "小米智能家庭面板  显示屏 自动屏幕亮度",
+   "domain": "switch",
+   "area": "客厅",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_578006328_86v1_auto_screen_off_p_16_3",
+   "name": "小米智能家庭面板  显示屏 true为开启自动息屏",
+   "domain": "switch",
+   "area": "客厅",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_578006328_86v1_key_name_display_p_17_9",
+   "name": "小米智能家庭面板 * 中控屏服务 显示按键名称；true为显示",
+   "domain": "switch",
+   "area": "客厅",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_578006328_86v1_mute_p_4_1",
+   "name": "小米智能家庭面板  麦克风 禁麦",
+   "domain": "switch",
+   "area": "客厅",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_578006328_86v1_on_p_11_1",
+   "name": "小米智能家庭面板  大门筒灯 开关",
+   "domain": "switch",
+   "area": "客厅",
+   "reason": "★ 该路为纯无线模式，动继电器会让下游智能灯断电"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_578006328_86v1_sleep_mode_p_5_3",
+   "name": "小米智能家庭面板  智能音箱 睡眠模式",
+   "domain": "switch",
+   "area": "客厅",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_578006328_86v1_touch_sound_p_17_4",
+   "name": "小米智能家庭面板 * 中控屏服务 屏幕触摸音效",
+   "domain": "switch",
+   "area": "客厅",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_599671876_86v1_agree_privacy_p_17_15",
+   "name": "卧室门口智能面板 * 中控屏服务 同意敏感弹窗；默认为false，true为同意过",
+   "domain": "switch",
+   "area": "舞台",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_599671876_86v1_auto_screen_brightness_p_16_4",
+   "name": "卧室门口智能面板  显示屏 自动屏幕亮度",
+   "domain": "switch",
+   "area": "舞台",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_599671876_86v1_auto_screen_off_p_16_3",
+   "name": "卧室门口智能面板  显示屏 true为开启自动息屏",
+   "domain": "switch",
+   "area": "舞台",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_599671876_86v1_key_name_display_p_17_9",
+   "name": "卧室门口智能面板 * 中控屏服务 显示按键名称；true为显示",
+   "domain": "switch",
+   "area": "舞台",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_599671876_86v1_mute_p_4_1",
+   "name": "卧室门口智能面板  麦克风 禁麦",
+   "domain": "switch",
+   "area": "舞台",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_599671876_86v1_sleep_mode_p_5_3",
+   "name": "卧室门口智能面板  智能音箱 睡眠模式",
+   "domain": "switch",
+   "area": "舞台",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_599671876_86v1_touch_sound_p_17_4",
+   "name": "卧室门口智能面板 * 中控屏服务 屏幕触摸音效",
+   "domain": "switch",
+   "area": "舞台",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_820652998_p1_enable_switch_p_2_6",
+   "name": "小米人在传感器Pro  传感器整体状态 雷达开启关闭",
+   "domain": "switch",
+   "area": "客厅",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_820652998_p1_installation_image_p_3_4",
+   "name": "小米人在传感器Pro * 传感器配置 是否镜像安装",
+   "domain": "switch",
+   "area": "客厅",
+   "reason": "厂商自定义服务（名称含 *）"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_821937859_p1_alarm_p_3_1",
+   "name": "米家智能多功能养生壶 P1  提示音 提示音",
+   "domain": "switch",
+   "area": "厨房",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_821937859_p1_auth_or_not_p_4_8",
+   "name": "米家智能多功能养生壶 P1 * 自定义 是否授权",
+   "domain": "switch",
+   "area": "厨房",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_821937859_p1_auto_keep_warm_p_2_6",
+   "name": "米家智能多功能养生壶 P1  养生壶 自动保温开关",
+   "domain": "switch",
+   "area": "厨房",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_821937859_p1_auto_screen_on_p_4_1",
+   "name": "米家智能多功能养生壶 P1 * 自定义 自动息屏",
+   "domain": "switch",
+   "area": "厨房",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_821937859_p1_pot_lift_memory_p_2_9",
+   "name": "米家智能多功能养生壶 P1  养生壶 提壶记忆开关",
+   "domain": "switch",
+   "area": "厨房",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_824017681_p69_alarm_p_7_1",
+   "name": "米家直流变频台式循环扇  提示音 提示音开关",
+   "domain": "switch",
+   "area": "舞台",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_824017681_p69_delay_p_9_1",
+   "name": "米家直流变频台式循环扇  延时 延时开关",
+   "domain": "switch",
+   "area": "舞台",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_824017681_p69_physical_controls_locked_p_8_1",
+   "name": "米家直流变频台式循环扇  童锁 童锁开关",
+   "domain": "switch",
+   "area": "舞台",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_824017681_p69_vertical_swing_p_2_8",
+   "name": "米家直流变频台式循环扇  风扇 上下摆风",
+   "domain": "switch",
+   "area": "舞台",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_826029761_mek01_alarm_p_5_1",
+   "name": "米家智能电热水瓶 5L  提示音 提示音",
+   "domain": "switch",
+   "area": "厨房",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_826029761_mek01_auto_alarm_off_p_5_2",
+   "name": "米家智能电热水瓶 5L  提示音 自动开启提示音",
+   "domain": "switch",
+   "area": "厨房",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_826029761_mek01_auto_keep_warm_p_2_7",
+   "name": "米家智能电热水瓶 5L  热水瓶 保温",
+   "domain": "switch",
+   "area": "厨房",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_826029761_mek01_dechlorination_p_2_10",
+   "name": "米家智能电热水瓶 5L  热水瓶 除氯",
+   "domain": "switch",
+   "area": "厨房",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_826029761_mek01_pure_water_keep_warm_p_2_16",
+   "name": "米家智能电热水瓶 5L  热水瓶 纯净水保温开关",
+   "domain": "switch",
+   "area": "厨房",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_826029761_mek01_rapid_cooling_p_2_12",
+   "name": "米家智能电热水瓶 5L  热水瓶 风冷",
+   "domain": "switch",
+   "area": "厨房",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_847219109_r34r00_alarm_p_5_1",
+   "name": "米家空调 自然风Pro 1.5匹 超一级能效  提示音 提示音",
+   "domain": "switch",
+   "area": "书房",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_847219109_r34r00_always_favorite_on_p_23_3",
+   "name": "米家空调 自然风Pro 1.5匹 超一级能效 * 喜好模式 以喜好模式开机",
+   "domain": "switch",
+   "area": "书房",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_847219109_r34r00_cooling_indoor_fan_noise_reduction_p_25_5",
+   "name": "米家空调 自然风Pro 1.5匹 超一级能效  空调开发者模式 制冷室内风扇降噪",
+   "domain": "switch",
+   "area": "书房",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_847219109_r34r00_cooling_outdoor_fan_noise_reduction_p_25_4",
+   "name": "米家空调 自然风Pro 1.5匹 超一级能效  空调开发者模式 制冷室外风扇降噪",
+   "domain": "switch",
+   "area": "书房",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_847219109_r34r00_dryer_p_2_10",
+   "name": "米家空调 自然风Pro 1.5匹 超一级能效  空调 干燥功能",
+   "domain": "switch",
+   "area": "书房",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_847219109_r34r00_eco_p_2_7",
+   "name": "米家空调 自然风Pro 1.5匹 超一级能效  空调 ECO节能模式",
+   "domain": "switch",
+   "area": "书房",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_847219109_r34r00_electricity_info_p_8_7",
+   "name": "米家空调 自然风Pro 1.5匹 超一级能效 * 电量管理 电量信息首页展示",
+   "domain": "switch",
+   "area": "书房",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_847219109_r34r00_favorite_on_p_2_19",
+   "name": "米家空调 自然风Pro 1.5匹 超一级能效  空调 喜好模式开关",
+   "domain": "switch",
+   "area": "书房",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_847219109_r34r00_find_zero_p_10_17",
+   "name": "米家空调 自然风Pro 1.5匹 超一级能效 * 增强 导风板自动找零",
+   "domain": "switch",
+   "area": "书房",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_847219109_r34r00_heater_p_2_9",
+   "name": "米家空调 自然风Pro 1.5匹 超一级能效  空调 辅热功能",
+   "domain": "switch",
+   "area": "书房",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_847219109_r34r00_heating_indoor_fan_noise_reduction_p_25_7",
+   "name": "米家空调 自然风Pro 1.5匹 超一级能效  空调开发者模式 制热室内风扇降噪",
+   "domain": "switch",
+   "area": "书房",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_847219109_r34r00_heating_outdoor_fan_noise_reduction_p_25_6",
+   "name": "米家空调 自然风Pro 1.5匹 超一级能效  空调开发者模式 制热室外风扇降噪",
+   "domain": "switch",
+   "area": "书房",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_847219109_r34r00_improve_heat_tar_temp_stop_p_25_9",
+   "name": "米家空调 自然风Pro 1.5匹 超一级能效  空调开发者模式 制热达温停机改善开关",
+   "domain": "switch",
+   "area": "书房",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_847219109_r34r00_like_diy_p_10_20",
+   "name": "米家空调 自然风Pro 1.5匹 超一级能效 * 增强 diy喜好模式",
+   "domain": "switch",
+   "area": "书房",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_847219109_r34r00_maxfan_select_p_10_18",
+   "name": "米家空调 自然风Pro 1.5匹 超一级能效 * 增强 MAX风挡选择开关",
+   "domain": "switch",
+   "area": "书房",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_847219109_r34r00_off_flag_p_10_8",
+   "name": "米家空调 自然风Pro 1.5匹 超一级能效 * 增强 关机下不执行标志位",
+   "domain": "switch",
+   "area": "书房",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_847219109_r34r00_relieve_air_deflector_condensation_p_25_3",
+   "name": "米家空调 自然风Pro 1.5匹 超一级能效  空调开发者模式 缓解导风板凝水",
+   "domain": "switch",
+   "area": "书房",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_847219109_r34r00_reset_defaltfilter_p_16_12",
+   "name": "米家空调 自然风Pro 1.5匹 超一级能效 * 单机智能场景 恢复默认滤网",
+   "domain": "switch",
+   "area": "书房",
+   "reason": "厂商自定义服务（名称含 *）"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_847219109_r34r00_room_select_p_10_19",
+   "name": "米家空调 自然风Pro 1.5匹 超一级能效 * 增强 房屋面积智能选择开关",
+   "domain": "switch",
+   "area": "书房",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_847219109_r34r00_run_dark_sleep_p_16_10",
+   "name": "米家空调 自然风Pro 1.5匹 超一级能效 * 单机智能场景 空调运行时，室内灯光变暗，开启睡眠模式",
+   "domain": "switch",
+   "area": "书房",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_847219109_r34r00_secondpart_of_hswing_p_10_5",
+   "name": "米家空调 自然风Pro 1.5匹 超一级能效 * 增强 左右摆风中第二个摆风分区",
+   "domain": "switch",
+   "area": "书房",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_847219109_r34r00_sleep_diy_p_10_4",
+   "name": "米家空调 自然风Pro 1.5匹 超一级能效 * 增强 diy睡眠",
+   "domain": "switch",
+   "area": "书房",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_847219109_r34r00_sleep_mode_p_2_11",
+   "name": "米家空调 自然风Pro 1.5匹 超一级能效  空调 标准睡眠",
+   "domain": "switch",
+   "area": "书房",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_847219109_r34r00_soft_wind_p_2_12",
+   "name": "米家空调 自然风Pro 1.5匹 超一级能效  空调 柔风功能",
+   "domain": "switch",
+   "area": "书房",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_884873845_mih1_is_on_p_8_1",
+   "name": "小米电视 * 音箱模式 是否为音箱模式",
+   "domain": "switch",
+   "area": "舞台",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_884873845_mih1_no_disturb_p_9_1",
+   "name": "小米电视  勿扰 勿扰",
+   "domain": "switch",
+   "area": "舞台",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_884873845_mih1_sleep_mode_p_2_2",
+   "name": "小米电视  电视 睡眠模式",
+   "domain": "switch",
+   "area": "舞台",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_923238269_pi2001_add_meal_state_p_5_3",
+   "name": "米家智能宠物喂食器2 * 喂食器自定义spec 加餐提醒开关",
+   "domain": "switch",
+   "area": "舞台",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_923238269_pi2001_food_intake_state_p_5_6",
+   "name": "米家智能宠物喂食器2 * 喂食器自定义spec 进食量低提醒开关状态",
+   "domain": "switch",
+   "area": "舞台",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_923238269_pi2001_physical_controls_locked_p_3_1",
+   "name": "米家智能宠物喂食器2  物理控制锁（童锁） 物理控制锁",
+   "domain": "switch",
+   "area": "舞台",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_923238269_pi2001_plan_process_display_p_5_4",
+   "name": "米家智能宠物喂食器2 * 喂食器自定义spec 计划进度显示开关",
+   "domain": "switch",
+   "area": "舞台",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_950382496_btlm2p_delay_p_3_1",
+   "name": "大门筒灯  延时 延时",
+   "domain": "switch",
+   "area": "客厅",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_950382496_btlm2p_flex_switch_p_2_12",
+   "name": "大门筒灯  灯 凌动开关",
+   "domain": "switch",
+   "area": "客厅",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_950382496_btlm2p_night_en_p_4_5",
+   "name": "大门筒灯 * 自定义属性 夜灯模式开启/关闭",
+   "domain": "switch",
+   "area": "客厅",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_950382496_btlm2p_wall_switch_en_p_4_1",
+   "name": "大门筒灯 * 自定义属性 墙壁开关状态",
+   "domain": "switch",
+   "area": "客厅",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_980579994_oh2p_mute_p_4_1",
+   "name": "Xiaomi 智能音箱 Pro  麦克风 静音",
+   "domain": "switch",
+   "area": "客厅",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_980579994_oh2p_no_disturb_p_9_1",
+   "name": "Xiaomi 智能音箱 Pro  勿扰 勿扰",
+   "domain": "switch",
+   "area": "客厅",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.xiaomi_cn_980579994_oh2p_sleep_mode_p_7_3",
+   "name": "Xiaomi 智能音箱 Pro  智能音箱 睡眠模式",
+   "domain": "switch",
+   "area": "客厅",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.yeelink_cn_1113642441_ml8_delay_p_4_1",
+   "name": "轨道射灯1  延时 延时",
+   "domain": "switch",
+   "area": "客厅",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.yeelink_cn_1113655780_ml8_delay_p_4_1",
+   "name": "轨道射灯2  延时 延时",
+   "domain": "switch",
+   "area": "客厅",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.yeelink_cn_1133290646_ml8_delay_p_4_1",
+   "name": "轨道射灯3  延时 延时",
+   "domain": "switch",
+   "area": "客厅",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.yeelink_cn_1133291216_ml8_delay_p_4_1",
+   "name": "轨道射灯5  延时 延时",
+   "domain": "switch",
+   "area": "客厅",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.yeelink_cn_1136701416_ml8_delay_p_4_1",
+   "name": "轨道射灯4  延时 延时",
+   "domain": "switch",
+   "area": "客厅",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.yeelink_cn_1159997477_ml6_delay_p_4_1",
+   "name": "格栅灯  延时 延时",
+   "domain": "switch",
+   "area": "客厅",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.yeelink_cn_1188051832_wy0a03_flex_switch_p_2_6",
+   "name": "厨房灯带  灯光 凌动开关",
+   "domain": "switch",
+   "area": "厨房",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.yeelink_cn_1189996185_ml8_delay_p_4_1",
+   "name": "轨道射灯6  延时 延时",
+   "domain": "switch",
+   "area": "客厅",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.yeelink_cn_750251176_lamp22_default_power_on_state_p_2_4",
+   "name": "米家智能显示器挂灯1S  灯 默认上电状态",
+   "domain": "switch",
+   "area": "书房",
+   "reason": "switch 未命中任何保留条件"
+  },
+  {
+   "entity_id": "switch.yeelink_cn_750251176_lamp22_delay_off_enable_p_3_4",
+   "name": "米家智能显示器挂灯1S * yeelight自定义功能 延时关灯功能开关",
+   "domain": "switch",
+   "area": "书房",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.yeelink_cn_750251176_lamp22_double_click_enable_p_3_6",
+   "name": "米家智能显示器挂灯1S * yeelight自定义功能 自定义双击功能开关",
+   "domain": "switch",
+   "area": "书房",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.yeelink_cn_750251176_lamp22_long_press_enable_p_3_8",
+   "name": "米家智能显示器挂灯1S * yeelight自定义功能 用户长按自定义功能开关",
+   "domain": "switch",
+   "area": "书房",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.yeelink_cn_750251176_lamp22_pomodoro_enable_p_3_18",
+   "name": "米家智能显示器挂灯1S * yeelight自定义功能 专注模式开关",
+   "domain": "switch",
+   "area": "书房",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.yeelink_cn_750251176_lamp22_save_state_p_3_1",
+   "name": "米家智能显示器挂灯1S * yeelight自定义功能 恢复断电前灯光",
+   "domain": "switch",
+   "area": "书房",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.zhimi_cn_593492799_rma2_alarm_p_5_1",
+   "name": "米家空气净化器 4 Lite  提示音 提示音",
+   "domain": "switch",
+   "area": "阳台",
+   "reason": "设备内部设置项"
+  },
+  {
+   "entity_id": "switch.zhimi_cn_593492799_rma2_physical_controls_locked_p_6_1",
+   "name": "米家空气净化器 4 Lite  物理控制锁 物理控制锁",
+   "domain": "switch",
+   "area": "阳台",
+   "reason": "设备内部设置项"
+  }
+ ]
+}
