@@ -1,5 +1,15 @@
 #!/usr/bin/env python3
-"""训练中文自定义唤醒词，直接导出 openWakeWord 能用的 .tflite。
+"""⛔ 已废弃，跑不起来了。留着只作记录。
+
+被 `scripts/wyoming_kws.py`（sherpa-onnx 开放词表 KWS）取代：那条路不用训练，
+33 MB 模型换掉这里要下的 16.5 GB 训练数据，换唤醒词只改一行文本。
+细节见 `deploy/README.md` 第十五节。
+
+**它依赖的 conda 环境 `wwtrain`（9.2 GB）已删**，照着跑只会 ModuleNotFoundError。
+
+---
+
+训练中文自定义唤醒词，直接导出 openWakeWord 能用的 .tflite。
 
 ## 为什么不走官方训练脚本
 

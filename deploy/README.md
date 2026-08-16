@@ -908,7 +908,7 @@ conda activate kws
 pip install sherpa-onnx wyoming "numpy<2" pypinyin soundfile soxr sentencepiece
 ```
 
-环境 **383 MB**（训练那套 `wwtrain` 是 9.2 GB）。模型放
+环境 **267 MB**（自训那套 `wwtrain` 环境是 9.2 GB，已删）。模型放
 `~/apps/wakeword/sherpa/sherpa-onnx-kws-zipformer-zh-en-3M-2025-12-20/`。
 
 ⚠️ **GitHub releases 直连会卡死**（速率掉到 0，10 分钟拉 2 MB）。走 `gh-proxy.com`
@@ -941,9 +941,15 @@ curl -L -C - -o m.tar.bz2 "https://gh-proxy.com/https://github.com/k2-fsa/sherpa
 
 ### 遗留
 
-- `scripts/train_wakeword.py` 和 `~/apps/wakeword/{data,rir}` 是自训那条路的产物，
-  已被本节取代。`data/` 现在的用途变成了**评测集**（`scripts/eval_kws.py` 要用），
-  别删；`rir/` 和 conda 环境 `wwtrain`（9.2 GB）可以清掉。
+- `scripts/train_wakeword.py` 是自训那条路的产物，已被本节取代，**跑不起来了**——
+  它依赖的 conda 环境 `wwtrain`（9.2 GB）已删。留着只作记录，别照着跑。
+- `~/apps/wakeword/data/` 别删：它从训练集变成了**评测集**（`scripts/eval_kws.py` /
+  `scripts/smoke_kws.py` 都要用）。`rir/`（9.8 MB）留着——将来想把评测集加上混响做
+  更贴近真实的召回率测量就靠它。
+
+  ⚠️ 删 conda 环境时 `conda env remove` 会被 Anaconda 频道的 ToS 检查拦下
+  （`CondaToSNonInteractiveError`，而且**退出码还是 0**）。不想接受那个 ToS 就直接
+  `rm -rf ~/miniconda3/envs/<name>`，效果一样。
 - 粤语召回 0%。真要覆盖，得再挂一个粤语发音的 keywords 条目（开放词表的好处是
   这只是多写一行），但没有粤语正样本可验证，暂不做。
 

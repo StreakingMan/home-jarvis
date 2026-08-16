@@ -11,8 +11,7 @@
 自动转，所以命令行上直接传中文即可。
 
 用法：
-    ENV=~/miniconda3/envs/wwtrain/bin/python
-    $ENV scripts/eval_kws.py \
+    ~/miniconda3/envs/kws/bin/python scripts/eval_kws.py \
         --model-dir ~/apps/wakeword/sherpa/sherpa-onnx-kws-zipformer-zh-en-3M-2025-12-20 \
         --positive ~/apps/wakeword/data/positive \
         --adversarial ~/apps/wakeword/data/adversarial \
