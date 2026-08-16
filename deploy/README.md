@@ -213,3 +213,67 @@ python scripts/tts_stream_bench.py          # 流式基准
 | 显存占用 | 4.4GB |
 | 首字延迟（整段一次合成） | 3.98s |
 | **首字延迟（句级流式）** | **1.15s** |
+
+
+---
+
+## 待办：Ollama（下一步）
+
+前置条件已全部就绪 —— 暴露面 435 → 83，prompt ~2,299 token，prefill 约 0.77s，
+落在语音场景给 LLM 的 300ms–2s 预算内。
+
+### 选型：Qwen3-8B Q4，不是 14B
+
+蓝图第 03 节原定 14B，但那时没把 TTS 的显存算进去。实测：
+
+| | 空闲 | 合成峰值 |
+|---|---|---|
+| gptsovits-api | 925 MiB | ~4.4 GB |
+
+按峰值算（16 GB 卡）：
+
+| 方案 | LLM | + whisper | 合计 | 结论 |
+|---|---|---|---|---|
+| **Qwen3-8B Q4** | ~6.5G | 1.6G | ~12.5G | ✅ 可共存 |
+| Qwen3-14B Q4 | ~10.5G | 1.6G | ~16.5G | ❌ 超 |
+
+领域窄（开关设备、查状态），要的是**工具调用稳、快**而非聪明，8B 绰绰有余。
+
+### 与 TTS 的关键差异：必须绑 0.0.0.0
+
+`gptsovits-api` / `tts-proxy` 绑回环即可，因为调用方 HASS.Agent 就在本机
+（mirrored 网络共享 localhost）。**Ollama 的调用方是 NUC 上的 HA，跨机**，所以：
+
+- `OLLAMA_HOST=0.0.0.0:11434`
+- 需开两层防火墙（Windows 防火墙 + Hyper-V），与 MQTT 1883 同样处理，需管理员权限
+
+### 步骤
+
+1. 装 Ollama，写 systemd 用户 unit（与现有三个并列），拉 `qwen3:8b`
+2. 开防火墙两条规则
+3. HA 加 Ollama 集成，指向本机局域网 IP:11434
+4. **开「优先本地处理命令」** —— 反射层先接，接不住才给 LLM，这是三层架构第一、二层的落点
+5. **关 thinking**（蓝图第 13 节）—— Qwen3 原生支持；HA 集成是否透出开关待实测，兜底是
+   system prompt 里写 `/no_think`
+6. **先用 HA 的文字对话调通** —— 不需要任何语音硬件即可完整验证 LLM 那一层
+7. 用真模型重跑 `scripts/tts_stream_bench.py`，把假定的 45 tok/s 换成实测值
+
+### 已知缺口
+
+曼波 TTS 目前**不是 HA 的 `tts.*` provider**，只是「一个能返回 wav 的 URL」，
+靠 `media_player.play_media` 播。所以 Ollama 接上后**对话的语音回复接不上曼波音色**。
+
+- 短期：Ollama 只做文字对话，语音回复暂用现有 provider
+- 正解：把 GPT-SoVITS 封成 Wyoming TTS server 或自定义 TTS 集成 → 得到 `tts.manbo` 实体
+
+### 游戏模式让路
+
+```
+HASS.Agent 上报 GPU 占用 / 活动进程（配置里加两个传感器即可）
+      ↓ 超阈值
+POST /api/generate  {"model":"qwen3:8b", "keep_alive": 0}   ← 立即卸载，释放 ~6.5G
+      ↓
+Assist pipeline 的对话代理切云端
+      ↓ 游戏退出
+切回本地 + 空请求预热
+```
