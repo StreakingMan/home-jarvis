@@ -98,8 +98,9 @@ def synth(text: str):
 class ManboHandler(AsyncEventHandler):
     def __init__(self, *a, **kw):
         super().__init__(*a, **kw)
-        self._buf = ""        # 流式模式下未成句的残余文本
+        self._buf = ""         # 流式模式下未成句的残余文本
         self._started = False  # 是否已发过 AudioStart
+        self._streaming = False  # 是否处在流式会话中
 
     # ---------- 公共 ----------
 
@@ -145,6 +146,7 @@ class ManboHandler(AsyncEventHandler):
             _LOG.info("流式合成开始")
             self._buf = ""
             self._started = False
+            self._streaming = True
             return True
 
         if SynthesizeChunk.is_type(event.type):
@@ -169,11 +171,17 @@ class ManboHandler(AsyncEventHandler):
                 await self._speak(self._buf)   # 最后不成句的残余
             await self._finish()
             await self.write_event(SynthesizeStopped().event())
+            self._streaming = False
             _LOG.info("流式合成结束")
             return True
 
         # ---- 整段：HA 不支持流式或未启用时走这里 ----
         if Synthesize.is_type(event.type):
+            # ⚠️ 流式会话里 HA **也会**发一份完整的 Synthesize（为兼容不支持流式的
+            # 服务端）。不忽略它就会合成两遍、播两遍 —— 实测就是这个 bug。
+            if self._streaming:
+                _LOG.debug("流式会话中，忽略整段 Synthesize")
+                return True
             text = " ".join(Synthesize.from_event(event).text.strip().splitlines())
             _LOG.info("整段合成：%s", text[:40])
             self._started = False
