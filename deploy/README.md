@@ -727,8 +727,10 @@ number.<名字>_mic_volume / _auto_gain
 
 ### 遗留
 
-- **唤醒词是英文 `hey_jarvis`**。openWakeWord 自带的 5 个（hey_jarvis / alexa /
-  ok_nabu / hey_mycroft / hey_rhasspy）全是英文，想要「你好曼波」必须自己训模型。
+- ~~**唤醒词是英文 `hey_jarvis`**。openWakeWord 自带的 5 个（hey_jarvis / alexa /
+  ok_nabu / hey_mycroft / hey_rhasspy）全是英文，想要「你好曼波」必须自己训模型。~~
+  **已推翻，见第十五节**：sherpa-onnx 的 KWS 是开放词表的，中文唤醒词不用训练，
+  33 MB 模型 + 改一行文本即可。现在跑的就是「你好曼波」。
 - **模型自称「小智」**：唤醒后随口一问，回的是「你好，我是小智。有什么我可以帮你的吗？」
   —— Qwen3 的出厂人格漏出来了。提示词 v16 只说了「你是家里的语音助手」，没给名字，
   得补一条身份约束。
@@ -812,6 +814,138 @@ VAD 参数在**客户端侧**（手机 App / 网页 / 以后的 ESPHome 卫星�
   想分析文字聊天得开 `logger` 的 `homeassistant.components.conversation` debug
 
 ---
+
+## 十五、中文唤醒词换成 sherpa-onnx KWS（2026-08-16）
+
+### 为什么推翻自训 openWakeWord
+
+第十二节的遗留写着「想要『你好曼波』必须自己训模型」。**这个结论是错的**，代价很实在：
+训练管线要下 16.5 GB 的 `openwakeword-features` 负样本特征，把 WSL 的 vhdx 撑到 66 GB
+（而 vhdx 只涨不缩，删了文件也不还给 C 盘，得手动 compact）。而且训完只得到一个词，
+换个唤醒词要从头再走一遍。
+
+现成方案是 **sherpa-onnx 的关键词检测**，`kws-zipformer-zh-en-3M`：
+
+| | 自训 openWakeWord | sherpa-onnx KWS |
+|---|---|---|
+| 体积 | 16.5 GB 训练数据 | **33 MB 模型** |
+| 训练 | 要，几小时 | **不用** |
+| 换唤醒词 | 重跑全流程 | **改一行文本** |
+| 中文 | 得自己合成数据 | 原生（WeNetSpeech 训练） |
+| Wyoming 封装 | 官方有 | **没有，得自己写**（`scripts/wyoming_kws.py`，约 200 行） |
+
+### ⚠️ 唤醒词不是汉字，是带调拼音
+
+模型的 `tokens.txt` 只有 263 个 token：ARPAbet 音素（英文）+ **带声调的拼音声韵母**
+（中文，形如 `iàng` / `iāo`）。所以：
+
+```
+你好曼波   ->   n ǐ h ǎo m àn b ō
+```
+
+keywords 文件格式（模型包里 `test_wavs/keywords.txt` 就是样例）：
+
+```
+n ǐ h ǎo m àn b ō @你好曼波
+```
+
+`@` 后面是显示名，HA 语音助手界面按它显示。转换用 `sherpa_onnx.text2token(...,
+tokens_type="ppinyin")`，`scripts/wyoming_kws.py` 已经内置，命令行上直接写中文。
+
+⚠️ `text2token` 无条件 `import sentencepiece`，哪怕走拼音路径也要 —— 不装就在启动时炸。
+
+### 评测结果（`scripts/eval_kws.py`，168 正样本 / 616 对抗样本）
+
+**整体召回率只有 73.8%，但这个数字是假的** —— 正样本是 edge-TTS 按 `Locale.startswith("zh-")`
+拉的 14 个音色生成的，**里面混了粤语和方言**。按音色拆开：
+
+| 音色 | 召回率 |
+|---|---|
+| 标准普通话 ×6（Xiaoxiao / Xiaoyi / Yunjian / Yunxi / Yunxia / Yunyang） | **100% (72/72)** |
+| 辽宁方言 Xiaobei | 100% |
+| 台湾国语 ×3 | 100% |
+| 陕西方言 Xiaoni | 33% |
+| **粤语 ×3（HK-HiuGaai / HiuMaan / WanLung）** | **0% (0/36)** |
+
+漏掉的 44 条 = 粤语 36 + 陕西 8，一条不差。粤语念「你好曼波」本来就是另一串音，
+模型不认是**正确行为**，不是缺陷。
+
+误唤醒同理，22 次误触发里 **21 次来自「尼好曼波」**（跟唤醒词只差第一个字的声调
+ní vs nǐ）：
+
+| 对抗短语 | 误触发 |
+|---|---|
+| 尼好曼波 | 75% (21/28) |
+| 好曼波 | 3.6% (1/28) |
+| 其余 20 条（曼波 / 慢波 / 曼博 / 你好曼谷 / 你好小爱 / 帮我开灯 …） | **全部 0%** |
+
+排除声调级近音后 **1/588 = 0.17%**，而且这还是一个 100% 由对抗语音构成的语料，
+真实环境噪声下只会更低。
+
+### 两个旋钮的实测行为（都反直觉）
+
+- **`--threshold` 基本是死的**：0.15 / 0.20 / 0.25 / 0.30 / 0.35 / 0.40 六个值，
+  召回率和误唤醒**一个数都没变**（123/168、21/616）。
+- **`--score` 不是越大越好**：boosting 分数调高**反而伤召回**。
+
+  | score | threshold | 召回率 |
+  |---|---|---|
+  | 1.0 | 0.25 | 73.2% |
+  | 2.0 | 0.25 | 73.8% |
+  | 3.0 | 0.25 | 66.1% |
+  | 3.0 | 0.45 | **39.9%** |
+
+  平台区在 score 1~2、threshold 0.25。
+
+- **chunk-8 / chunk-16 × fp32 / int8 四种组合结果完全一致**（普通话召回 100%、
+  误唤醒 0.17%），所以取延迟最低、内存最小的 **chunk-8 + int8**。
+
+### 部署
+
+```bash
+conda create -y -n kws -c conda-forge --override-channels python=3.11   # ⚠️ 不加 --override-channels 会被 Anaconda 频道的 ToS 拦下
+conda activate kws
+pip install sherpa-onnx wyoming "numpy<2" pypinyin soundfile soxr sentencepiece
+```
+
+环境 **383 MB**（训练那套 `wwtrain` 是 9.2 GB）。模型放
+`~/apps/wakeword/sherpa/sherpa-onnx-kws-zipformer-zh-en-3M-2025-12-20/`。
+
+⚠️ **GitHub releases 直连会卡死**（速率掉到 0，10 分钟拉 2 MB）。走 `gh-proxy.com`
+前缀，支持 Range 断点续传：
+
+```bash
+curl -L -C - -o m.tar.bz2 "https://gh-proxy.com/https://github.com/k2-fsa/sherpa-onnx/releases/download/kws-models/sherpa-onnx-kws-zipformer-zh-en-3M-2025-12-20.tar.bz2"
+```
+
+启动走 `scripts/run_kws.sh`，systemd unit 是 `deploy/systemd/wyoming-kws.service`。
+
+### ⚠️ 第六个静默失败：被 disable 掉的旧服务会自己爬起来
+
+切换时 `wyoming-kws` 起来几秒就被 TERM，看起来像新服务自己崩了。真相是
+`wyoming-satellite.service` 里写着 `Requires=wyoming-openwakeword.service` ——
+**`systemctl disable` 挡不住 `Requires=`**，重启 satellite 时它把旧服务又拉了起来，
+抢占 10400，再触发 `wyoming-kws.service` 里的 `Conflicts=` 把新服务干掉。
+
+换唤醒词服务时，`Requires=` / `After=` **必须一起改**。
+
+### 验证
+
+`scripts/smoke_kws.py` 直连唤醒词服务推真实音频，不依赖麦克风：
+
+```bash
+~/miniconda3/envs/kws/bin/python scripts/smoke_kws.py
+# program: sherpa-kws  models: ['你好曼波']  phrase: ['你好曼波']
+# 命中 12/12   误触发 0/12
+```
+
+### 遗留
+
+- `scripts/train_wakeword.py` 和 `~/apps/wakeword/{data,rir}` 是自训那条路的产物，
+  已被本节取代。`data/` 现在的用途变成了**评测集**（`scripts/eval_kws.py` 要用），
+  别删；`rir/` 和 conda 环境 `wwtrain`（9.2 GB）可以清掉。
+- 粤语召回 0%。真要覆盖，得再挂一个粤语发音的 keywords 条目（开放词表的好处是
+  这只是多写一行），但没有粤语正样本可验证，暂不做。
 
 ## ⚠️ 通用规则：冷启动数字一律不可信
 

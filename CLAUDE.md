@@ -18,7 +18,8 @@
 ## 家庭事实
 
 - 宿主机 NucBox G3 Plus（N150，无头）；算力机 14600KF + 5060 Ti 16G（Windows + WSL2，兼职游戏）
-- 算力机已跑：GPT-SoVITS 曼波音色 TTS（:9880 + 缓冲代理 :9881）、Mosquitto broker（:1883）、Ollama（:11434）、Wyoming whisper（:10300）/ manbo TTS（:10200）/ openWakeWord（:10400）/ satellite（:10700）、HASS.Agent；详见 `deploy/README.md`
+- 算力机已跑：GPT-SoVITS 曼波音色 TTS（:9880 + 缓冲代理 :9881）、Mosquitto broker（:1883）、Ollama（:11434）、Wyoming whisper（:10300）/ manbo TTS（:10200）/ **sherpa-onnx KWS（:10400，唤醒词「你好曼波」）** / satellite（:10700）、HASS.Agent；详见 `deploy/README.md`
+- 唤醒词走 sherpa-onnx **开放词表** KWS，不是自训模型：换唤醒词只改 `run_kws.sh` 一行，不用训练。内部是带调拼音（`n ǐ h ǎo m àn b ō`）不是汉字。openWakeWord 那条路已废弃
 - **算力机 24/7 常开**（不只是游戏机），所以唤醒词这类常驻职责可以放在它上面
 - 路由器：小米 BE6500 Pro（RD08）。**NUC 只是拉不到 Docker Hub**（DNS 污染，每次返回不同的假 IP）；**ghcr.io 完全可用**，所以社区加载项（hassio-addons / ESPHome / Music Assistant）能正常装，只有官方加载项装不了。细节与试过的无效方案见 `deploy/README.md` 附录
 - 三只猫：哦多茄、雕猫、妹妹；Petkit 猫厕所 MAX / MAX PRO 2；米家喂食器×2、无线饮水机
@@ -46,6 +47,7 @@
 - `docs/voice-tuning.md` — **语音层调优**（提示词工程 + 实体命名；含「命名错了设备就控制不了」的实测，社区无成体系资料）
 - `prompts/v7..v12.txt` — 系统提示词各版本；用 `scripts/set_prompt.py --file` 写入（Ollama 把提示词放在 **subentry** 里，只能走 reconfigure flow）
 - `scripts/run_eval.py` + `scripts/eval_cases.yaml` — **语音评测集**（20 条，每条跑 3 遍报通过率）。改提示词前后各跑一次看回归
+- `scripts/eval_kws.py` — **唤醒词评测**（168 正 / 616 对抗样本，扫 threshold × score）。换唤醒词或调旋钮前后各跑一次；`scripts/smoke_kws.py` 是不依赖麦克风的端到端冒烟测试
 - `docs/model-tuning.md` — **模型调优决策**（提示词 vs 微调 vs 评测集：什么时候该动哪个杠杆）
 - `docs/exposure-policy.md` — **实体暴露策略**（该不该暴露给 LLM 的判定规则，含官方默认逻辑与 8 条补充规则）
 - `docs/related-work.md` — **相关研究对照**（结论 vs 官方/社区/学术；含三处设计警告与可落地增量清单）

@@ -1,8 +1,12 @@
 [Unit]
 Description=Wyoming satellite (麦克风 → 唤醒词 → HA 管线)
-After=network-online.target wyoming-openwakeword.service
+# ⚠️ 唤醒词服务换成 wyoming-kws（sherpa-onnx 中文）后，这里必须跟着改。
+#    忘了改的表现很隐蔽：`disable` 掉的 openWakeWord 会被 Requires= **重新拉起来**，
+#    抢占 10400，再触发 wyoming-kws.service 里的 Conflicts= 把新服务 TERM 掉——
+#    看起来像新服务自己崩了。
+After=network-online.target wyoming-kws.service
 Wants=network-online.target
-Requires=wyoming-openwakeword.service
+Requires=wyoming-kws.service
 
 [Service]
 Type=simple

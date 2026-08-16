@@ -1,0 +1,17 @@
+[Unit]
+Description=Wyoming sherpa-onnx KWS (中文唤醒词)
+After=network-online.target
+Wants=network-online.target
+# 和 openWakeWord 抢 10400，两个不能同时开
+Conflicts=wyoming-openwakeword.service
+
+[Service]
+Type=simple
+ExecStart=%h/code/home-jarvis/scripts/run_kws.sh
+Restart=on-failure
+RestartSec=10
+StandardOutput=append:%h/apps/jarvis/logs/wyoming-kws.log
+StandardError=append:%h/apps/jarvis/logs/wyoming-kws.log
+
+[Install]
+WantedBy=default.target

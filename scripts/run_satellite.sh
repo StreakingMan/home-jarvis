@@ -25,7 +25,9 @@ ENV="${WAKEWORD_ENV:-wakeword}"
 NAME="${SATELLITE_NAME:-书房卫星}"
 URI="${SATELLITE_URI:-tcp://0.0.0.0:10700}"
 WAKE_URI="${SATELLITE_WAKE_URI:-tcp://127.0.0.1:10400}"
-WAKE_WORD="${SATELLITE_WAKE_WORD:-hey_jarvis}"
+# 10400 上现在跑的是 wyoming_kws（sherpa-onnx 中文），词名就是唤醒词本身。
+# 换回 openWakeWord 的话这里要改成 hey_jarvis
+WAKE_WORD="${SATELLITE_WAKE_WORD:-你好曼波}"
 
 # shellcheck disable=SC1091
 source "$CONDA_ROOT/etc/profile.d/conda.sh"
