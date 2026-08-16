@@ -1,0 +1,22 @@
+[Unit]
+Description=Ollama LLM server (Qwen3-8B, 对话层)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+# 必须绑 0.0.0.0：调用方是 NUC 上的 HA，跨机访问。
+# 与 gptsovits-api / tts-proxy 不同 —— 那两个的调用方 HASS.Agent 在本机，
+# mirrored 网络共享 localhost，绑回环即可。
+Environment=OLLAMA_HOST=0.0.0.0:11434
+Environment=OLLAMA_MODELS=%h/apps/ollama/models
+# 模型常驻，避免每次对话重新加载（游戏模式让路时用 keep_alive:0 显式卸载）
+Environment=OLLAMA_KEEP_ALIVE=24h
+ExecStart=%h/apps/ollama/bin/ollama serve
+Restart=on-failure
+RestartSec=5
+StandardOutput=append:%h/apps/jarvis/logs/ollama.log
+StandardError=append:%h/apps/jarvis/logs/ollama.log
+
+[Install]
+WantedBy=default.target
