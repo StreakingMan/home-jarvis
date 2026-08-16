@@ -27,8 +27,8 @@ import requests
 
 PROXY = "http://127.0.0.1:9881/"
 SAMPLE_RATE = 32000
-TOK_PER_SEC = 45.0        # Qwen3-8B Q4 在 5060 Ti 上的典型出字速度
-FIRST_TOK_LATENCY = 0.30  # 首 token 延迟
+TOK_PER_SEC = 74.4        # Qwen3-8B Q4 在 5060 Ti 上的实测值（2026-08-16）
+FIRST_TOK_LATENCY = 0.15  # 实测：prompt 缓存命中时 0.13-0.15s
 
 DEFAULT_TEXT = (
     "好的，我看了一下。书房的灯已经关好了。"

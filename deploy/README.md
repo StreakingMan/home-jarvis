@@ -265,6 +265,49 @@ New-NetFirewallRule -DisplayName "Ollama 11434 (WSL, LAN only)" -Direction Inbou
 New-NetFirewallHyperVRule -Name "Ollama-11434-WSL" -DisplayName "Ollama 11434 WSL" -Direction Inbound -VMCreatorId '{40E0AC32-46A5-438A-A0B2-2B479E8F2E90}' -Protocol TCP -LocalPorts 11434 -Action Allow
 ```
 
+### 实测（RTX 5060 Ti，qwen3:8b Q4，2026-08-16）
+
+| 指标 | 数值 |
+|---|---|
+| 生成速度 | **74.4 tok/s**（原假定 45，低估了 65%） |
+| 首 token | 0.13–0.15s |
+| prompt（83 个实体） | 2,543 token |
+| prefill 首次 / 缓存命中 | **0.76s → 0.02s** |
+| 端到端（含工具调用） | 0.57–1.40s |
+| 显存 | 6,455 MiB |
+
+**★ prompt 缓存是最大的意外收获。** 系统提示词不变时 Ollama 复用 KV 缓存，
+prefill 几乎免费（0.02s）。这比 token 数下降更值钱，而且**正是砍暴露面换来的**——
+83 个实体的状态变化频率远低于 435 个，缓存能长时间不被打穿。
+
+⚠️ **冷启动的数字会骗人**：首次推理测出来只有 1.9 tok/s，那是 CUDA 预热被计进
+`eval_duration` 的假象，热态是 74.4。测性能务必先跑一次预热。
+
+### 工具调用能力（`scripts/ollama_ha_bench.py`）
+
+四条典型指令，函数名和 `area`/`domain` **全对**，但**模型会凭空编造 `name`**：
+
+```
+「关掉书房的灯」   → HassTurnOff(area:书房, domain:[light], name:"台灯1")
+                                                   ↑ 书房没有「台灯1」
+「卧室风扇开一下」 → HassTurnOn(domain:[fan], name:"卧室风扇")
+                                              ↑ 真名是「风扇  风扇」
+```
+
+`name` 填错可能让 HA 匹配失败。缓解方向：提示词里写明「只在用户点名具体设备时才填
+name」。另外该测试构造的提示词**没有 `areas:` 字段**（HA 真实提示词有），
+模型是纯靠设备名猜区域，真实环境准确率应更高。
+
+### LLM 与 TTS 共存：无代价
+
+| | 显存 | TTS 实时率 |
+|---|---|---|
+| LLM 已卸载 | 3,547 MiB | 6.2x |
+| LLM 常驻 | 9,029 MiB | **6.3x** |
+
+常驻在显存里不影响 TTS 吞吐，只有**同时推理**才互抢算力。
+两模型共占 9G，余 7G，塞 whisper（1.6G）绰绰有余。
+
 ### 启动后应看到
 
 ```
