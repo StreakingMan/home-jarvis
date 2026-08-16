@@ -412,16 +412,33 @@ cp deploy/systemd/wyoming-manbo-tts.service ~/.config/systemd/user/
 systemctl --user daemon-reload && systemctl --user enable --now wyoming-manbo-tts
 ```
 
-### 句级流式在这里落地
+### ⚠️ 必须声明 `supports_synthesize_streaming`
 
-按 `。！？；` 切句、逐句合成、逐句吐 `AudioChunk`，而不是整段合成完再发。
-协议层实测：
+Wyoming 有两套 TTS 交互：
 
-| 指标 | 数值 |
-|---|---|
-| 首个音频事件 | **1.02s** |
-| 全部完成 | 1.86s |
-| 音频 | 32000Hz / 16bit / 单声道，5.56s |
+| 模式 | 事件 | 行为 |
+|---|---|---|
+| 整段 | `Synthesize` | **HA 等对话代理完全生成完**，再把全文交过来 |
+| 流式 | `SynthesizeStart` / `SynthesizeChunk` / `SynthesizeStop` | HA 边收 LLM 的 token 边推文本片段 |
+
+**不在 `TtsProgram` 里声明 `supports_synthesize_streaming=True`，HA 一律走整段模式**
+—— 哪怕服务端内部做了句级切分也没用，因为文本本来就是整段才到的。
+初版就栽在这里：服务内部切了句，但 HA 压根没推流式文本，等于白做。
+
+症状很好认：**LLM 回复越长，等语音的时间越久，甚至流式文字都显示完了才出声。**
+
+A/B 实测（各一段 62 字全新文本，按实测 74.4 tok/s 模拟 LLM 出字）：
+
+| 模式 | 从 LLM 开始到听见第一个字 | 全部合成完 |
+|---|---|---|
+| 整段 | 1.08s | 2.91s |
+| **流式** | **0.30s** | 0.87s |
+
+**首字快 3.6 倍，且差距随回复变长而拉大** —— 整段模式必须等全文，
+流式只等第一句，与总长无关。
+
+实现要点：`SynthesizeChunk` 里攒文本，一遇到 `。！？；.!?;` 就立刻送合成、
+立刻吐 `AudioChunk`；`SynthesizeStop` 时把不成句的残余补上再收尾。
 
 上游接的是 `tts_proxy(:9881)` 而非 `api.py(:9880)` —— 代理补了 `Content-Length`
 并带磁盘缓存，固定播报只合成一次。
