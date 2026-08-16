@@ -170,20 +170,47 @@ def build_features(a):
         print(f"  {kind}: {arr.shape} → {kind}_features.npy")
 
 
+def sample_windows(path, n, seed=0, dtype=np.float32):
+    """从「连续嵌入流」里随机抽 n 个长度 16 的窗口。
+
+    ⚠️ 上游发布的负样本特征是 **[帧数, 96] 的连续流**，不是切好的 [N,16,96]。
+    实测 validation_set_features.npy 是 (481345, 96) —— 每帧约 80ms，
+    合 ~10.7 小时，跟 openwakeword 源码里 `val_set_hrs=11.3` 对得上。
+    大文件 ACAV100M 是 float16 的 ~8600 万帧（~1900 小时），
+    **全部开窗会炸内存**（86M × 16 × 96 × 4B ≈ 500 GB），只能抽样。
+    """
+    if not os.path.exists(path):
+        return np.zeros((0, WINDOW, EMB), np.float32)
+    try:
+        arr = np.load(path, mmap_mode="r")
+    except ValueError as e:
+        # 断点续传中的半截文件：头里写的 shape 比实际字节多，mmap 直接报错。
+        # 不能让它把整轮训练带崩 —— 当作「暂时没有这份数据」处理。
+        print(f"  ⚠️ {os.path.basename(path)} 尚未下载完整（{e}），本轮跳过")
+        return np.zeros((0, WINDOW, EMB), np.float32)
+    if arr.ndim == 3:                      # 已经是切好的窗口
+        idx = np.random.default_rng(seed).choice(len(arr), min(n, len(arr)), replace=False)
+        return np.asarray(arr[np.sort(idx)], dtype=np.float32)
+    total = len(arr) - WINDOW
+    n = min(n, total)
+    starts = np.sort(np.random.default_rng(seed).choice(total, n, replace=False))
+    out = np.empty((n, WINDOW, EMB), np.float32)
+    for i, s0 in enumerate(starts):        # mmap 逐条切，内存占用只有输出那份
+        out[i] = arr[s0:s0 + WINDOW]
+    return out
+
+
 def train(a):
     import tensorflow as tf
     pos = np.load(os.path.join(FEAT, "positive_features.npy"))
     adv = np.load(os.path.join(FEAT, "adversarial_features.npy"))
     big = os.path.join(FEAT, "openwakeword_features_ACAV100M_2000_hrs_16bit.npy")
-    neg_big = np.load(big, mmap_mode="r") if os.path.exists(big) else None
-    if neg_big is not None:
-        take = min(a.neg_samples, len(neg_big))
-        idx = np.random.default_rng(0).choice(len(neg_big), take, replace=False)
-        neg_big = np.asarray(neg_big[np.sort(idx)], dtype=np.float32)
-        print(f"  大规模负样本抽 {take} / {len(np.load(big, mmap_mode='r'))}")
+    neg_big = sample_windows(big, a.neg_samples, seed=0)
+    if len(neg_big):
+        raw = np.load(big, mmap_mode="r")
+        print(f"  大规模负样本：从 {len(raw)} 帧（≈{len(raw)*0.08/3600:.0f} 小时）抽 {len(neg_big)} 个窗口")
     else:
         print("  ⚠️ 没有大规模负样本特征，误唤醒率会明显偏高")
-        neg_big = np.zeros((0, WINDOW, EMB), np.float32)
 
     # 对抗负样本加权重复 —— 它们数量少但最关键
     X = np.concatenate([pos, np.repeat(adv, a.adv_weight, axis=0), neg_big])
@@ -212,9 +239,10 @@ def train(a):
     # 误唤醒率：拿官方验证集（纯负样本）过一遍
     vpath = os.path.join(FEAT, "validation_set_features.npy")
     if os.path.exists(vpath):
-        V = np.load(vpath, mmap_mode="r")
-        V = np.asarray(V[:min(200000, len(V))], dtype=np.float32)
+        V = sample_windows(vpath, a.val_windows, seed=7)
+        hours = len(np.load(vpath, mmap_mode="r")) * 0.08 / 3600
         s = m.predict(V, batch_size=4096, verbose=0).ravel()
+        print(f"\n  （验证集约 {hours:.1f} 小时纯负样本，抽了 {len(V)} 个窗口）")
         print("\n  误唤醒（官方验证集，纯负样本）：")
         for th in (0.3, 0.5, 0.7, 0.9):
             print(f"    阈值 {th}: 触发率 {(s>th).mean()*100:.4f}%")
@@ -241,6 +269,7 @@ ap.add_argument("--neg-samples", type=int, default=2_000_000, help="从大负样
 ap.add_argument("--adv-weight", type=int, default=20, help="对抗负样本重复几遍")
 ap.add_argument("--pos-weight", type=float, default=8.0)
 ap.add_argument("--epochs", type=int, default=25)
+ap.add_argument("--val-windows", type=int, default=300_000, help="误唤醒评估抽多少窗口")
 _a = ap.parse_args()
 if _a.steps in ("all", "features"):
     build_features(_a)
