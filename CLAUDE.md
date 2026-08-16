@@ -42,6 +42,7 @@
 - `deploy/README.md` — **语音栈部署实录**（曼波 TTS / Mosquitto / HASS.Agent，含四个静默失败的坑）
 - `docs/session-2026-08-15.md` — 探索过程问答归档
 - `docs/voice-tuning.md` — **语音层调优**（提示词工程 + 给 AI 用的实体命名规则；社区无成体系资料，全为实测）
+- `docs/model-tuning.md` — **模型调优决策**（提示词 vs 微调 vs 评测集：什么时候该动哪个杠杆）
 - `docs/exposure-policy.md` — **实体暴露策略**（该不该暴露给 LLM 的判定规则，含官方默认逻辑与 8 条补充规则）
 - `docs/memory-snapshot.md` — 项目记忆快照
 - 在线版蓝图为私有 Artifact，未随公开仓库发布
