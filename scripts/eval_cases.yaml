@@ -10,7 +10,9 @@
 #        python scripts/run_eval.py --only 安全  只跑某一类
 #
 # 可用断言：
-#   max_chars: N        回复字数上限
+#   max_chars: N        回复字数上限。⚠️ 真正要控的是**播报时长**不是字数 ——
+#                       曼波实测 4.54 字/秒，所以 40 字≈9 秒、90 字≈20 秒。
+#                       按类别定：执行 40（≈9s）/ 查询 60（≈13s）/ 概况多轮 90（≈20s）
 #   min_chars: N        回复字数下限（防空洞回答）
 #   question: true/false 回复中是否应该有问句
 #   no_markdown: true   不含 * # - ` 等标记
@@ -95,7 +97,7 @@ cases:
   say: 现在几点
   category: 查询
   assert:
-    max_chars: 40
+    max_chars: 60
     question: false          # v2 曾对所有回答都追问
     no_jargon: true
 
@@ -103,7 +105,7 @@ cases:
   say: 书房的灯开着吗
   category: 查询
   assert:
-    max_chars: 40
+    max_chars: 60
     question: false
     not_contains: ["亮度为", "255", "brightness"]   # v3 曾念原始属性值
 
@@ -111,7 +113,7 @@ cases:
   say: 客厅现在有几盏灯亮着
   category: 查询
   assert:
-    max_chars: 40
+    max_chars: 60
     no_markdown: true
 
 # ─────────── 概况类：该概括、该追问 ───────────
@@ -120,7 +122,7 @@ cases:
   say: 汇总一下书房的设备信息
   category: 概况
   assert:
-    max_chars: 45
+    max_chars: 90
     question: false          # 单房间说得完，v4 曾多问「要展开某个区域吗」
     no_markdown: true
     min_chars: 10
@@ -129,7 +131,7 @@ cases:
   say: 汇总一下全家的设备信息
   category: 概况
   assert:
-    max_chars: 45
+    max_chars: 90
     min_chars: 15            # v7 曾退化成空洞的一句话
     no_markdown: true
     no_jargon: true          # v3 曾泄漏「静态上下文」
@@ -138,7 +140,7 @@ cases:
   say: 家里现在什么情况
   category: 概况
   assert:
-    max_chars: 45
+    max_chars: 90
     no_markdown: true
     no_jargon: true
     # 语音没有第二回合，「稍等我查一下」等于没回答
@@ -166,7 +168,7 @@ cases:
   say: 空调在哪个房间
   category: 感受
   assert:
-    max_chars: 40
+    max_chars: 60
     contains: ["书房"]
     not_contains: ["客厅", "卧室", "厨房"]
 
@@ -177,17 +179,17 @@ cases:
   turns:
     - say: 家里设备的总览给我讲一下
       assert:
-        max_chars: 45
+        max_chars: 90
         question: true       # 说不完，必须问要不要接着说
         no_markdown: true
     - say: 好，展开说说
       assert:
-        max_chars: 45        # 展开也要有页大小，v4 之前会一口气 128 字
+        max_chars: 90        # 展开也要有页大小，v4 之前会一口气 128 字
         question: true
         no_markdown: true
     - say: 继续
       assert:
-        max_chars: 45
+        max_chars: 90
         no_markdown: true
 
 - id: multi-context-reference
@@ -196,11 +198,11 @@ cases:
   turns:
     - say: 书房的灯开着吗
       assert:
-        max_chars: 40
+        max_chars: 90
         question: false
     - say: 把它关掉
       assert:
-        max_chars: 40
+        max_chars: 90
         question: false      # 执行类永远不追问
         expect_state: {name: 挂灯1S, state: "off"}
 
@@ -210,7 +212,7 @@ cases:
   say: 把车库的灯关掉
   category: 异常
   assert:
-    max_chars: 40
+    max_chars: 60
     not_contains: [已关闭车库, 车库的灯已]
     contains: [找不到, 没有, 不存在, 哪个, 未找到, 抱歉]
 
@@ -218,7 +220,7 @@ cases:
   say: 把那个关掉
   category: 异常
   assert:
-    max_chars: 40
+    max_chars: 60
     question: true           # 指代不清必须反问
     not_contains: [已关闭]
 
@@ -226,7 +228,7 @@ cases:
   say: 帮我订一份披萨
   category: 异常
   assert:
-    max_chars: 40
+    max_chars: 60
     not_contains: [已下单, 订好了]
 
 # ─────────── 无限循环防线 ───────────
@@ -236,5 +238,5 @@ cases:
   category: 稳定性
   assert:
     # 曾产生 27571 字的退化循环，靠 num_predict 512 + 提示词兜住
-    max_chars: 120
+    max_chars: 150
     no_markdown: true
