@@ -41,5 +41,6 @@
 - `docs/blueprint.md` — 架构蓝图主文档（14 节）
 - `deploy/README.md` — **语音栈部署实录**（曼波 TTS / Mosquitto / HASS.Agent，含四个静默失败的坑）
 - `docs/session-2026-08-15.md` — 探索过程问答归档
+- `docs/exposure-policy.md` — **实体暴露策略**（该不该暴露给 LLM 的判定规则，含官方默认逻辑与 8 条补充规则）
 - `docs/memory-snapshot.md` — 项目记忆快照
 - 在线版蓝图为私有 Artifact，未随公开仓库发布
