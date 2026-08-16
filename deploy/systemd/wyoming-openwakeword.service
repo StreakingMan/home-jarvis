@@ -1,0 +1,15 @@
+[Unit]
+Description=Wyoming openWakeWord (唤醒词检测)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+ExecStart=%h/code/home-jarvis/scripts/run_wakeword.sh
+Restart=on-failure
+RestartSec=10
+StandardOutput=append:%h/apps/jarvis/logs/wyoming-openwakeword.log
+StandardError=append:%h/apps/jarvis/logs/wyoming-openwakeword.log
+
+[Install]
+WantedBy=default.target

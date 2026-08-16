@@ -1,0 +1,16 @@
+[Unit]
+Description=Wyoming satellite (麦克风 → 唤醒词 → HA 管线)
+After=network-online.target wyoming-openwakeword.service
+Wants=network-online.target
+Requires=wyoming-openwakeword.service
+
+[Service]
+Type=simple
+ExecStart=%h/code/home-jarvis/scripts/run_satellite.sh
+Restart=always
+RestartSec=10
+StandardOutput=append:%h/apps/jarvis/logs/wyoming-satellite.log
+StandardError=append:%h/apps/jarvis/logs/wyoming-satellite.log
+
+[Install]
+WantedBy=default.target

@@ -18,7 +18,8 @@
 ## 家庭事实
 
 - 宿主机 NucBox G3 Plus（N150，无头）；算力机 14600KF + 5060 Ti 16G（Windows + WSL2，兼职游戏）
-- 算力机已跑：GPT-SoVITS 曼波音色 TTS（:9880 + 缓冲代理 :9881）、Mosquitto broker（:1883）、HASS.Agent；详见 `deploy/README.md`
+- 算力机已跑：GPT-SoVITS 曼波音色 TTS（:9880 + 缓冲代理 :9881）、Mosquitto broker（:1883）、Ollama（:11434）、Wyoming whisper（:10300）/ manbo TTS（:10200）/ openWakeWord（:10400）/ satellite（:10700）、HASS.Agent；详见 `deploy/README.md`
+- **算力机 24/7 常开**（不只是游戏机），所以唤醒词这类常驻职责可以放在它上面
 - 路由器：小米 BE6500 Pro（RD08）。**NUC 只是拉不到 Docker Hub**（DNS 污染，每次返回不同的假 IP）；**ghcr.io 完全可用**，所以社区加载项（hassio-addons / ESPHome / Music Assistant）能正常装，只有官方加载项装不了。细节与试过的无效方案见 `deploy/README.md` 附录
 - 三只猫：哦多茄、雕猫、妹妹；Petkit 猫厕所 MAX / MAX PRO 2；米家喂食器×2、无线饮水机
 - 拓竹 P1S、美的空调（LAN）、小米人在传感器 Pro、闲置小爱×2、闲置 iPad

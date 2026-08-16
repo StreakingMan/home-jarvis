@@ -625,7 +625,119 @@ LLM 听到不认识的「修房的灯」时**没有瞎猜**，而是回
 「"修房的灯"在系统中没有被识别到，请提供更具体的信息」，灯也没被误关。
 说明 `llm_hass_api` 的工具约束在起作用，比硬蒙一个实体好得多。
 
-## 十二、资源占用实测（2026-08-16）
+## 十二、唤醒词与麦克风卫星（2026-08-16）
+
+目标：对着算力机的麦克风喊一声就能唤醒，不用点按钮。
+
+### 为什么需要「卫星」这个东西
+
+**HA 不会主动去拉麦克风**。它只会等一个客户端把音频推进来。所以要有个常驻进程：
+持续采集 → 本地判唤醒词 → 命中后把后续音频流给 Assist 管线 → 再把 TTS 音频播回来。
+这就是 `wyoming-satellite` 的职责。
+
+```
+Windows 麦克风（智能音箱 Pro-2010，系统默认录音设备）
+   ↓  WSLg 的 PulseAudio 桥 /mnt/wslg/PulseServer，源名固定 RDPSource
+ffmpeg -f pulse -i RDPSource        16kHz 单声道 s16le 裸 PCM
+   ↓
+wyoming-satellite  :10700  ──→  wyoming-openwakeword  :10400（本机，hey_jarvis）
+   ↓ 命中后流给 HA
+HA Assist 管线「曼波管家」  STT → LLM → 曼波 TTS
+   ↓ 音频回流
+ffmpeg -f pulse RDPSink  →  Windows 默认输出
+```
+
+### 装法（全用户级，无 sudo）
+
+```bash
+conda create -y -n wakeword --override-channels -c conda-forge python=3.11 ffmpeg
+conda activate wakeword
+pip install wyoming-openwakeword "wyoming-satellite[silerovad]"
+pip install "numpy<2"        # ⚠️ 必须，见下
+```
+
+启动脚本 `scripts/run_wakeword.sh` / `scripts/run_satellite.sh`，
+systemd unit 见 `deploy/systemd/`（satellite `Requires=` openwakeword）。
+
+### ⚠️ 第五个静默失败：numpy 2.x 让唤醒词永远不响
+
+装完默认会带上 numpy 2.x，而 `tflite-runtime` 是按 numpy 1.x 的 C ABI 编的。
+后果极具迷惑性：
+
+- 端口正常监听 ✓
+- Wyoming `Describe` 正常返回全部 5 个唤醒词 ✓
+- 日志里 `INFO:root:Ready` ✓
+- **但检测线程在启动时就炸了**，`_ARRAY_API not found` /
+  `numpy.core.multiarray failed to import`，而且是在**子线程**里，不影响主进程
+
+也就是说所有能想到的健康检查都是绿的，唯独永远不会唤醒。
+`pip install "numpy<2"` 解决（实测降到 1.25.2）。
+
+### ⚠️ 用 ffmpeg 代替 arecord/aplay
+
+官方文档用 `arecord`/`aplay`，那要装 `alsa-utils`，需要 sudo。
+本机 sudo 要密码、服务一律用户级，所以改成从 conda-forge 装 ffmpeg 到同一个环境，
+用它的 pulse 输入输出。`--mic-command` / `--snd-command` 接受任意命令，只要格式对。
+
+### ⚠️ 防火墙：又是同一个坑
+
+10700 是新端口，Windows 防火墙里没有规则，HA 连过来直接**挂住**（不是拒绝，是黑洞，
+所以配置流会卡到超时而不是立刻报错）。
+
+```powershell
+New-NetFirewallRule -DisplayName "Wyoming satellite 10700 (WSL, LAN only)" `
+  -Direction Inbound -Action Allow -Protocol TCP -LocalPort 10700 `
+  -RemoteAddress LocalSubnet -Profile Any
+```
+
+排查要点：**在 WSL 里连本机局域网 IP 是测不出问题的** —— mirrored 模式下会走环回，
+绕过防火墙，10700 照样通。必须从别的机器测。
+
+另：Hyper-V 那层虽然 `DefaultInboundAction: Block`，但实际没有自定义规则，
+10200/10300 就是只靠 Windows 防火墙规则放行的，10700 同理。
+
+### 接进 HA
+
+Wyoming 集成的配置流（REST 端点是 `/api/config/config_entries/flow`，
+不是 `/api/config/config_flow`），host 填算力机地址、port 10700。
+建成之后出现这些实体：
+
+```
+assist_satellite.<名字>                      idle/listening/processing/responding
+select.<名字>_assistant                      选管线 → 设成「曼波管家」
+select.<名字>_finished_speaking_detection    default / relaxed / aggressive
+select.<名字>_noise_suppression_level        off ~ max
+number.<名字>_mic_volume / _auto_gain
+```
+
+### 首次跑通的实测
+
+```
+20:54:45  idle → listening        唤醒词命中
+20:54:54  listening → processing  ← 9 秒！VAD 判「说完了」
+20:54:58  processing → responding ← 4 秒（STT + LLM）
+20:55:04  responding → idle       ← 6 秒（TTS 播放）
+```
+
+**瓶颈是 VAD 结束检测的 9 秒**，跟第十三节用文字管线量到的 1.5–2.2 秒是同一类问题，
+只是卫星这边更夸张。已把 `finished_speaking_detection` 调成 `aggressive`。
+
+采集还发现**削顶**（`max_volume: -0.0 dB`），增益太大会让唤醒词模型失效，
+`mic_volume` 降到 0.6。
+
+### 遗留
+
+- **唤醒词是英文 `hey_jarvis`**。openWakeWord 自带的 5 个（hey_jarvis / alexa /
+  ok_nabu / hey_mycroft / hey_rhasspy）全是英文，想要「你好曼波」必须自己训模型。
+- **模型自称「小智」**：唤醒后随口一问，回的是「你好，我是小智。有什么我可以帮你的吗？」
+  —— Qwen3 的出厂人格漏出来了。提示词 v16 只说了「你是家里的语音助手」，没给名字，
+  得补一条身份约束。
+- zeroconf 播报的 IP 是 `198.18.0.1`（Clash 的 fake-ip 段），所以自动发现不可用，
+  必须手工按 IP 添加。
+
+---
+
+## 十三、资源占用实测（2026-08-16）
 
 ### 显存分摊（5060 Ti / 16 GB）
 
@@ -670,7 +782,7 @@ LLM 切云端」的设计是**必需**而非优化 —— 卸掉 LLM 能腾出 6
 
 ---
 
-## 十三、真实语音的延迟分段（`pipeline_debug` 实录）
+## 十四、真实语音的延迟分段（`pipeline_debug` 实录）
 
 之前第十一节那个「端到端 1.97s」是用文字接口量的，**不含 VAD**。
 真实语音的四条记录拆开是这样：
