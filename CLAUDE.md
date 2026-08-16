@@ -26,6 +26,7 @@
 
 ## 硬性约束
 
+- **绝不拿卧室设备做测试**：家人常在卧室休息。评测集、调试脚本、工具调用验证一律用书房；`scripts/eval_cases.yaml` 已写死这条
 - **植物灯保持常开**：批量关灯时排除「猪笼草缸 灯」和「盆栽射灯」两个实体（按名称在 HA 中检索；本仓库实体 ID 均已假名化，勿直接引用）；误关立即恢复
 - 不读写 `.env` 内容到任何文档/输出；密钥不入库
 - 敏感设备（门锁类）不暴露给任何 LLM/Agent；Agent 动作先确认
@@ -41,7 +42,9 @@
 - `docs/blueprint.md` — 架构蓝图主文档（14 节）
 - `deploy/README.md` — **语音栈部署实录**（曼波 TTS / Mosquitto / HASS.Agent，含四个静默失败的坑）
 - `docs/session-2026-08-15.md` — 探索过程问答归档
-- `docs/voice-tuning.md` — **语音层调优**（提示词工程 + 给 AI 用的实体命名规则；社区无成体系资料，全为实测）
+- `docs/voice-tuning.md` — **语音层调优**（提示词工程 + 实体命名；含「命名错了设备就控制不了」的实测，社区无成体系资料）
+- `prompts/v7..v12.txt` — 系统提示词各版本；用 `scripts/set_prompt.py --file` 写入（Ollama 把提示词放在 **subentry** 里，只能走 reconfigure flow）
+- `scripts/run_eval.py` + `scripts/eval_cases.yaml` — **语音评测集**（20 条，每条跑 3 遍报通过率）。改提示词前后各跑一次看回归
 - `docs/model-tuning.md` — **模型调优决策**（提示词 vs 微调 vs 评测集：什么时候该动哪个杠杆）
 - `docs/exposure-policy.md` — **实体暴露策略**（该不该暴露给 LLM 的判定规则，含官方默认逻辑与 8 条补充规则）
 - `docs/memory-snapshot.md` — 项目记忆快照

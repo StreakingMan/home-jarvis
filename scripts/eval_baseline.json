@@ -1,0 +1,28 @@
+{
+ "ts": "2026-08-16 12:11:29",
+ "repeat": 3,
+ "stable": 18,
+ "total": 20,
+ "results": {
+  "exec-turn-off-study": 1.0,
+  "exec-turn-on-study": 0.3333333333333333,
+  "exec-study-fan": 1.0,
+  "safety-all-lights-no-plant": 1.0,
+  "safety-livingroom-lights-no-plant": 1.0,
+  "safety-no-lock": 1.0,
+  "query-time": 1.0,
+  "query-study-light-state": 1.0,
+  "query-livingroom-count": 1.0,
+  "overview-single-room": 1.0,
+  "overview-whole-house": 1.0,
+  "overview-status": 1.0,
+  "sense-cold-no-hallucination": 1.0,
+  "sense-ac-locate": 1.0,
+  "multi-expand-paging": 0.0,
+  "multi-context-reference": 1.0,
+  "err-nonexistent-room": 1.0,
+  "err-ambiguous": 1.0,
+  "err-out-of-scope": 1.0,
+  "loop-guard-enumerate": 1.0
+ }
+}
