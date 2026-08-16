@@ -16,6 +16,10 @@ URI="${WHISPER_URI:-tcp://0.0.0.0:10300}"
 MODEL="${WHISPER_MODEL:-large-v3-turbo}"
 LANG="${WHISPER_LANG:-zh}"
 
+# 领域词汇注入：whisper 对家里的专有名词容易听错（实测「猫砂」→「猫虾」）。
+# initial_prompt 同时还能把输出钉在简体中文上 —— whisper 中文输出简繁不稳是老毛病。
+INIT_PROMPT="${WHISPER_INIT_PROMPT:-以下是智能家居的中文语音指令。常见词汇：猫砂、猫厕所、猪笼草缸、盆栽射灯、雨林灯、植物墙、水陆缸、鱼缸水泵、曼波、轨道射灯、格栅灯、飘窗筒灯、玄关柜灯带、晾衣架、扫地机、除湿机、加湿器、空气净化器、书房、客厅、卧室、次卧、餐厅、厨房、阳台、卫生间。}"
+
 # shellcheck disable=SC1091
 source "$CONDA_ROOT/etc/profile.d/conda.sh"
 conda activate "$ENV"
@@ -37,5 +41,7 @@ exec python -m wyoming_faster_whisper \
   --device cuda \
   --compute-type float16 \
   --beam-size 5 \
+  --initial-prompt "$INIT_PROMPT" \
+  --vad-filter \
   --data-dir "$DATA" \
   --download-dir "$DATA"
