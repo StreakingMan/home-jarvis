@@ -12,6 +12,10 @@ Environment=OLLAMA_HOST=0.0.0.0:11434
 Environment=OLLAMA_MODELS=%h/apps/ollama/models
 # 模型常驻，避免每次对话重新加载（游戏模式让路时用 keep_alive:0 显式卸载）
 Environment=OLLAMA_KEEP_ALIVE=24h
+# 机器相关配置（代理等）。ollama serve 由 systemd 拉起，继承不到 shell 的代理变量，
+# 而 registry.ollama.ai 在国内直连不通，拉模型必须显式给代理。
+# 文件不入库，内容见 deploy/README.md。前缀 - 表示文件缺失时不报错。
+EnvironmentFile=-%h/apps/jarvis/config/ollama.env
 ExecStart=%h/apps/ollama/bin/ollama serve
 Restart=on-failure
 RestartSec=5

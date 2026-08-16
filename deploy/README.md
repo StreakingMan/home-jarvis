@@ -23,6 +23,9 @@ HA (NucBox)
 | 曼波权重 / 参考音频 | `~/apps/GPT-SoVITS/{GPT,SoVITS}_weights_v2Pro/`、`refer/` | ✗ 240MB，版权归 Cygames |
 | Mosquitto 配置与密码 | `~/apps/mosquitto/config/` | ✗ 含凭据（`passwd` 是哈希，取不回明文） |
 | **MQTT 账号明文备份** | `~/apps/jarvis/config/mqtt_credentials.txt`（`chmod 600`） | ✗ **仓库是公开的，切勿入库** |
+| Ollama 本体 | `~/apps/ollama`（2.1G，含 CUDA 运行库） | ✗ |
+| Ollama 模型 | `~/apps/ollama/models` | ✗ |
+| Ollama 机器相关配置 | `~/apps/jarvis/config/ollama.env`（代理等） | ✗ |
 | 缓存 / 日志 | `~/apps/jarvis/{cache,logs}/` | ✗ |
 | 脚本 | 本仓库 `scripts/` | ✓ |
 | systemd unit | 本仓库 `deploy/systemd/` | ✓ |
@@ -217,7 +220,59 @@ python scripts/tts_stream_bench.py          # 流式基准
 
 ---
 
-## 待办：Ollama（下一步）
+## 七、Ollama（对话层）
+
+```bash
+bash scripts/setup_ollama.sh                       # 免 root 装到 ~/apps/ollama
+cp deploy/systemd/ollama.service ~/.config/systemd/user/
+systemctl --user daemon-reload && systemctl --user enable --now ollama
+~/apps/ollama/bin/ollama pull qwen3:8b
+```
+
+免 root 是刻意的：官方 `install.sh` 要 sudo（装 `/usr/local/bin` + 系统级服务），
+改用 release tarball 解压到用户目录。解压需要 zstd，系统没装，
+但 **Python 3.14 自带 `compression.zstd`**（PEP 784），直接拿它解，省一次 apt。
+
+### ⚠️ 必须给服务显式配代理
+
+`registry.ollama.ai` 国内直连不通（`TLS handshake timeout`）。
+`ollama pull` 只是客户端，**真正下载的是 systemd 拉起的 server**，
+而它**继承不到 shell 里的代理变量** —— 日志开头那行 env dump 里
+`HTTP_PROXY:` `HTTPS_PROXY:` 全是空的。
+
+解法是 unit 里 `EnvironmentFile=-%h/apps/jarvis/config/ollama.env`，文件内容：
+
+```
+HTTPS_PROXY=http://127.0.0.1:7897
+HTTP_PROXY=http://127.0.0.1:7897
+NO_PROXY=localhost,127.0.0.1,192.168.0.0/16,::1
+```
+
+代理地址是机器相关的，所以不入库（前缀 `-` 表示文件缺失时 systemd 不报错）。
+
+> 这跟 `run_gptsovits_api.sh` 里的 `LD_LIBRARY_PATH` 是同一类问题：
+> **systemd 拉起的服务不继承 shell 环境**，凡是依赖环境变量的东西都要在 unit 里显式给。
+
+### 绑定地址与其他服务不同
+
+| 服务 | 绑定 | 原因 |
+|---|---|---|
+| `gptsovits-api` / `tts-proxy` | `127.0.0.1` | 调用方 HASS.Agent 在本机，mirrored 网络共享 localhost |
+| **`ollama`** | **`0.0.0.0`** | **调用方是 NUC 上的 HA，跨机**，需开两层防火墙 |
+
+```powershell
+New-NetFirewallRule -DisplayName "Ollama 11434 (WSL, LAN only)" -Direction Inbound -Protocol TCP -LocalPort 11434 -Action Allow -Profile Any -RemoteAddress LocalSubnet
+New-NetFirewallHyperVRule -Name "Ollama-11434-WSL" -DisplayName "Ollama 11434 WSL" -Direction Inbound -VMCreatorId '{40E0AC32-46A5-438A-A0B2-2B479E8F2E90}' -Protocol TCP -LocalPorts 11434 -Action Allow
+```
+
+### 启动后应看到
+
+```
+inference compute  library=CUDA compute=12.0 driver=13.3
+name=CUDA0 "NVIDIA GeForce RTX 5060 Ti" total="15.9 GiB" available="14.8 GiB"
+```
+
+## 待办：HA 侧接入（下一步）
 
 前置条件已全部就绪 —— 暴露面 435 → 83，prompt ~2,299 token，prefill 约 0.77s，
 落在语音场景给 LLM 的 300ms–2s 预算内。
