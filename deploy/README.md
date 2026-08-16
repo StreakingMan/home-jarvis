@@ -315,7 +315,54 @@ inference compute  library=CUDA compute=12.0 driver=13.3
 name=CUDA0 "NVIDIA GeForce RTX 5060 Ti" total="15.9 GiB" available="14.8 GiB"
 ```
 
-## 待办：HA 侧接入（下一步）
+## 八、HA 侧接入 Ollama
+
+### ⚠️ 主条目 + 子条目，两步
+
+HA 2026 的 Ollama 集成把「连接」和「对话代理」拆开了：
+
+1. **主条目**：设置 → 设备与服务 → 添加集成 → Ollama，填 `http://<算力机IP>:11434`，
+   API 密钥留空。提交成功后 `subentries=0`，**此时还没有任何 conversation 实体**
+2. **子条目**：在集成页面添加「对话代理」。这一步才产生 `conversation.*` 实体
+
+只做第一步会看到「集成已加载但实体不出现」，容易误以为失败。
+
+用 API 直接建子条目（省去 UI 点击）：
+
+```bash
+E=<主条目的 entry_id>   # config_entries/get 里查
+FID=$(curl -s --noproxy '*' -X POST -H "Authorization: Bearer $HA_TOKEN" \
+  -H "Content-Type: application/json" -d "{\"handler\":[\"$E\",\"conversation\"]}" \
+  "$HA_URL/api/config/config_entries/subentries/flow" | jq -r .flow_id)
+curl -s --noproxy '*' -X POST -H "Authorization: Bearer $HA_TOKEN" \
+  -H "Content-Type: application/json" -d '{
+    "name":"Qwen3 对话代理", "model":"qwen3:8b",
+    "llm_hass_api":["assist"], "num_ctx":8192, "max_history":5, "think":false
+  }' "$HA_URL/api/config/config_entries/subentries/flow/$FID"
+```
+
+### 采用的配置
+
+| 字段 | 值 | 依据 |
+|---|---|---|
+| `llm_hass_api` | `["assist"]` | 启用 HA 控制，拿到 Assist 的工具集 |
+| `think` | `false` | 蓝图第 13 节「本地 LLM 关 thinking」——思考 token 念不出来，音箱会死寂 |
+| `num_ctx` | 8192 | prompt 2,543 tok + 历史 + 回复，留足余量 |
+| `max_history` | 5 | 限制历史轮数，防 prompt 随对话膨胀打穿缓存 |
+
+### 端到端实测（真实管线，`/api/conversation/process`）
+
+| 指令 | 耗时 | 结果 |
+|---|---|---|
+| 「书房的灯现在是开着的吗」 | 6.18s（冷） | 回答准确 |
+| 「现在客厅有几盏灯亮着」 | 1.22s | 回答准确（10 盏全 off） |
+| 「把书房的灯关掉」 | 1.22s | ✅ 实际 off |
+| 「书房的灯再打开」 | 1.02s | ✅ 实际 on |
+
+**稳定在 1.0–1.2 秒**，落在蓝图第 03 节给对话层的 1–3 秒预算内，且偏快的一端。
+首次调用 6.18s 是模型重载，常驻后不再出现。
+
+## 待办：下一步
 
 前置条件已全部就绪 —— 暴露面 435 → 83，prompt ~2,299 token，prefill 约 0.77s，
 落在语音场景给 LLM 的 300ms–2s 预算内。
