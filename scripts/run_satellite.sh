@@ -40,6 +40,11 @@ MIC_CMD="ffmpeg -hide_banner -loglevel error -f pulse -i RDPSource -ac 1 -ar 160
 # 播放：从 stdin 读 22.05kHz 裸 PCM 送回 Windows 默认输出
 SND_CMD="ffmpeg -hide_banner -loglevel error -f s16le -ar 22050 -ac 1 -i - -f pulse RDPSink"
 
+# ⚠️ 提示音不是锦上添花。satellite 默认**一声不吭**：唤醒词命中后直接开始录指令，
+#    人完全感知不到，表现就是「喊了没反应」，而日志里唤醒明明是成功的。
+#    没有它排查唤醒问题基本靠猜。用 scripts/gen_sounds.py 生成。
+SOUNDS="${SATELLITE_SOUNDS:-$HOME/apps/jarvis/sounds}"
+
 exec python -m wyoming_satellite \
   --name "$NAME" \
   --uri "$URI" \
@@ -47,4 +52,6 @@ exec python -m wyoming_satellite \
   --snd-command "$SND_CMD" \
   --snd-command-rate 22050 \
   --wake-uri "$WAKE_URI" \
-  --wake-word-name "$WAKE_WORD"
+  --wake-word-name "$WAKE_WORD" \
+  --awake-wav "$SOUNDS/awake.wav" \
+  --done-wav "$SOUNDS/done.wav"

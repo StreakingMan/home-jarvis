@@ -138,7 +138,13 @@ async def main() -> None:
     ap.add_argument("--debug", action="store_true")
     args = ap.parse_args()
 
-    logging.basicConfig(level=logging.DEBUG if args.debug else logging.INFO)
+    # 带时间戳：唤醒词排查全靠「这次命中是几点」跟麦克风/管线日志对齐，
+    # 没时间戳的日志基本没法用
+    logging.basicConfig(
+        level=logging.DEBUG if args.debug else logging.INFO,
+        format="%(asctime)s %(levelname)s %(message)s",
+        datefmt="%H:%M:%S",
+    )
 
     model_dir = Path(args.model_dir).expanduser()
     keywords = args.keyword or ["你好曼波"]
