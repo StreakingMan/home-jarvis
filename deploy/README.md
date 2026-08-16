@@ -398,6 +398,58 @@ curl -s --noproxy '*' -X POST -H "Authorization: Bearer $HA_TOKEN" \
 **稳定在 1.0–1.2 秒**，落在蓝图第 03 节给对话层的 1–3 秒预算内，且偏快的一端。
 首次调用 6.18s 是模型重载，常驻后不再出现。
 
+## 九、Wyoming TTS 封装（曼波接进 Assist）
+
+`tts_proxy` 只是「一个能返回 wav 的 URL」，靠 `media_player.play_media` 播 ——
+那条路能做主动播报，但**接不进 Assist 管线**，管线要的是一个真正的 `tts.*` 实体。
+
+`scripts/wyoming_manbo_tts.py` 把它包成 Wyoming TTS 服务（`:10200`），
+HA 的「Wyoming Protocol」集成会注册成 `tts.manbo`。
+
+```bash
+~/miniconda3/envs/GPTSoVits/bin/pip install wyoming
+cp deploy/systemd/wyoming-manbo-tts.service ~/.config/systemd/user/
+systemctl --user daemon-reload && systemctl --user enable --now wyoming-manbo-tts
+```
+
+### 句级流式在这里落地
+
+按 `。！？；` 切句、逐句合成、逐句吐 `AudioChunk`，而不是整段合成完再发。
+协议层实测：
+
+| 指标 | 数值 |
+|---|---|
+| 首个音频事件 | **1.02s** |
+| 全部完成 | 1.86s |
+| 音频 | 32000Hz / 16bit / 单声道，5.56s |
+
+上游接的是 `tts_proxy(:9881)` 而非 `api.py(:9880)` —— 代理补了 `Content-Length`
+并带磁盘缓存，固定播报只合成一次。
+
+### 踩的坑
+
+`global UPSTREAM` 写在 `argparse` 之后 → `SyntaxError: name 'UPSTREAM' is used
+prior to global declaration`。systemd 会一直 `activating` 重试，
+日志里才看得到真实原因。
+
+## 十、faster-whisper（STT）
+
+```bash
+bash scripts/setup_whisper.sh
+cp deploy/systemd/wyoming-whisper.service ~/.config/systemd/user/
+systemctl --user daemon-reload && systemctl --user enable --now wyoming-whisper
+```
+
+独立 conda 环境，不与 GPTSoVits 共用 —— faster-whisper 走 CTranslate2、
+GPT-SoVITS 走 PyTorch，两者对 cuDNN/cuBLAS 的要求不一定一致。
+
+模型选 **large-v3-turbo**：809M 参数，比 large-v3 快约 8 倍，中文质量损失很小，
+fp16 约 1.6GB。**别用 base/small** —— 中文识别质量会毁掉整条链路，
+前面再准后面也救不回来。
+
+同样需要 `LD_LIBRARY_PATH`（CTranslate2 要 cuDNN/cuBLAS，pip 版 nvidia 包装在
+`site-packages/nvidia/*/lib`）和 `HF_ENDPOINT`（首次下模型走国内镜像）。
+
 ## 待办：下一步
 
 前置条件已全部就绪 —— 暴露面 435 → 83，prompt ~2,299 token，prefill 约 0.77s，

@@ -1,0 +1,19 @@
+[Unit]
+Description=Wyoming faster-whisper (STT, large-v3-turbo)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+ExecStart=%h/code/home-jarvis/scripts/run_wyoming_whisper.sh
+Restart=on-failure
+RestartSec=10
+# 首次启动要下模型（约 1.6GB），给足超时
+TimeoutStartSec=1800
+# 代理等机器相关配置（首次下模型需要）；前缀 - 表示文件缺失时不报错
+EnvironmentFile=-%h/apps/jarvis/config/ollama.env
+StandardOutput=append:%h/apps/jarvis/logs/wyoming-whisper.log
+StandardError=append:%h/apps/jarvis/logs/wyoming-whisper.log
+
+[Install]
+WantedBy=default.target

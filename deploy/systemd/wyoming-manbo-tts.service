@@ -1,0 +1,16 @@
+[Unit]
+Description=Wyoming TTS wrapper for GPT-SoVITS manbo voice
+After=tts-proxy.service
+Wants=tts-proxy.service
+
+[Service]
+Type=simple
+# 绑 0.0.0.0：调用方是 NUC 上的 HA，跨机
+ExecStart=%h/miniconda3/envs/GPTSoVits/bin/python %h/code/home-jarvis/scripts/wyoming_manbo_tts.py --uri tcp://0.0.0.0:10200
+Restart=on-failure
+RestartSec=5
+StandardOutput=append:%h/apps/jarvis/logs/wyoming-manbo-tts.log
+StandardError=append:%h/apps/jarvis/logs/wyoming-manbo-tts.log
+
+[Install]
+WantedBy=default.target
