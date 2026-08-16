@@ -160,6 +160,40 @@ xiaomi_home 集成用 ` * ` 标记「非标准 MIoT 服务」。实测 435 个�
 但那是面板状态 LED，不是被控负载。它们 `entity_category: config`、本就不会被暴露，
 **按名字匹配会误判成重复**，需按 `entity_category` 排除后再比。
 
+### R5b 米家的「标记为灯」HA 读不到，用 switch_as_x 补
+
+米家 App 里可以把开关的某一路标记为灯，小爱据此让「关某房间所有灯」包含它。
+但那是**米家云端/App 层的属性，不在 MIoT spec 里** —— xiaomi_home 集成只看到
+一个 `switch:on` 属性，如实映射成 `switch` 实体（实测 `device_class: switch`，
+没有任何品类线索）。
+
+后果：HA 的「关某区域所有的灯」不含这些继电器，LLM 拿到的语义也是 switch。
+
+**解法是 HA 内置的 `switch_as_x` 助手**，把 switch 重新包装成 light：
+
+```
+配置流 handler = switch_as_x
+参数：entity_id / target_domain（cover|fan|light|lock|siren|valve）/ invert
+```
+
+转换后 HA 会自动把原 switch 置为 `hidden_by=integration`，
+并**把暴露设置一并迁移到新实体**（实测 25 转 25，暴露总数不变）。
+这正好满足 R5「重复控制路径只留一个」。
+
+本宅 2026-08-16 转了 24 个（22 → light，2 → fan），效果：
+
+| | 转换前 | 转换后 |
+|---|---|---|
+| 暴露的 light | 30 | **51** |
+| 暴露的 switch | 38 | 13 |
+| 书房的「灯」 | 1 盏 | **5 盏** |
+| 卫生间的「灯」 | **0 盏** | 3 盏 |
+
+⚠️ **植物灯不要转**：转成 light 后会被「把灯都关了」误伤，见 R6。
+本宅的雨林灯、猪笼草缸相关继电器保持 switch。
+
+见 `scripts/switch_as_light.py`。
+
 ### R6 后果不可逆 **且指令易混淆** 才不暴露
 
 原先的表述是「后果不可逆就不暴露」，**实践中过严**。
