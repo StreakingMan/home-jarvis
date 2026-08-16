@@ -448,7 +448,43 @@ fp16 约 1.6GB。**别用 base/small** —— 中文识别质量会毁掉整条�
 前面再准后面也救不回来。
 
 同样需要 `LD_LIBRARY_PATH`（CTranslate2 要 cuDNN/cuBLAS，pip 版 nvidia 包装在
-`site-packages/nvidia/*/lib`）和 `HF_ENDPOINT`（首次下模型走国内镜像）。
+`site-packages/nvidia/*/lib`）。
+
+### ⚠️ 别用 hf-mirror 下模型
+
+初版给了 `HF_ENDPOINT=https://hf-mirror.com`，结果**大文件下成、小文件全挂**：
+
+```
+model.bin                 ✅ 1.6GB 下完
+config.json               ❌ 重试 30 次
+preprocessor_config.json  ❌
+tokenizer.json            ❌
+vocabulary.json           ❌
+→ huggingface_hub.errors.LocalEntryNotFoundError
+```
+
+原因是 hf-mirror 对 `HEAD` 请求返回 **308 永久重定向**回 huggingface.co，
+`huggingface_hub` 的 HEAD 探测在重定向链上失败。
+
+既然 unit 已经通过 `EnvironmentFile` 给了 Clash 代理（Ollama 那 5GB 就是这么下的），
+**直连 huggingface.co 更可靠**。脚本改成只在显式设置时才用 `HF_ENDPOINT`。
+
+⚠️ 排查时注意：模型下载发生在 **systemd 服务内部**，不是独立任务，
+`du -sh ~/apps/whisper` 和服务日志是唯二的观察窗口。
+
+### 防火墙
+
+Wyoming 的两个端口都要开（同 MQTT / Ollama）：
+
+```powershell
+New-NetFirewallHyperVRule -Name "Wyoming-10200-WSL" -DisplayName "Wyoming TTS 10200" -Direction Inbound -VMCreatorId '{40E0AC32-46A5-438A-A0B2-2B479E8F2E90}' -Protocol TCP -LocalPorts 10200 -Action Allow
+New-NetFirewallHyperVRule -Name "Wyoming-10300-WSL" -DisplayName "Wyoming STT 10300" -Direction Inbound -VMCreatorId '{40E0AC32-46A5-438A-A0B2-2B479E8F2E90}' -Protocol TCP -LocalPorts 10300 -Action Allow
+New-NetFirewallRule -DisplayName "Wyoming 10200/10300 (WSL, LAN only)" -Direction Inbound -Protocol TCP -LocalPort 10200,10300 -Action Allow -Profile Any -RemoteAddress LocalSubnet
+```
+
+**症状识别**：HA 的 Wyoming 集成对话框一直转圈、而服务端日志里**没有任何连接记录**、
+`ss` 里也看不到连接 —— 那是 TCP 连接被静默丢弃（防火墙 DROP），不是握手失败。
+握手失败会在服务端留下日志。
 
 ## 待办：下一步
 

@@ -23,7 +23,11 @@ conda activate "$ENV"
 SP="$CONDA_PREFIX/lib/python3.11/site-packages"
 NVLIBS="$(find "$SP/nvidia" -maxdepth 2 -name lib -type d 2>/dev/null | tr '\n' ':')"
 export LD_LIBRARY_PATH="${NVLIBS}$CONDA_PREFIX/lib:${LD_LIBRARY_PATH:-}"
-export HF_ENDPOINT="${HF_ENDPOINT:-https://hf-mirror.com}"
+# 不默认走 hf-mirror：它对 HEAD 请求返回 308 重定向，导致小文件（config/tokenizer/
+# vocabulary 等）反复失败，而大文件 model.bin 反而能下成。既然 unit 里已经通过
+# EnvironmentFile 给了 Clash 代理，直连 huggingface.co 更可靠。
+# 需要时可显式 export HF_ENDPOINT 覆盖。
+[ -n "${HF_ENDPOINT:-}" ] && export HF_ENDPOINT
 
 mkdir -p "$DATA"
 exec python -m wyoming_faster_whisper \
