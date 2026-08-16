@@ -213,6 +213,30 @@ homeassistant/expose_new_entities/set   {assistant, expose_new}
 
 均需管理员权限。长期令牌走 WebSocket 可用，REST 的 `/api/hassio/*` 则一律 401。
 
+## 隐藏 ≠ 解除暴露
+
+两者是**独立的开关**，HA 只在实体**首次出现**时用 `hidden_by` 推导默认暴露值：
+
+```
+async_should_expose:
+  1. options 里有显式 should_expose？ → 直接用，不再计算
+  2. 没有 → 按默认规则算一次（这时才看 hidden_by / entity_category / 域白名单）
+  3. 把结果存进 options —— 从此固化
+```
+
+**HA 没有监听 `entity_registry_updated`**，所以：
+
+| 顺序 | 结果 |
+|---|---|
+| 先隐藏，后出现的实体 | 算默认值时 `hidden_by` 已在 → 不暴露 ✅ |
+| **先暴露，后隐藏** | 存储值早已固化为 `should_expose: True` → **仍然暴露** ❌ |
+
+> **想让实体不被 LLM 碰，必须显式解除暴露，光隐藏没用。**
+
+反过来，解除暴露的实体在 UI 里依然可见——要清 UI 噪音得单独隐藏。
+两个集合也不相同：**隐藏集合 ⊂ 解除暴露集合**，需剔除「真设备但不给 LLM」的部分
+（传感器、植物灯、纯无线继电器等，UI 里仍需可见）。见 `scripts/hide_settings_entities.py`。
+
 ## 本宅治理结果（2026-08-16）
 
 | | 治理前 | 治理后 |
@@ -222,5 +246,8 @@ homeassistant/expose_new_entities/set   {assistant, expose_new}
 | 估算 token | ~14,245 | **~2,299** |
 | prefill 估算 | ~4.7s | **~0.77s** |
 
-同时把 `expose_new` 设为 `False` —— 新设备不再自动进入暴露集合，
-否则治理成果会被下一台米家设备稀释回去。
+同时：
+
+- `expose_new` 设为 `False` —— 新设备不再自动进入暴露集合，否则治理成果会被下一台米家设备稀释回去
+- 隐藏了 282 个 `switch` 设置项（2026-08-14 那次噪音治理漏掉的域），已隐藏总数 1519 → 1801
+- 保持可见 70 个「真设备但不给 LLM」的实体：31 传感器 / 29 纯无线继电器 / 4 植物灯 / 3 P1S 风扇 / 2 binary_sensor / 1 猫厕所摄像头
