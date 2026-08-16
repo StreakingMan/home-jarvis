@@ -40,9 +40,27 @@ UPSTREAM = "http://127.0.0.1:9881/"
 SESSION = requests.Session()
 SESSION.trust_env = False  # 绕开 Clash，同 tts_proxy.py
 
-# 句末标点。流式模式下攒到这些字符就立刻送合成
-SENT_END = "。！？；.!?;\n"
-SENT_SPLIT = re.compile(r"(?<=[。！？；.!?;])")
+# 句末标点：见到就立刻送合成
+SENT_END = "。！？；：.!?;:\n"
+# 次级停顿：缓冲区够长时，在这些位置也可以断句 —— 否则第一句太长会拖慢开口
+PAUSE = "，,、"
+# 缓冲区超过这个长度就找次级停顿断开，防止长句拖死首字延迟
+MAX_BUF = 18
+SENT_SPLIT = re.compile(r"(?<=[。！？；：.!?;:])")
+
+# Markdown 念出来全是噪音。模型偶尔还是会输出，这里兜底清掉
+MD_STRIP = [
+    (re.compile(r"\*\*(.+?)\*\*"), r"\1"),      # 粗体
+    (re.compile(r"(?m)^\s*[-*+]\s+"), ""),      # 列表符号
+    (re.compile(r"(?m)^\s*#+\s*"), ""),         # 标题
+    (re.compile(r"`([^`]*)`"), r"\1"),           # 行内代码
+]
+
+
+def clean(text: str) -> str:
+    for pat, rep in MD_STRIP:
+        text = pat.sub(rep, text)
+    return text.strip()
 
 INFO = Info(
     tts=[
@@ -87,7 +105,7 @@ class ManboHandler(AsyncEventHandler):
 
     async def _speak(self, text: str):
         """合成一句并吐出去；首次调用时补发 AudioStart"""
-        text = text.strip()
+        text = clean(text)
         if not text:
             return
         try:
@@ -135,7 +153,13 @@ class ManboHandler(AsyncEventHandler):
             while True:
                 idx = next((i for i, c in enumerate(self._buf) if c in SENT_END), -1)
                 if idx < 0:
-                    break
+                    # 没有句末标点，但缓冲太长时在次级停顿处断开，
+                    # 否则「家里有以下设备和它们的分布情况：」这类长开头会拖慢首字
+                    if len(self._buf) >= MAX_BUF:
+                        idx = max((i for i, c in enumerate(self._buf) if c in PAUSE),
+                                  default=-1)
+                    if idx < 0:
+                        break
                 sent, self._buf = self._buf[:idx + 1], self._buf[idx + 1:]
                 await self._speak(sent)
             return True

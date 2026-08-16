@@ -377,6 +377,46 @@ curl -s --noproxy '*' -X POST -H "Authorization: Bearer $HA_TOKEN" \
   }' "$HA_URL/api/config/config_entries/subentries/flow/$FID"
 ```
 
+### ⚠️ 模型必须加护栏，否则会退化循环
+
+2026-08-16 实测：问「汇总下家里的设备总览情况」时 qwen3:8b 陷入退化循环 ——
+**14,956 个 intent-progress 事件、27,571 字**，同一行
+「- **智能鱼缸水泵**：分布在客厅」重复 110 次，只能手动中断。
+
+Ollama 默认 `repeat_last_n=64`，对这种大段列表循环的窗口太小；`num_predict` 又无上限。
+解法是建定制模型（`deploy/Modelfile.qwen3-jarvis`）：
+
+```
+FROM qwen3:8b
+PARAMETER num_predict 512      # 输出硬上限，堵死无限循环
+PARAMETER repeat_penalty 1.15
+PARAMETER repeat_last_n 512    # 窗口 64 → 512
+PARAMETER temperature 0.7      # 以下为 Qwen3 官方推荐的 non-thinking 采样参数
+PARAMETER top_p 0.8
+PARAMETER top_k 20
+PARAMETER min_p 0
+```
+
+```bash
+ollama create qwen3-jarvis -f deploy/Modelfile.qwen3-jarvis
+```
+
+### ⚠️ Modelfile 里的 SYSTEM 不生效
+
+**HA 会用自己的系统提示词覆盖模型自带的 SYSTEM。**
+「别罗列设备、别用 Markdown」这类约束必须写进 **HA 子条目的 `prompt` 字段**。
+
+实测对比（同一句「汇总下家里的设备总览情况」）：
+
+| 配置 | 结果 |
+|---|---|
+| 无护栏 | 27,571 字，无限循环 |
+| 仅 Modelfile 护栏 | 653 字，仍在罗列设备 + Markdown |
+| **+ HA prompt 约束** | **6 字「其他都正常。」** |
+
+本宅采用的 prompt 要点：两三句以内、不罗列清单、不用 Markdown、
+执行后简短确认、找不到就追问不猜、数字用中文说法。
+
 ### 采用的配置
 
 | 字段 | 值 | 依据 |
@@ -437,8 +477,16 @@ A/B 实测（各一段 62 字全新文本，按实测 74.4 tok/s 模拟 LLM 出�
 **首字快 3.6 倍，且差距随回复变长而拉大** —— 整段模式必须等全文，
 流式只等第一句，与总长无关。
 
-实现要点：`SynthesizeChunk` 里攒文本，一遇到 `。！？；.!?;` 就立刻送合成、
-立刻吐 `AudioChunk`；`SynthesizeStop` 时把不成句的残余补上再收尾。
+实现要点：`SynthesizeChunk` 里攒文本，一遇句末标点就立刻送合成、立刻吐 `AudioChunk`；
+`SynthesizeStop` 时把不成句的残余补上再收尾。
+
+**三个容易漏的细节**：
+
+1. **`：` 必须算句末标点**。实测 LLM 的第一句常是「家里有以下设备和它们的分布情况**：**」，
+   漏了它就要一路攒到第一个 `。`，首字延迟被白白拖长
+2. **缓冲超过 18 字时在逗号处强制断开** —— 防止没有句末标点的长开头拖死开口
+3. **清掉 Markdown** —— `**粗体**`、`- 列表`、`# 标题` 念出来全是噪音。
+   提示词里已经禁止，这里再兜一层
 
 上游接的是 `tts_proxy(:9881)` 而非 `api.py(:9880)` —— 代理补了 `Content-Length`
 并带磁盘缓存，固定播报只合成一次。

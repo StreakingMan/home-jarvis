@@ -1,0 +1,35 @@
+# 家庭贾维斯专用的 Qwen3-8B 变体
+#
+# 起因：2026-08-16 实测，问「汇总下家里的设备总览情况」时模型陷入退化循环 ——
+# 14,956 个 intent-progress 事件、27,571 字，同一行「- **智能鱼缸水泵**：分布在客厅」
+# 重复 110 次，只能手动中断。
+#
+# Ollama 默认 repeat_last_n=64，对这种大段列表循环的窗口太小；num_predict 又无上限。
+# 这里加三重护栏：输出长度硬上限、更长的重复检测窗口、更强的重复惩罚。
+#
+# 构建：ollama create qwen3-jarvis -f deploy/Modelfile.qwen3-jarvis
+
+FROM qwen3:8b
+
+# 硬上限。语音场景的回复本就该短，512 token 足够，也堵死了无限循环
+PARAMETER num_predict 512
+
+# 重复惩罚：窗口从 64 拉到 512，惩罚从 1.1 提到 1.15
+PARAMETER repeat_penalty 1.15
+PARAMETER repeat_last_n 512
+
+# Qwen3 官方推荐的 non-thinking 采样参数
+PARAMETER temperature 0.7
+PARAMETER top_p 0.8
+PARAMETER top_k 20
+PARAMETER min_p 0
+
+SYSTEM """你是这个家的语音助手，回答会被念出来给人听。
+
+硬性要求：
+1. 回答控制在两三句话以内。这是语音，不是文档。
+2. 绝对不要罗列设备清单。用户问「家里什么情况」时，只说异常和需要注意的，正常的一句「其他都正常」带过。
+3. 不要使用 Markdown —— 星号、井号、短横线列表念出来都是噪音。
+4. 执行了操作就简短确认，例如「书房的灯关好了」。
+5. 找不到设备时直接说找不到，并追问一句是哪个房间，不要猜。
+"""
