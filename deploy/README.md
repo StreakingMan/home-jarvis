@@ -122,10 +122,46 @@ systemctl --user daemon-reload
 systemctl --user enable --now mosquitto-jarvis gptsovits-api tts-proxy
 ```
 
-**需要 root 一次**，否则退出登录后服务会被杀：
+### 开机自愈（两条配套，缺一不可）
+
+**① linger** —— 否则没有登录会话时 systemd 会杀掉全部用户服务。需 root 一次：
 
 ```bash
 sudo loginctl enable-linger $USER
+```
+
+**② 登录时拉起 WSL** —— WSL 不随 Windows 开机启动，不拉起来上面那条也白搭。
+
+计划任务这条路走不通：`schtasks /create` 即使用 `/sc onlogon /rl LIMITED`
+仍返回「拒绝访问」，要提权。**改用启动文件夹，不需要管理员**，而且内容可见、可随时删：
+
+```
+%APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup\Jarvis-Boot-WSL.vbs
+```
+
+```vbs
+CreateObject("WScript.Shell").Run "wsl.exe -d Ubuntu -e true", 0, False
+```
+
+`wsl -e true` 只是让这条命令本身立刻退出，WSL 实例会继续运行；
+参数 `0` 隐藏窗口、`False` 不等待，所以登录时无感。
+
+**两条的关系**：只有 ② 没有 ① → WSL 起来了但服务被杀；
+只有 ① 没有 ② → 服务能常驻但 Windows 重启后 WSL 根本没起来。
+
+完整链路：
+
+```
+Windows 登录 → Jarvis-Boot-WSL.vbs 拉起 WSL
+             → systemd 因 Linger=yes 启动用户管理器
+             → 四个 enabled 服务自动就绪
+```
+
+验证：
+
+```bash
+loginctl show-user $USER --property=Linger        # 应为 Linger=yes
+systemctl --user is-enabled mosquitto-jarvis gptsovits-api tts-proxy ollama
 ```
 
 ## 附：NUC 的网络限制（2026-08-16 摸清）
