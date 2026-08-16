@@ -24,6 +24,7 @@ import asyncio
 import io
 import logging
 import re
+import time
 import wave
 
 import requests
@@ -42,10 +43,15 @@ SESSION.trust_env = False  # 绕开 Clash，同 tts_proxy.py
 
 # 句末标点：见到就立刻送合成
 SENT_END = "。！？；：.!?;:\n"
-# 次级停顿：缓冲区够长时，在这些位置也可以断句 —— 否则第一句太长会拖慢开口
+# 次级停顿：没有句末标点时，在这些位置断句 —— 否则第一句太长会拖慢开口
 PAUSE = "，,、"
-# 缓冲区超过这个长度就找次级停顿断开，防止长句拖死首字延迟
-MAX_BUF = 18
+# 第一段的目标长度：越短越早开口。实测「从 1 数到 100」这类没有句号的长回复，
+# 第一段被撑到 15.6 秒音频时首块延迟 5.5 秒，切短后能压到 1 秒级
+FIRST_SEG = 6
+# 后续段落可以长一些，太碎会让语气断断续续，也增加每次合成的固定开销
+MIN_SEG = 14
+# 连一个停顿都没有的超长串（数字、英文、代码）兜底硬切，否则会一直等下去
+HARD_MAX = 60
 SENT_SPLIT = re.compile(r"(?<=[。！？；：.!?;:])")
 
 # Markdown 念出来全是噪音。模型偶尔还是会输出，这里兜底清掉
@@ -101,24 +107,68 @@ class ManboHandler(AsyncEventHandler):
         self._buf = ""         # 流式模式下未成句的残余文本
         self._started = False  # 是否已发过 AudioStart
         self._streaming = False  # 是否处在流式会话中
+        # 计时：流式的全部价值在于「第一块音频多久吐出来」，不测就不知道有没有生效
+        self._t0 = 0.0         # 本轮合成开始的时刻
+        self._sentences = 0    # 本轮合成了几句
+        self._audio_sec = 0.0  # 本轮产出的音频总时长
 
     # ---------- 公共 ----------
+
+    def _split_point(self) -> int:
+        """在缓冲区里找断句位置，返回下标；-1 表示还不该切。
+
+        ⚠️ 关键是取**最早**可用的断点，不是最晚的。早先这里用 `max()` 取缓冲区里
+        最后一个停顿，本意「缓冲太长就断开」被写成了「尽可能多攒」——LLM 吐字快时
+        第一段被撑到 15 秒音频，首块延迟 5.5 秒。「从 1 数到 100」这种没有句号的
+        回复受害最重。
+        """
+        buf = self._buf
+        # 句末标点：第一个出现的位置就断
+        for i, c in enumerate(buf):
+            if c in SENT_END:
+                return i
+        # 没有句末标点：够长之后的第一个次级停顿。首段阈值更低，为的是尽快开口
+        limit = FIRST_SEG if not self._started else MIN_SEG
+        if len(buf) >= limit:
+            for i, c in enumerate(buf):
+                if i + 1 >= limit and c in PAUSE:
+                    return i
+        # 一个停顿都没有的超长串，硬切兜底
+        if len(buf) >= HARD_MAX:
+            return HARD_MAX - 1
+        return -1
 
     async def _speak(self, text: str):
         """合成一句并吐出去；首次调用时补发 AudioStart"""
         text = clean(text)
         if not text:
             return
+        t_start = time.monotonic()
         try:
             pcm, rate, width, ch = await asyncio.get_running_loop().run_in_executor(
                 None, synth, text)
         except Exception:
             _LOG.exception("合成失败，跳过：%s", text[:20])
             return
+        synth_sec = time.monotonic() - t_start
+        audio_sec = len(pcm) / (rate * width * ch)
+        self._sentences += 1
+        self._audio_sec += audio_sec
 
         if not self._started:
             await self.write_event(AudioStart(rate=rate, width=width, channels=ch).event())
             self._started = True
+            # 首块延迟：从收到第一个文本片段到第一块音频出门。这个数字才决定「听起来快不快」
+            _LOG.info(
+                "首块音频 %.2fs（合成 %.2fs / 音频 %.2fs）｜%s",
+                time.monotonic() - self._t0, synth_sec, audio_sec, text[:20],
+            )
+        else:
+            _LOG.debug(
+                "第 %d 句 合成 %.2fs / 音频 %.2fs（实时率 %.1fx）｜%s",
+                self._sentences, synth_sec, audio_sec,
+                audio_sec / synth_sec if synth_sec else 0, text[:20],
+            )
 
         step = rate * width * ch  # 约 1 秒一块
         for off in range(0, len(pcm), step):
@@ -147,21 +197,18 @@ class ManboHandler(AsyncEventHandler):
             self._buf = ""
             self._started = False
             self._streaming = True
+            self._t0 = time.monotonic()
+            self._sentences = 0
+            self._audio_sec = 0.0
             return True
 
         if SynthesizeChunk.is_type(event.type):
             self._buf += SynthesizeChunk.from_event(event).text
             # 攒够一句就立刻送合成，不等全文
             while True:
-                idx = next((i for i, c in enumerate(self._buf) if c in SENT_END), -1)
+                idx = self._split_point()
                 if idx < 0:
-                    # 没有句末标点，但缓冲太长时在次级停顿处断开，
-                    # 否则「家里有以下设备和它们的分布情况：」这类长开头会拖慢首字
-                    if len(self._buf) >= MAX_BUF:
-                        idx = max((i for i, c in enumerate(self._buf) if c in PAUSE),
-                                  default=-1)
-                    if idx < 0:
-                        break
+                    break
                 sent, self._buf = self._buf[:idx + 1], self._buf[idx + 1:]
                 await self._speak(sent)
             return True
@@ -172,7 +219,12 @@ class ManboHandler(AsyncEventHandler):
             await self._finish()
             await self.write_event(SynthesizeStopped().event())
             self._streaming = False
-            _LOG.info("流式合成结束")
+            wall = time.monotonic() - self._t0
+            _LOG.info(
+                "流式合成结束：%d 句 / 音频 %.1fs / 耗时 %.1fs（%s）",
+                self._sentences, self._audio_sec, wall,
+                "赶得上播放" if wall < self._audio_sec else "⚠️ 比播放还慢，会卡顿",
+            )
             return True
 
         # ---- 整段：HA 不支持流式或未启用时走这里 ----
@@ -203,7 +255,11 @@ async def main():
     args = ap.parse_args()
 
     UPSTREAM = args.upstream
-    logging.basicConfig(level=logging.DEBUG if args.debug else logging.INFO)
+    logging.basicConfig(
+        level=logging.DEBUG if args.debug else logging.INFO,
+        format="%(asctime)s %(levelname)s %(message)s",
+        datefmt="%H:%M:%S",
+    )
     _LOG.info("Wyoming 曼波 TTS 启动于 %s，上游 %s（流式已启用）", args.uri, UPSTREAM)
 
     server = AsyncServer.from_uri(args.uri)
