@@ -22,6 +22,8 @@
 #   response_type: xx   action_done / query_answer
 #   expect_state: {name: 友好名片段, state: on/off}   指令后该实体的真实状态
 #   not_affects: [..]   这些实体的状态绝不能被改变（安全断言）
+#   handled_by: 内建/LLM  该由哪一层处理。⚠️ 管线上 prefer_local_intents=True，
+#                       高频指令走 HA 内建意图（~0.1s），掉进 LLM 就是 15 倍延迟劣化
 #   restore: true       跑完把被改动的实体恢复原状
 #   setup: [{name, service, data}]  跑之前把设备摆成指定状态（按友好名定位）
 #          ⚠️ 别拿空调、压缩机类设备做 setup，反复启停伤硬件
@@ -43,6 +45,7 @@ cases:
   category: 执行
   restore: true
   assert:
+    handled_by: 内建
     max_chars: 40
     question: false          # v6 曾退化成「需要我帮您做其他操作吗」
     no_markdown: true
@@ -53,11 +56,16 @@ cases:
   category: 执行
   restore: true
   assert:
+    handled_by: 内建
     max_chars: 40
     question: false
     expect_state: {name: 挂灯1S, state: "on"}
 
 # ⚠️ 评测集**绝不能碰卧室**（有人在睡觉）。测执行类一律用书房。
+# ⚠️ 这条**故意不锁 handled_by**：「把书房的循环扇打开」进不了内建快路。
+#    内建匹配具体设备要整串名字对上，而「书房循环扇」这个名字里的「书房」
+#    和句式里的区域槽撞了；说「打开书房循环扇」才能中（0.24s）。
+#    留着它是为了守住「掉进 LLM 也得答对」这条底线。
 - id: exec-study-fan
   say: 把书房的循环扇打开
   category: 执行
@@ -97,6 +105,7 @@ cases:
   say: 现在几点
   category: 查询
   assert:
+    handled_by: 内建
     max_chars: 60
     question: false          # v2 曾对所有回答都追问
     no_jargon: true

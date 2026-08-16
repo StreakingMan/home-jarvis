@@ -5,21 +5,28 @@
 v7 修好执行类的同时把全屋概况弄退化了，纯粹是碰巧测到才发现的。
 没有尺子的时候，你以为在优化，实际在随机游走。详见 docs/model-tuning.md。
 
-⚠️ 这是个**随机系统**：温度 0.7 下同一版提示词连跑三轮拿到 18/18、15/18、16/18。
-所以每条默认跑三遍报通过率，而不是给一个二元的通过/失败。判断某次改动有没有用，
-看的是通过率的变化，不是某一次的跑分。
+⚠️ 走的是**真实语音管线**（`assist_pipeline/run`），不是直接调对话代理。
+两者不等价：管线上 `prefer_local_intents=True`，高频指令先由 HA 内建意图匹配，
+命中就 0.08s 返回、根本不进 LLM。直接调代理会绕过这一层，测出来的东西
+和用户实际听到的不是一回事 —— 实测「打开书房的灯」走管线 0.08s 成功，
+直接调 LLM 则幻觉出「书房灯带」失败。用 `--path agent` 可以切回去做对照。
+
+⚠️ 这还是个**随机系统**：温度 0.7 下同一版提示词连跑三轮拿到 18/18、15/18、16/18。
+所以每条默认跑三遍报通过率，而不是给一个二元的通过/失败。
 
 用法：
     python scripts/run_eval.py                 跑全量（每条 3 遍），与上次基线对比
     python scripts/run_eval.py --repeat 5      要更稳的结论就多跑几遍
     python scripts/run_eval.py --save          把本次结果存为新基线
     python scripts/run_eval.py --only 安全      只跑某一类
-    python scripts/run_eval.py --agent conversation.xxx   指定对话代理
+    python scripts/run_eval.py --path agent    绕过内建层只测 LLM（做对照用）
 
 安全性：带 `restore: true` 的用例会在执行前快照相关实体、跑完恢复原状，
 所以「把所有的灯都关掉」这种破坏性用例可以放心跑。
+⚠️ 用例里不许出现卧室设备（有人睡觉），不许拿空调做 setup（反复启停伤压缩机）。
 """
 import argparse
+import asyncio
 import json
 import os
 import re
@@ -28,10 +35,12 @@ import time
 import urllib.request
 import uuid
 
+import websockets
 import yaml
 
 HA = os.environ["HA_URL"].rstrip("/")
 T = os.environ["HA_TOKEN"]
+WS = HA.replace("https://", "wss://").replace("http://", "ws://") + "/api/websocket"
 HERE = os.path.dirname(os.path.abspath(__file__))
 CASES = os.path.join(HERE, "eval_cases.yaml")
 BASELINE = os.path.join(HERE, "eval_baseline.json")
@@ -43,6 +52,7 @@ QUESTION = re.compile(r"[？?]")
 # 会被破坏性用例改动的域，快照范围
 VOLATILE = ("light.", "switch.", "fan.", "cover.", "climate.")
 RUN = uuid.uuid4().hex[:8]
+CPS = 4.54          # 曼波音色实测语速，字/秒。字数 ÷ 这个 = 播报秒数
 
 
 def _open(req, timeout=300):
@@ -126,16 +136,9 @@ def setup(steps):
         time.sleep(3)   # 设备回报有延迟，等状态进到 LLM 看得见的地方
 
 
-def converse(text, agent, conv_id):
-    body = {"text": text, "language": "zh-cn", "conversation_id": conv_id}
-    if agent:
-        body["agent_id"] = agent
-    return post("/api/conversation/process", body)
-
-
-def check(case, resp, speech, before_states, after):
+def check(assertion, speech, before_states, after, layer):
     """返回失败原因列表，空列表 = 通过"""
-    a = case.get("assert", {})
+    a = assertion or {}
     bad = []
 
     if "max_chars" in a and len(speech) > a["max_chars"]:
@@ -158,10 +161,9 @@ def check(case, resp, speech, before_states, after):
         hit = [k for k in a["not_contains"] if k in speech]
         if hit:
             bad.append(f"含禁用词 {hit}")
-    if "response_type" in a:
-        rt = resp.get("response", {}).get("response_type")
-        if rt != a["response_type"]:
-            bad.append(f"类型 {rt}≠{a['response_type']}")
+    # 锁住「这条该走快路」—— 高频指令掉进 LLM 就是 15 倍的延迟劣化
+    if "handled_by" in a and layer != a["handled_by"]:
+        bad.append(f"该由「{a['handled_by']}」处理，实际是「{layer}」")
     # ⚠️ LLM 对话代理返回的是纯文本，工具调用结果**不在** response.data.success 里
     #    （那是内建意图代理的格式）。所以正确性与安全断言一律看实体真实状态。
     if "expect_state" in a:
@@ -179,15 +181,61 @@ def check(case, resp, speech, before_states, after):
     return bad
 
 
-def main():
-    ap = argparse.ArgumentParser()
-    ap.add_argument("--save", action="store_true", help="把本次结果存为新基线")
-    ap.add_argument("--only", help="只跑某一类（执行/安全/查询/概况/异常/稳定性）")
-    ap.add_argument("--agent", default=None, help="对话代理 entity_id，默认用管线首选")
-    ap.add_argument("--repeat", type=int, default=3,
-                    help="每条跑几遍，报通过率（默认 3；温度 0.7 下跑一遍不可信）")
-    args = ap.parse_args()
+class Session:
+    """一条长连接跑完整轮评测。管线路径只有 WebSocket 端点，REST 上没有。"""
 
+    def __init__(self, w):
+        self.w, self.n, self.pid, self.agent = w, 0, None, None
+
+    async def cmd(self, **kw):
+        self.n += 1
+        kw["id"] = self.n
+        await self.w.send(json.dumps(kw))
+        while True:
+            m = json.loads(await self.w.recv())
+            if m.get("id") == self.n and m["type"] == "result":
+                if not m.get("success"):
+                    raise RuntimeError(m.get("error"))
+                return m.get("result")
+
+    async def via_pipeline(self, text, conv_id):
+        """真实语音路径：含 prefer_local_intents，可能根本不进 LLM"""
+        self.n += 1
+        mid, t0, prog, speech = self.n, time.time(), 0, ""
+        await self.w.send(json.dumps({
+            "id": mid, "type": "assist_pipeline/run", "pipeline": self.pid,
+            "start_stage": "intent", "end_stage": "intent",
+            "input": {"text": text}, "conversation_id": conv_id}))
+        while True:
+            m = json.loads(await self.w.recv())
+            if m.get("id") != mid:
+                continue
+            if m["type"] == "result" and not m.get("success"):
+                raise RuntimeError(m.get("error"))
+            if m["type"] != "event":
+                continue
+            e = m["event"]
+            if e["type"] == "intent-progress":
+                prog += 1
+            elif e["type"] == "intent-end":
+                speech = (e["data"]["intent_output"]["response"]["speech"]
+                          .get("plain", {}).get("speech") or "").strip()
+            elif e["type"] == "error":
+                raise RuntimeError(e["data"].get("message"))
+            elif e["type"] == "run-end":
+                # 一个 intent-progress 都没有 = 内建意图代理接住了，没进 LLM
+                return speech, ("内建" if prog == 0 else "LLM"), time.time() - t0
+
+    async def via_agent(self, text, conv_id):
+        """对照路径：直接打对话代理，绕过内建层"""
+        t0 = time.time()
+        r = await self.cmd(type="conversation/process", text=text, language="zh-cn",
+                           agent_id=self.agent, conversation_id=conv_id)
+        sp = (r["response"]["speech"].get("plain", {}).get("speech") or "").strip()
+        return sp, "LLM", time.time() - t0
+
+
+async def run(args):
     cases = yaml.safe_load(open(CASES, encoding="utf-8"))["cases"]
     if args.only:
         cases = [c for c in cases if c.get("category") == args.only]
@@ -195,90 +243,119 @@ def main():
     if os.path.exists(BASELINE):
         base = json.load(open(BASELINE, encoding="utf-8")).get("results", {})
 
-    results, t_all = {}, time.time()
-    print(f"跑 {len(cases)} 条用例"
-          f"{'（对比基线）' if base else '（无基线，本次将作为首个基线）'}\n")
+    async with websockets.connect(WS, max_size=None) as w:
+        await w.recv()
+        await w.send(json.dumps({"type": "auth", "access_token": T}))
+        await w.recv()
+        s = Session(w)
+        pls = (await s.cmd(type="assist_pipeline/pipeline/list"))["pipelines"]
+        pl = next((p for p in pls if args.pipeline in (p["id"], p["name"])), None) \
+            if args.pipeline else None
+        pl = pl or next((p for p in pls if p.get("stt_engine")), pls[0])
+        s.pid, s.agent = pl["id"], args.agent or pl["conversation_engine"]
+        ask = s.via_pipeline if args.path == "pipeline" else s.via_agent
 
-    for c in cases:
-        # 单轮写 say/assert，多轮写 turns[]；多轮共用一个 conversation_id
-        turns = c.get("turns") or [{"say": c["say"], "assert": c.get("assert", {})}]
-        hits, lines, reasons = 0, [], []
-        t0 = time.time()
-        for rep in range(args.repeat):
-            before = snapshot() if c.get("restore") else None
-            setup(c.get("setup"))
-            before_named = named_states()
-            # ⚠️ conversation_id 每次都得换新。写死成 eval-<id> 会让 HA 把上一次跑的问答
-            #    留在会话历史里，同一个问题再问时模型直接复读上次的答案 —— 表现为改了
-            #    提示词而回复字节完全不变，看上去像「提示词没生效」。
-            conv = f"eval-{RUN}-{c['id']}-{rep}"
-            bad = []
-            for ti, tn in enumerate(turns):
-                try:
-                    resp = converse(tn["say"], args.agent, conv)
-                    r = resp.get("response", {})
-                    speech = (r.get("speech", {}).get("plain", {}).get("speech") or "").strip()
-                    # 设备状态回报有延迟（实测 MIoT 约 0.5s），单次读会误判成「没执行」
-                    after = await_state(tn.get("assert", {}).get("expect_state"))
-                    tbad = check({"assert": tn.get("assert", {})}, resp, speech,
-                                 before_named or {}, after)
-                except Exception as e:
-                    speech, tbad = "", [f"异常 {type(e).__name__}: {e}"]
-                if rep == 0 or tbad:
-                    pre = "     " if len(turns) == 1 else f"     {ti + 1}) "
-                    tag = "" if args.repeat == 1 else f"[{rep + 1}] "
-                    lines.append(f"{pre}{tag}「{tn['say']}」 → {speech[:60]}  ({len(speech)}字)")
-                bad += [f"第{ti + 1}轮 {b}" for b in tbad] if len(turns) > 1 else tbad
-            if before:
-                restore(before)
-            hits += not bad
-            reasons += bad
-        el = time.time() - t0
+        where = (f"语音管线「{pl['name']}」 prefer_local_intents={pl.get('prefer_local_intents')}"
+                 if args.path == "pipeline" else f"直连 {s.agent}（绕过内建层）")
+        print(f"跑 {len(cases)} 条 × {args.repeat} 遍   路径={where}"
+              f"{'   对比基线' if base else '   无基线'}\n")
 
-        rate = hits / args.repeat
-        results[c["id"]] = rate
-        was = base.get(c["id"])
-        # ⚠️ 温度 0.7 的系统没有「通过/不通过」，只有通过率。实测同一版提示词
-        #    连跑三轮拿到 18/18、15/18、16/18 —— 单次跑分会把运气当成结论。
-        mark = "✅" if rate == 1 else ("⚠️" if rate > 0 else "❌")
-        flag = ""
-        if was is not None and rate < was - 1e-9:
-            flag = f"  ⚠️ 回归 {was:.0%}→{rate:.0%}"
-        elif was is not None and rate > was + 1e-9:
-            flag = f"  🔧 改善 {was:.0%}→{rate:.0%}"
-        score = "" if args.repeat == 1 else f" {hits}/{args.repeat}"
-        print(f"{mark} [{c.get('category','')}] {c['id']}{score}{flag}  ({el:.1f}s)")
-        for ln in lines:
-            print(ln)
-        for b in dict.fromkeys(reasons):
-            print(f"     ✗ {b}（{reasons.count(b)}/{args.repeat}）"
-                  if args.repeat > 1 else f"     ✗ {b}")
+        results, layers, t_all = {}, {}, time.time()
+        for c in cases:
+            turns = c.get("turns") or [{"say": c["say"], "assert": c.get("assert", {})}]
+            hits, lines, reasons, lay = 0, [], [], []
+            t0 = time.time()
+            for rep in range(args.repeat):
+                before = snapshot() if c.get("restore") else None
+                setup(c.get("setup"))
+                before_named = named_states()
+                # ⚠️ conversation_id 每次都得换新。写死会让 HA 把上一次跑的问答留在会话
+                #    历史里，同一个问题再问时模型直接复读上次的答案 —— 表现为改了提示词
+                #    而回复字节完全不变，看上去像「提示词没生效」。
+                conv = f"eval-{RUN}-{c['id']}-{rep}"
+                bad = []
+                for ti, tn in enumerate(turns):
+                    try:
+                        speech, who, el = await ask(tn["say"], conv)
+                        lay.append(who)
+                        # 状态回报有延迟（实测 MIoT 约 0.5s），单次读会误判成「没执行」
+                        after = await_state(tn.get("assert", {}).get("expect_state"))
+                        tbad = check(tn.get("assert"), speech, before_named or {}, after, who)
+                    except Exception as e:
+                        speech, who, el, tbad = "", "?", 0, [f"异常 {type(e).__name__}: {e}"]
+                    if rep == 0 or tbad:
+                        pre = "     " if len(turns) == 1 else f"     {ti + 1}) "
+                        tag = "" if args.repeat == 1 else f"[{rep + 1}] "
+                        lines.append(f"{pre}{tag}〔{who} {el:.2f}s〕「{tn['say']}」 → {speech[:58]}"
+                                     f"  ({len(speech)}字≈{len(speech) / CPS:.0f}s播报)")
+                    bad += [f"第{ti + 1}轮 {b}" for b in tbad] if len(turns) > 1 else tbad
+                if before:
+                    restore(before)
+                hits += not bad
+                reasons += bad
+            el = time.time() - t0
 
-    stable = sum(1 for v in results.values() if v == 1)
-    flaky = sum(1 for v in results.values() if 0 < v < 1)
-    total = len(results)
-    regressed = [k for k, v in results.items() if base.get(k, -1) > v]
-    fixed = [k for k, v in results.items() if 0 <= base.get(k, 2) < v]
+            rate = hits / args.repeat
+            results[c["id"]] = rate
+            layers[c["id"]] = ("内建" if lay and all(x == "内建" for x in lay)
+                               else ("混合" if "内建" in lay else "LLM"))
+            was = base.get(c["id"])
+            # ⚠️ 温度 0.7 的系统没有「通过/不通过」，只有通过率。
+            mark = "✅" if rate == 1 else ("⚠️" if rate > 0 else "❌")
+            flag = ""
+            if was is not None and rate < was - 1e-9:
+                flag = f"  ⚠️ 回归 {was:.0%}→{rate:.0%}"
+            elif was is not None and rate > was + 1e-9:
+                flag = f"  🔧 改善 {was:.0%}→{rate:.0%}"
+            score = "" if args.repeat == 1 else f" {hits}/{args.repeat}"
+            print(f"{mark} [{c.get('category','')}] {c['id']}{score}{flag}  ({el:.1f}s)")
+            for ln in lines:
+                print(ln)
+            for b in dict.fromkeys(reasons):
+                print(f"     ✗ {b}（{reasons.count(b)}/{args.repeat}）"
+                      if args.repeat > 1 else f"     ✗ {b}")
 
-    print(f"\n{'=' * 56}")
-    print(f"稳定通过 {stable}/{total}   不稳定 {flaky}   全败 {total - stable - flaky}"
-          f"   整体 {sum(results.values()) / total:.0%}   耗时 {time.time() - t_all:.0f}s")
-    if args.repeat == 1:
-        print("⚠️  只跑了一轮，结果含运气成分。判断提示词改动请用 --repeat 3 以上")
-    if regressed:
-        print(f"⚠️  回归 {len(regressed)}：{', '.join(regressed)}")
-    if fixed:
-        print(f"🔧 改善 {len(fixed)}：{', '.join(fixed)}")
-    if base and not regressed and not fixed:
-        print("与基线一致")
+        stable = sum(1 for v in results.values() if v == 1)
+        flaky = sum(1 for v in results.values() if 0 < v < 1)
+        total = len(results)
+        regressed = [k for k, v in results.items() if base.get(k, -1) > v]
+        fixed = [k for k, v in results.items() if 0 <= base.get(k, 2) < v]
 
-    if args.save:
-        json.dump({"ts": time.strftime("%Y-%m-%d %H:%M:%S"), "repeat": args.repeat,
-                   "stable": stable, "total": total, "results": results},
-                  open(BASELINE, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
-        print(f"\n已存为基线：{BASELINE}")
+        print(f"\n{'=' * 60}")
+        print(f"稳定通过 {stable}/{total}   不稳定 {flaky}   全败 {total - stable - flaky}"
+              f"   整体 {sum(results.values()) / total:.0%}   耗时 {time.time() - t_all:.0f}s")
+        if args.path == "pipeline":
+            byl = {}
+            for v in layers.values():
+                byl[v] = byl.get(v, 0) + 1
+            print("处理层：" + "  ".join(f"{k} {n} 条" for k, n in sorted(byl.items()))
+                  + "   ← 走内建的越多日常越快（内建 ~0.1s / LLM ~1.2s）")
+        if args.repeat == 1:
+            print("⚠️  只跑了一轮，结果含运气成分。判断提示词改动请用 --repeat 3 以上")
+        if regressed:
+            print(f"⚠️  回归 {len(regressed)}：{', '.join(regressed)}")
+        if fixed:
+            print(f"🔧 改善 {len(fixed)}：{', '.join(fixed)}")
+        if base and not regressed and not fixed:
+            print("与基线一致")
 
-    return 1 if regressed else 0
+        if args.save:
+            json.dump({"ts": time.strftime("%Y-%m-%d %H:%M:%S"), "repeat": args.repeat,
+                       "path": args.path, "stable": stable, "total": total,
+                       "results": results, "layers": layers},
+                      open(BASELINE, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+            print(f"\n已存为基线：{BASELINE}")
+
+        return 1 if regressed else 0
 
 
-sys.exit(main())
+ap = argparse.ArgumentParser()
+ap.add_argument("--save", action="store_true", help="把本次结果存为新基线")
+ap.add_argument("--only", help="只跑某一类（执行/安全/查询/概况/感受/多轮/异常/稳定性）")
+ap.add_argument("--agent", default=None, help="对话代理 entity_id，默认用管线配置的")
+ap.add_argument("--pipeline", default=None, help="管线 id 或名称，默认取第一个带 STT 的")
+ap.add_argument("--path", choices=["pipeline", "agent"], default="pipeline",
+                help="pipeline=真实语音路径（默认）；agent=绕过内建层只测 LLM")
+ap.add_argument("--repeat", type=int, default=3,
+                help="每条跑几遍，报通过率（默认 3；温度 0.7 下跑一遍不可信）")
+sys.exit(asyncio.run(run(ap.parse_args())))
