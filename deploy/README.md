@@ -164,7 +164,7 @@ loginctl show-user $USER --property=Linger        # 应为 Linger=yes
 systemctl --user is-enabled mosquitto-jarvis gptsovits-api tts-proxy ollama
 ```
 
-## 附：NUC 的网络限制（2026-08-16 摸清）
+## 附：NUC 的网络限制
 
 ### 结论先行
 
@@ -301,7 +301,7 @@ New-NetFirewallRule -DisplayName "Ollama 11434 (WSL, LAN only)" -Direction Inbou
 New-NetFirewallHyperVRule -Name "Ollama-11434-WSL" -DisplayName "Ollama 11434 WSL" -Direction Inbound -VMCreatorId '{40E0AC32-46A5-438A-A0B2-2B479E8F2E90}' -Protocol TCP -LocalPorts 11434 -Action Allow
 ```
 
-### 实测（RTX 5060 Ti，qwen3:8b Q4，2026-08-16）
+### 实测（RTX 5060 Ti，qwen3:8b Q4）
 
 | 指标 | 数值 |
 |---|---|
@@ -625,7 +625,7 @@ LLM 听到不认识的「修房的灯」时**没有瞎猜**，而是回
 「"修房的灯"在系统中没有被识别到，请提供更具体的信息」，灯也没被误关。
 说明 `llm_hass_api` 的工具约束在起作用，比硬蒙一个实体好得多。
 
-## 十二、唤醒词与麦克风卫星（2026-08-16）
+## 十二、唤醒词与麦克风卫星
 
 目标：对着算力机的麦克风喊一声就能唤醒，不用点按钮。
 
@@ -739,7 +739,7 @@ number.<名字>_mic_volume / _auto_gain
 
 ---
 
-## 十三、资源占用实测（2026-08-16）
+## 十三、资源占用实测
 
 ### 显存分摊（5060 Ti / 16 GB）
 
