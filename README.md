@@ -78,6 +78,6 @@
 - [ ] 阶段二：Voice PE 进屋、小爱播报出口、主动问询自动化
 - [ ] 阶段三：AI Task 晨间简报、习惯档案与夜间反思循环、游戏模式自动化（含云端兜底降级链）
 - [ ] 阶段四：OpenClaw 认知层、iPad 中控屏、LLM Vision 看猫
-- [ ] 零散待办：暴露集合改名（83 个）、房间级灯组（exposure-policy R8）、MQTT broker 迁回 NUC、ESP32-S3 套件改书房桌面卫星（+曼波玩偶外壳，见蓝图第 09 节）
+- [ ] 零散待办：暴露集合改名（83 个）、房间级灯组（exposure-policy R8）、MQTT broker 迁回 NUC、ESP32-S3 套件改书房桌面卫星（+曼波玩偶外壳，见蓝图第 09 节）、HA 上 HTTPS（浏览器端卫星的前置闸门，见蓝图第 11 节）、确认闲置小爱型号（LX04 则刷机复活为播报点）
 
 详见 [`docs/blueprint.md` 第 12 节](docs/blueprint.md#12-落地路线图)。
