@@ -48,5 +48,6 @@
 - `scripts/run_eval.py` + `scripts/eval_cases.yaml` — **语音评测集**（20 条，每条跑 3 遍报通过率）。改提示词前后各跑一次看回归
 - `docs/model-tuning.md` — **模型调优决策**（提示词 vs 微调 vs 评测集：什么时候该动哪个杠杆）
 - `docs/exposure-policy.md` — **实体暴露策略**（该不该暴露给 LLM 的判定规则，含官方默认逻辑与 8 条补充规则）
+- `docs/progress.md` — **进展时间线**（约定：日期只出现在这个文件；知识按模块沉淀到各文档，不用日期组织）
 - `docs/memory-snapshot.md` — 项目记忆快照
 - 在线版蓝图为私有 Artifact，未随公开仓库发布

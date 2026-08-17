@@ -1,0 +1,23 @@
+# 进展记录
+
+**约定**：日期只出现在这个文件里。知识与结论按模块沉淀到各文档（见根 README 的文档地图），那边不用日期组织内容；本文件倒序记里程碑，供回溯「什么时候做到了哪一步」。
+
+## 2026-08-16 · 语音层从蓝图变成现实
+
+- **语音栈全链路跑通**：faster-whisper STT（热态 0.30s）+ Ollama Qwen3-8B（对话端到端 1.0–1.2s）+ 曼波音色 Wyoming TTS（真流式，首字 0.30s）→ `deploy/README.md`
+- **中文唤醒词「你好曼波」**：openWakeWord + wyoming-satellite 跑通，自训管线（数据生成→训练→导出）贯通验证
+- **暴露面治理**：435 → 83 实体（prompt ~14.2K → ~2.3K token），沉淀官方规则之外的 8 条判定规则；`expose_new` 关闭；switch_as_x 转 24 个继电器为 light/fan → `docs/exposure-policy.md`
+- **提示词收敛**：v4 → v16 迭代 + 20 条评测集（走真实 `assist_pipeline/run`），稳定通过 18 条 → `docs/voice-tuning.md`
+- **蓝图两处修正**：查明 `prefer_local_intents=True` 就是反射层，自建分层路由一步作废；新增第 14 节认知层框架设计
+- **两个否决记录**：TTS 层硬分页（截断策略必须由知道意图的层来定）；全惰性检索 MCP Assist 类方案（多跳工具链是小模型最短板）
+- **容量结论**：8B 实体甜点区 80–150、上限 ~250；4B 甜点区 40–80 → `docs/exposure-policy.md`
+
+## 2026-08-15 · 仓库初始化
+
+- 架构蓝图（13 节）、探索问答归档、仪表板脚本入库（公开脱敏版）
+
+## 入库前
+
+- 实体噪音治理：隐藏 1519 个噪音实体
+- 单屏 iOS 风仪表板「贪玩兰粤」（WebSocket API 免重启创建）
+- HA 官方 MCP Server 接入
