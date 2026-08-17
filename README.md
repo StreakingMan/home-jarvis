@@ -38,13 +38,14 @@
 | [`docs/model-tuning.md`](docs/model-tuning.md) | 调优决策：提示词 vs 微调 vs 评测集，什么时候动哪个杠杆 |
 | [`prompts/`](prompts/) | 系统提示词各版本，用 `scripts/set_prompt.py` 写入 |
 | `scripts/run_eval.py` + `eval_cases.yaml` | 语音评测集：20 条断言走真实管线，改动前后各跑一次看回归 |
+| `scripts/eval_kws.py` | 唤醒词评测：168 正 / 616 对抗样本扫 threshold × score；`smoke_kws.py` 是不依赖麦克风的端到端冒烟 |
 
 ### 部署与运维
 
 | 路径 | 内容 |
 |---|---|
 | [`deploy/README.md`](deploy/README.md) | 语音栈部署实录：TTS / MQTT / HASS.Agent，含静默失败的坑 |
-| [`scripts/`](scripts/) | 暴露面治理、唤醒词训练、仪表板等（HA WebSocket API 免重启；实体 ID 已假名化） |
+| [`scripts/`](scripts/) | 暴露面治理、唤醒词 / TTS 的 Wyoming 服务、仪表板等（HA WebSocket API 免重启；实体 ID 已假名化） |
 | `ha.sh` | HA REST 快捷工具（states / call / services） |
 
 ### 认知层
