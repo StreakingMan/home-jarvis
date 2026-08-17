@@ -27,6 +27,7 @@
 | 路径 | 内容 |
 |---|---|
 | [`docs/blueprint.md`](docs/blueprint.md) | **主文档**：14 节架构蓝图 + 关键决策记录（含否决的方案和理由） |
+| [`docs/related-work.md`](docs/related-work.md) | **相关研究对照**：各模块结论 vs 官方/社区/学术，含警告、可落地增量、原创点 |
 
 ### 语音层
 
