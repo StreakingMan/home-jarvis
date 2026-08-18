@@ -1,6 +1,6 @@
 # 相关研究对照
 
-本项目各模块的实测结论,与官方(HA)、社区、学术研究的系统对照。一次全面调研沉淀(约 70 条经打开验证的来源,此处收录最有价值的部分),按模块归档;每条标注与本项目结论的关系:**印证 / 矛盾或警告 / 增量**。
+本项目各模块的实测结论,与官方(HA)、社区、学术研究的系统对照。两轮调研沉淀(第一轮约 70 条通盘对照,第二轮专攻 agent harness,均只收录亲自打开验证过的来源),按模块归档;每条标注与本项目结论的关系:**印证 / 矛盾或警告 / 增量**。
 
 **总判断**:本项目实测结论无一被推翻;官方演进方向与本项目高度共振;三处设计收到警告(已回填蓝图第 14 节);另有若干可对外输出的原创点。
 
@@ -101,6 +101,50 @@
 
 ---
 
+## 六、Agent harness(运行时结构)
+
+harness = 不动模型权重,靠运行时结构(路由、检索、校验、循环控制)提升可靠性的手段。专项调研结论:**"智能家居 agent harness"作为整体主题,学术/社区/工业都没有成体系方案**——但各个部件已分头出现,且三大厂与 HA 官方在架构上收敛到与本宅三层设计同构的形态。
+
+### 学术:两篇最对口的解法论文
+
+- [TaskGround](https://arxiv.org/abs/2605.18109)——**增量,最可移植**:Ground–Infer–Execute 三段式,先把全屋场景**裁剪成任务相关子集**再喂模型;training-free、model-agnostic,让 Qwen3.5-9B 达到 GPT-5 相当表现,输入 token 最多降 18×。直接回答「2806 实体怎么喂 8B」——静态暴露白名单之上再加运行时按任务动态裁剪,与 exposure-policy.md 互补
+- [DS-IA / Proactive Rejection and Grounded Execution](https://arxiv.org/abs/2603.16207)——**增量**:双阶段意图分析,Stage 1「语义防火墙」对照家庭状态过滤无效指令,Stage 2 **确定性级联校验器**按房间→设备→能力逐级验证后才执行;EM +28pp、无效指令拒绝率 87%,SAGE benchmark 上 42.9%→71.4%。这是「确定性验证层兜住小模型幻觉实体」的论文版,用 `./ha.sh state` 即可实现低配版;其「交互频率困境」(迭代框架反问太多,用状态推断替代反问)也值得记
+- [DTDR](https://arxiv.org/abs/2512.17052)——**增量**:tool retrieval 随「已生成的调用计划」动态更新检索条件,on-device 定位,函数调用成功率 +23–104% 且缩短上下文
+- [AgentLTL](https://arxiv.org/abs/2607.02599)——**增量**:把「先查状态再行动」「敏感设备先确认」写成时序逻辑规则,运行时逐前缀检查、**执行前拦截违规调用**;7 模型中 5 个合规率提升。本宅「Agent 动作先确认」约束的形式化先例
+- [ToolPRM](https://arxiv.org/abs/2510.14703)——verifier 模型路线代表;本地算力预算内优先级低,但其发现可直接采纳:**结构化生成早期 JSON 错误不可恢复——重试策略应整体重生成,不要修补**
+- [IoTGPT](https://arxiv.org/abs/2601.04680)——指令分解为可复用子任务并缓存,后续命令复用、减少 LLM 调用;思路与「习惯→自动化」相邻,但它自动复用,采纳须加人工确认闸门
+
+### 学术:警告与边界
+
+- [When Self-Consistency Backfires](https://arxiv.org/abs/2608.11403)——**警告**:<10B 小模型采样多数投票在难题上**反而降准确率**(Qwen2.5-7B 上 56.6% 的难题被投票投坏);小模型的错误是系统性偏置不是随机噪声,投票放大偏置。「8B 采样 N 遍投票」这条 harness 路线基本可否决
+- 新 benchmark 划出的能力边界:[SMH-Bench](https://arxiv.org/abs/2606.01912)(1100 任务,复杂度越高退化越快)、[SmartBench](https://arxiv.org/abs/2603.06636)(异常状态检测 13 模型全线不及格)、[DevicesWorld](https://arxiv.org/abs/2607.13465)(跨设备协同最佳前沿模型仅 12.5%)——都支持 harness 层做状态裁剪+确定性校验,而不是指望模型看懂全屋
+- [HomeFlow](https://arxiv.org/abs/2606.01230)——训练路线对照:8B 经 RL 后 87.03%、超 GPT-5.5,说明将来若动微调杠杆,8B 天花板足够高
+- AdaHome 后续引用为零(发表不足一月),三个月后值得复查引文树
+
+### HA 官方与社区的 harness 现状
+
+- HA 官方管线演进:2025.3 起 LLM 流式响应且**命令一到就执行不等整段生成完**;2025.8 AI Task 集成(结构化输出 schema)+ 流式 TTS(实测 5.31s→0.56s);[官方 AI 立场文](https://www.home-assistant.io/blog/2025/09/11/ai-in-home-assistant/)把「本地意图优先→LLM 兜底、AI 是工具不是自治系统」成文;2026.4 Assist 对话框加「Show details」**首次把工具调用循环透明化到 UI**。每轮工具迭代有约 10 次硬上限。**官方管线没有自我验证/先查再动这类步骤——验证类结构全在社区层**,是本宅可差异化的空间
+- [goruck/home-generative-agent](https://github.com/goruck/home-generative-agent)——**生态内最完整的 LangGraph harness 参考**(仍在高频提交):pgvector 长期语义记忆 + Sentinel 确定性异常引擎(**规则守门,LLM 只建议不直接执行关键动作**)+ 多模型分工(大模型推理、小模型摄像头分析/摘要)。与蓝图第 14 节(打扰闸门、记忆留 HA 侧)高度对应,值得逐节对照
+- [extended_openai_conversation](https://github.com/jekalmin/extended_openai_conversation)——最老牌函数调用循环(仍维护,v3 beta 线):「Maximum Function Calls Per Conversation」防死循环、七种函数类型;issue 区是本地模型失败模式数据库(带 function call 的请求 5s vs 不带 0.9s;llama.cpp 下「嘴上说做了实际没调」)
+- [aradlein/hass-agent-llm](https://github.com/aradlein/hass-agent-llm)——早期但设计对口:自动记忆抽取 + **ChromaDB 实体语义检索做上下文注入省 token** + 本地快模型/云端强模型双 LLM 分诊。抄思路优于直接依赖
+- [homeassistant-ai/ha-mcp](https://github.com/homeassistant-ai/ha-mcp)(非官方,4.4k★)——88+ 工具且带 harness 特征:模糊实体检索、**BM25 工具检索**、批量操作、按工具审批/只读策略。若认知层走「HA MCP + 通用 agent」,这是事实标准,能替掉 `ha.sh`/`supervisor_ws.py` 大部分职责——但权限远超官方 server,接认知层前须做工具白名单
+- 社区实战两帖(与 voice-tuning.md 同类的一手数据):[llama.cpp prompt caching 帖](https://community.home-assistant.io/t/improve-local-llm-performance-with-llama-cpp-and-custom-conversation/935476)——**把日期时间挪到提示词末尾**最大化前缀缓存命中,Qwen3-4B 响应 ~5s→<2s;[My Journey to a reliable voice assistant](https://community.home-assistant.io/t/my-journey-to-a-reliable-and-enjoyable-locally-hosted-voice-assistant/944860)——**音乐播放等高频路径退回 sentence 自动化不过 LLM**、误唤醒时回复不带问句防对话死循环
+- Nicolas Mowen(Frigate 作者)全本地语音栈:**「模型选型不是决定因素,提示词设计和工具路由才是」**;HA 支持**双唤醒词映射双管线**(快词→本地快管线,慢词→复杂请求管线),与三层分流可直接对应
+
+### 工业界收敛(与三层架构同构)
+
+- [Alexa+ 「experts」架构](https://www.aboutamazon.com/news/devices/new-alexa-tech-generative-artificial-intelligence)——expert = 系统/API/指令打包成的任务单元,路由层先选模型再选 expert 再选 API;官方明言**路由是最关键最难的一步,路由错了下游无法挽回**——对三层分流最有价值的工业教训
+- 新 Siri(App Intents 成唯一工具暴露框架 + 端侧编排器 + 云端只做难推理)、Gemini for Home——三家不约而同收敛到「**端侧编排器 + 声明式工具目录 + 分级算力**」,与本宅架构同构,差异只在他们路由在云端
+- [XDA 实测:HA 本地 LLM 胜过 Gemini for Home](https://www.xda-developers.com/home-assistants-local-llm-outperforms-gemini-for-home-and-google-knows-it/)——同指令对测,Gemini 全云端且免费档限 20 次/天;本地 Qwen3 对「it's too warm」能跨设备推理秒级响应——本地小模型语音层路线的量化背书
+- [小米 Miloco 2.0](https://github.com/XiaoMi/xiaomi-miloco)(官方开源,3.2k★)——摄像头感知(MiMo-VL)→ **agent runtime 跑在 OpenClaw 上** → MIoT 网关控设备,2.0 加家庭记忆/身份识别/主动智能。**小米官方选 OpenClaw 当认知层 runtime,是本宅同一选型的最强方向性佐证**;配套 [MiCU](https://arxiv.org/abs/2606.01099) 的「设备描述压缩成单个 special token」和 [DevPiolt](https://arxiv.org/abs/2511.14227)(设备操作推荐 = 习惯→建议的工业实现)两个技法分别对应实体暴露成本与习惯档案设计
+  - **能否直接用作本宅认知层:否,三处硬冲突**(README 逐项核对):①控制通路是 MIoT SDK 直连米家、不经 HA——Petkit/拓竹/美的(LAN)及全部 HA 自动化和打扰闸门都够不着,接入等于立第二个平行中枢;②感知入口锁死米家摄像头音视频流(本宅无米家摄像头,感知来源是 HA 传感器+Recorder 日志),没有摄像头则身份识别/风险检测/事件感知全部落空;③感知与 agent 主要依赖云端 MiMo API(README 明示持续费用)——上云的是**实时音视频**而非日志,比 14.5 未决的反思数据边界敏感一个量级(缓解:MiMo-VL-Miloco 7B 底座已开源可本地跑,但 5060 Ti 已背满语音栈)
+  - 另两处非冲突差异:无语音交互管线(仅 Silero VAD 做感知侧语音字段,与本宅语音层零重叠、互补不替代);许可证仅限非商业且未经书面授权不得开发 app/web 服务(自用/写教程无碍,产品化不能含其代码)
+  - **真正可拿的是设计**:四层递进(常识规则库→身份识别→家庭记忆蒸馏→习惯升级为条件自动化)与蓝图第 14 节习惯档案几乎同图;差异点在它「稳定习惯自动升级为任务」而本宅坚持人工确认——AwareAuto 与通知疲劳文献均支持本宅的保守侧;其家庭概览/成员/事件历史仪表板形态可移植到 HA dashboard。若日后添置米家摄像头,可让它只管摄像头感知一小块试点、经 micam 桥回 HA/Frigate;主线(OpenClaw 经 MCP 接 HA + 记忆反思留 HA 侧)仍无现成方案,须自建
+- OpenClaw × HA 实践:[HA add-on](https://community.home-assistant.io/t/openclaw-clawdbot-on-home-assistant/981467)(跑在 Supervisor 容器里,可读写 /config);[Dan Malone 实录](https://www.dan-malone.com/blog/openclaw-home-assistant)——agent 主动发现坏灯泡并重写自动化,教训:**沙箱隔离必须做(prompt injection 真实存在)、纯 API 一次密集会话可达 $560**——直接支撑打扰闸门与敏感设备隔离两条既有约束;[homeassistant-assist skill](https://github.com/developmentcats/homeassistant-assist)——**认知层不自己查实体,把话术转发给 HA Assist API** 由 HA 做意图解析,token 高效,正是本宅「语音层交给 HA、认知层只做高阶决策」的边界该有的样子
+- **空白区**:Claude Agent SDK / CrewAI + HA 的常驻家庭 agent 公开项目,多轮中英检索无果——本宅「OpenClaw 经 MCP 接入认知层」在公开生态无先例可抄,亦即有首发沉淀价值
+
+---
+
 ## 可落地增量清单(按性价比排序)
 
 1. **确认 HA 版本含 prompt 前缀稳定化改动**(GetDateTime 外移、别名排序)——官方实测 5 倍延迟差,可能零成本
@@ -110,6 +154,15 @@
 5. **试 ICL 例子注入**(home-llm 式,3–5 条多样化示范)
 6. 微调作为提示词到顶后的备胎(acon96 路线,已在 model-tuning.md 论证)
 
+harness 专项调研(第六节)追加:
+
+7. **日期时间等动态内容挪到提示词末尾**(社区实测 Qwen3-4B 5s→<2s,与第 1 条官方前缀稳定化同源)——对现行提示词近零成本可试
+8. **执行前确定性校验**(DS-IA 低配版):LLM 输出工具调用后、执行前,校验实体存在性与能力匹配,失败即拒绝而非幻觉执行;顺带给评测集「无效指令」负例提供判定依据
+9. **高频路径退回 sentence trigger**(音乐/常用开关不过 LLM),配合双唤醒词双管线分流
+10. **任务相关实体动态裁剪**(TaskGround 思路,叠加在静态暴露白名单之上)——实体规模再涨时的下一级手段
+11. 重试策略:JSON 早期格式错误**整体重生成不修补**(ToolPRM 结论)
+12. **否决记录**:8B 采样 N 遍投票(self-consistency)——学术负面证据,难题被投坏比例过半
+
 ## 本宅可对外输出的原创点
 
 1. 命名→工具调用成败的系统实测(学术无消融、官方仅定性)
@@ -117,3 +170,4 @@
 3. 分类型每日打扰预算 + 话题衰减的具体机制(无量化研究先例)
 4. 走真实管线的 LLM 层评测集(HA 官方测试只覆盖模板层)
 5. 小模型「接近极限时编造而非拒答」的失败模式观察
+6. 「OpenClaw 经 MCP 接入家庭认知层」的公开实践(生态空白,且小米 Miloco 用 OpenClaw 当 runtime 佐证了选型方向)
